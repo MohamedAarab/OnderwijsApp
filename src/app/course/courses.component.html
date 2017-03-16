@@ -1,0 +1,30 @@
+<h1>Cursussen</h1>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <td><b>ID</b></td>
+            <td><b>Code</b></td>
+            <td><b>Naam</b></td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let c of courses" (click)="onSelect(c)">
+            <td>{{ c.id }}</td>
+            <td>{{ c.code }}</td>
+            <td>{{ c.name }}</td>
+        </tr>
+    </tbody>
+</table>
+
+
+<div>
+<h3>Geselecteerde cursus</h3>
+<b>ID:</b> {{currentCourse.id}} <br />
+<b>Code:</b> {{currentCourse.code}} <br />
+<b>Naam:</b> {{currentCourse.name}} <br />
+<b>Periode:</b> {{currentCourse.period}} <br />
+<b>Europese Credits:</b> {{currentCourse.europeanCredits}} <br />
+<b>Coordinator:</b> {{currentCourse.coordinator}}<br />
+<b>Toetsen:</b> {{currentCourse.examination}}<br />
+
+</div>
