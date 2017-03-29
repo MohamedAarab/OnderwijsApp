@@ -1,4 +1,4 @@
-export class Course{
+export class Cursus{
     id:number;
     code:string;
     name:string;

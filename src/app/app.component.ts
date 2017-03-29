@@ -8,8 +8,8 @@ import {
 } from '@angular/core';
 import { AppState } from './app.service';
 import { Config } from './config.service';
-import { Course } from './course/course';
-import { CoursesComponent } from './course/courses.component';
+import { Cursus } from './cursus/cursus';
+import { CursussenComponent } from './cursus/cursus.component';
 /*
  * App Component
  * Top Level Component
