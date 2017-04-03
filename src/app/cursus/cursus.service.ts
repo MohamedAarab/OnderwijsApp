@@ -4,12 +4,17 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class CursusService {
-  constructor(private http: Http){
-    console.log('PostsService Initialized...')
-  }
+    constructor(private http: Http){
+        console.log('PostsService Initialized...')
+    }
 
-  getCursussen(){
-    return this.http.get('http://curcon-huict.rhcloud.com/rest/cursussen/')
-      .map(res => res.json());
-  }
+    getCursussen(){
+        return this.http.get('http://curcon-huict.rhcloud.com/rest/cursussen/')
+            .map(res => res.json());
+    }
+
+    getLeerdoelenByHref(href){
+        return this.http.get(href)
+            .map(res => res.json());
+    }
 }

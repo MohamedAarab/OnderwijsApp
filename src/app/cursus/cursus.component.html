@@ -27,7 +27,6 @@
       <div class="col-md-10">
         <h3>Geselecteerde cursus</h3>
 
-
         <table class="table">
            <tr>
                <td class="table-label"><b>ID:</b></td>
@@ -60,6 +59,43 @@
              </table>
              </td>
            </tr>
+           <tr>
+             <td class="table-label"><b>Professionalskills:</b></td>
+             <td>
+               <table>
+                <tr *ngFor="let ps of currentCourse.eindPS">
+                    <td><b>Naam:</b></td>
+                    <td>{{ps.naam}}</td>
+                </tr>
+             </table>
+             </td>
+           </tr>
+
+           <tr>
+             <!-- <td class="table-label"><b>leerdoelen:</b></td> -->
+             <!-- <td>
+                <table>
+                <tr *ngFor="let ld of leerdoelen">
+                    <td>
+                        <table>
+                            <tr *ngFor="let name of leerdoelen.bloomniveau">
+                                <td><b>Naam:</b></td>
+                                <td>{{name.naam}}</td>
+                            </tr>
+                        </table>
+                    </td>
+
+                    <td><b>Omschrijving:</b></td>
+                    <td>{{ld.omschrijving}}</td>
+
+                    <td><b>Bloomniveau:</b></td>
+                    <td>{{ld.bloomniveau}}</td>
+
+                </tr>
+             </table>
+             </td> -->
+           </tr>
+
         </table>
       </div>
   </div>
