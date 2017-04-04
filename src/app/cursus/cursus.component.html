@@ -1,148 +1,123 @@
-<h1>Cursussen</h1>
-<div class="container-fluid" *ngIf="!loading">
-  <style>
-      .selectable:hover {
-          cursor: pointer;
-      }
-      .table-label {
-          width: 10%;
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>cursussen</title>
 
-      }
-  </style>
-  <div class="row">
-      <div class="col-md-2">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <td><b>Naam</b></td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let c of courses" (click)="onSelect(c)" class="selectable">
-                    <td>{{ c.naam }}</td>
-                </tr>
-            </tbody>
-        </table>
-      </div>
-      <div class="col-md-10">
-        <h3>Geselecteerde cursus</h3>
+        <style>
+            .selectable:hover {
+                cursor: pointer;
+            }
+            .table-label {
+                width: 10%;
+            }
+        </style>
 
-        <table class="table">
-           <tr>
-               <td class="table-label"><b>ID:</b></td>
-               <td>{{currentCourse.id}} </td>
-           </tr>
-           <tr>
-               <td class="table-label"><b>Code:</b></td>
-               <td>{{currentCourse.code}} </td>
-           </tr>
-           <tr>
-               <td class="table-label"><b>Naam:</b></td>
-               <td>{{currentCourse.naam}} </td>
-           </tr>
-           <tr>
-               <td class="table-label"><b>Periode:</b></td>
-               <td>{{currentCourse.periode}} </td>
-           </tr>
-           <tr>
-               <td class="table-label"><b>Europese Credits:</b></td>
-               <td>{{currentCourse.europeanCredits}} </td>
-           </tr>
-           <tr>
-             <td class="table-label"><b>Beroepstaken:</b></td>
-             <td>
-               <table>
-                <tr *ngFor="let bt of currentCourse.eindBT">
-                    <td><b>Naam:</b></td>
-                    <td>{{bt.data?.activiteit}}</td>
-                </tr>
-             </table>
-             </td>
-           </tr>
-           <tr>
-             <td class="table-label"><b>Professionalskills:</b></td>
-             <td>
-               <table>
-                <tr *ngFor="let ps of currentCourse.eindPS">
-                    <td><b>Naam:</b></td>
-                    <td>{{ps.naam}}</td>
-                </tr>
-             </table>
-             </td>
-           </tr>
+    </head>
+    <body>
+        <h1>Cursussen</h1>
+        <div class="container-fluid" *ngIf="!loading">
 
-           <tr>
-             <!-- <td class="table-label"><b>leerdoelen:</b></td> -->
-             <!-- <td>
-                <table>
-                <tr *ngFor="let ld of leerdoelen">
-                    <td>
-                        <table>
-                            <tr *ngFor="let name of leerdoelen.bloomniveau">
+          <div class="row">
+              <div class="col-md-2">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <td><b>Naam</b></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let c of courses" (click)="onSelect(c)" class="selectable">
+                            <td>{{ c.naam }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+              </div>
+
+            <h3>{{selectedbutton}}</h3>
+
+              <div class="btn-group" role="group" aria-label="...">
+                  <button type="button" class="btn btn-default" (click)="changeTab(1)">Cursus beschrijving</button>
+                  <button type="button" class="btn btn-default" (click)="changeTab(2)">Beroepstaken</button>
+                  <button type="button" class="btn btn-default" (click)="changeTab(3)">professionalskills</button>
+              </div>
+
+              <div class="details" *ngIf="selectedbutton == 1">
+                  <div class="col-md-10">
+                    <!-- <h3>Geselecteerde cursus</h3> -->
+                    <table class="table">
+                       <tr>
+                           <td class="table-label"><b>Code:</b></td>
+                           <td>{{currentCourse.code}} </td>
+                       </tr>
+                       <tr>
+                           <td class="table-label"><b>Naam:</b></td>
+                           <td>{{currentCourse.naam}} </td>
+                       </tr>
+                       <tr>
+                           <td class="table-label"><b>Coordinator:</b></td>
+                           <td>{{currentCourse.coordinator.naam}} </td>
+                       </tr>
+                       <tr>
+                           <td class="table-label"><b>Periode:</b></td>
+                           <td>{{currentCourse.periode}} </td>
+                       </tr>
+                       <tr>
+                           <td class="table-label"><b>Europese Credits:</b></td>
+                           <td>{{currentCourse.europeanCredits}} </td>
+                       </tr>
+                    </table>
+                  </div>
+              </div>
+
+                <div class="Beroepstaken" *ngIf="selectedbutton == 2">
+                    <div class="col-md-10">
+                        <tr>
+                         <!-- <td class="table-label"><b>Beroepstaken:</b></td> -->
+                         <td>
+                           <table>
+                            <tr *ngFor="let bt of currentCourse.eindBT">
                                 <td><b>Naam:</b></td>
-                                <td>{{name.naam}}</td>
+                                <td>{{bt.data?.activiteit}}</td>
                             </tr>
-                        </table>
-                    </td>
+                            <tr *ngFor="let bt of currentCourse.eindBT">
+                                <td><b>Architectuurlaag:</b></td>
+                                <td>{{bt.data?.architectuurlaag}}</td>
+                            </tr>
+                            <tr *ngFor="let bt of currentCourse.eindBT">
+                                <td><b>Niveau:</b></td>
+                                <td>{{bt.data?.niveau}}</td>
+                            </tr>
+                         </table>
+                         </td>
+                       </tr>
+                    </div>
+                </div>
 
-                    <td><b>Omschrijving:</b></td>
-                    <td>{{ld.omschrijving}}</td>
-
-                    <td><b>Bloomniveau:</b></td>
-                    <td>{{ld.bloomniveau}}</td>
-
-                </tr>
-             </table>
-             </td> -->
-           </tr>
-
-        </table>
-      </div>
-  </div>
-</div>
-
-
-<!--
-
-
-          3 knopjes maken in html
-
-
-          component:
-          1 variabel selectedButton = [1,2,3]
-
-
-          ngClick = selectedButton = 1;
-          ngclick = selectedbutton = 2;
-          ngclick = selectedbutton = 3;
-
-          1 - details
-          2 - beroepstaken
-          3 - professionalskills
-
-
-
-
-
-          <div class="details" *ngIf="selectedbutton == 1">
-
-
+                <!-- <div class="professionalskills" *ngIf="selectedbutton == 3">
+                    <div class="col-md-10">
+                        <tr>
+                           <table>
+                                <tr *ngFor="let ps of currentCourse.eindPS">
+                                    <tr>
+                                        <td class="table-label"><b>Code:</b></td>
+                                        <td>{{bt.data?.code}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-label"><b>Activiteit:</b></td>
+                                        <td>{{bt.data?.activiteit}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-label"><b>Niveau:</b></td>
+                                        <td>{{bt.data?.niveau}}</td>
+                                    </tr>
+                                </tr>
+                          </table>
+                       </tr>
+                    </div>
+                </div> -->
 
           </div>
-
-
-          <div class="beroepstaken" *ngIf="selectedbutton == 2">
-
-
-
-          </div>
-
-
-          <div class="professionalskills" *ngIf="selectedbutton == 3">
-
-
-
-          </div>
-
-
--->
+        </div>
+    </body>
+</html>

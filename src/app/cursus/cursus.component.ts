@@ -1,4 +1,5 @@
 import { Component, OnInit, EventEmitter, Input, Output, } from '@angular/core';
+import { Subject } from "rxjs/Subject";
 import { CursusService } from './cursus.service';
 import { ActivatedRoute } from '@angular/router';
 
@@ -11,22 +12,25 @@ import { ActivatedRoute } from '@angular/router';
 export class CursussenComponent{
     @Input() courses: Array<Object>;
     @Output() onSelectedCourse = new EventEmitter<Object>();
-    courses : Array<Object>;
+    // private clickStream = new Subject<number>();
+    // @Output() observ = this.clickStream.asObservable();
+
     loading : boolean;
-    naam : string;
+    selectedbutton : number;
     currentCourse = <any>{};
 
     constructor(private cursusService: CursusService){
-      this.loading = true;
+
+        this.loading = true;
     }
 
     ngOnInit() {
+      this.selectedbutton = 1;
       this.cursusService.getCursussen().subscribe(cursussen => {
           this.courses = cursussen;
           console.log(this.courses);
           this.currentCourse = this.courses[0];
           for(let j = 0; j < this.courses.length; j++) {
-            //console.log(this.courses[j].leerdoelen);
             for(let i = 0; i < this.courses[j].leerdoelen.length; i++){
               this.cursusService.getDataByHref(this.courses[j].leerdoelen[i].href)
                 .subscribe(leerdoelen => {
@@ -43,11 +47,8 @@ export class CursussenComponent{
             }
 
             for(let i = 0; i < this.courses[j].eindBT.length; i++){
-              // console.log(i);
-              // console.log(i);
               this.cursusService.getDataByHref(this.courses[j].eindBT[i].href)
                 .subscribe(beroepstaken => {
-                    //console.log(i);
                     this.courses[j].eindBT[i].data = beroepstaken;
                   },
                   error => console.log("Error: ", error));
@@ -70,7 +71,6 @@ export class CursussenComponent{
         () => {
           this.loading = false;
           console.log(this.currentCourse);
-          //console.log(this.currentCourse.eindBT[0].data);
         });
 
     }
@@ -78,6 +78,9 @@ export class CursussenComponent{
     onSelect(cour:Object) {
         this.onSelectedCourse.emit(cour);
         this.currentCourse = cour;
-        console.log(this.currentCourse);
+    }
+
+    changeTab(tabnr : number) {
+        this.selectedbutton = tabnr;
     }
 }
