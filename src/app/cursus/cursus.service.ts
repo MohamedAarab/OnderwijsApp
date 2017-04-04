@@ -13,7 +13,7 @@ export class CursusService {
             .map(res => res.json());
     }
 
-    getLeerdoelenByHref(href){
+    getDataByHref(href){
         return this.http.get(href)
             .map(res => res.json());
     }
