@@ -1,5 +1,5 @@
 <h1>Cursussen</h1>
-<div class="container-fluid">
+<div class="container-fluid" *ngIf="!loading">
   <style>
       .selectable:hover {
           cursor: pointer;
@@ -54,7 +54,7 @@
                <table>
                 <tr *ngFor="let bt of currentCourse.eindBT">
                     <td><b>Naam:</b></td>
-                    <td>{{bt.naam}}</td>
+                    <td>{{bt.data?.activiteit}}</td>
                 </tr>
              </table>
              </td>
@@ -100,3 +100,49 @@
       </div>
   </div>
 </div>
+
+
+<!--
+
+
+          3 knopjes maken in html
+
+
+          component:
+          1 variabel selectedButton = [1,2,3]
+
+
+          ngClick = selectedButton = 1;
+          ngclick = selectedbutton = 2;
+          ngclick = selectedbutton = 3;
+
+          1 - details
+          2 - beroepstaken
+          3 - professionalskills
+
+
+
+
+
+          <div class="details" *ngIf="selectedbutton == 1">
+
+
+
+          </div>
+
+
+          <div class="beroepstaken" *ngIf="selectedbutton == 2">
+
+
+
+          </div>
+
+
+          <div class="professionalskills" *ngIf="selectedbutton == 3">
+
+
+
+          </div>
+
+
+-->
