@@ -3,7 +3,7 @@
     <div class="col-md-12 col-lg-12">
       <div class="card">
         <div class="card-header">
-          <h4 class="card-title mb-0">Cursussen</h4>
+          <h4 class="card-title mb-0">Leerplannen</h4>
         </div>
         <div class="card-block">
           <div class="course-wrapper" style="min-height:300px;">
@@ -21,7 +21,7 @@
                 <table class="table table-hover">
                   <thead>
                   <tr>
-                    <td><b>Cursussen</b></td>
+                    <td><b>Cohorts</b></td>
                   </tr>
                   </thead>
                   <tbody>
@@ -42,7 +42,7 @@
                     <h3>{{currentCourse.naam}}</h3>
                   </div>
                   <div class="course-navigation pull-right">
-                    <button type="button" [ngClass]="{active : selectedButton == 1}" class="btn btn-primary" (click)="changeTab(1)"><i class="icon-info"></i> Detailss</button>
+                    <button type="button" [ngClass]="{active : selectedButton == 1}" class="btn btn-primary" (click)="changeTab(1)"><i class="icon-info"></i> Details</button>
                     <button type="button" [ngClass]="{active : selectedButton == 2}" class="btn btn-primary" (click)="changeTab(2)" *ngIf="currentCourse.eindBT?.length > 0"><i class="fa fa-star"></i> Beroepstaken</button>
                     <button type="button" [ngClass]="{active : selectedButton == 3}" class="btn btn-primary" (click)="changeTab(3)" *ngIf="currentCourse.eindPS?.length > 0"><i class="icon-badge"></i> Professional Skills</button>
                     <button type="button" [ngClass]="{active : selectedButton == 4}" class="btn btn-primary" (click)="changeTab(4)" *ngIf="currentCourse.leerdoelen?.length > 0"><i class="icon-list"></i> Leerdoelen</button>

@@ -1,0 +1,125 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12 col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title mb-0">Leerplannen</h4>
+        </div>
+        <div class="card-block">
+          <div class="course-wrapper" style="min-height:300px;">
+            <style>
+              .selectable:hover {
+                cursor: pointer;
+              }
+              .table-label {
+                width: 10%;
+
+              }
+            </style>
+            <div class="row">
+              <div class="col-md-2">
+                <button (click)="goBack(currentState)" *ngIf="currentState != 0" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Terug</button><br /><br />
+                <div *ngIf="currentState == 0">
+                <table class="table table-hover">
+                  <thead>
+                  <tr>
+                    <td><b>Opleidingen</b></td>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let o of organisaties" (click)="onSelectOrganisatie(o)" class="selectable">
+                    <td>{{ o.naam }}</td>
+                  </tr>
+                  </tbody>
+                </table>
+                  <span *ngIf="isEmptyObject(organisaties)">Geen organisaties beschikbaar</span>
+                </div>
+                <div *ngIf="currentState == 1">
+                  <table class="table table-hover">
+                    <thead>
+                    <tr>
+                      <td><b>Cohorts</b></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let c of cohorten" (click)="onSelectCohort(c)" class="selectable">
+                      <td>{{ c.naam }}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                  <span *ngIf="isEmptyObject(cohorten)">Geen cohorten beschikbaar</span>
+                </div>
+              </div>
+              <div class="col-md-10 leerplannen">
+                <div class="loading" *ngIf="loading">Loading...</div>
+                <div class="choose-cohort" *ngIf="currentState == 1 && (isEmptyObject(selectedCohort) || isEmptyObject(cursussen))">
+                  <h4>{{selectedOrganisatie.naam}}</h4>
+                  <b>Selecteer een cohort</b>
+                </div>
+                <div class="courses" *ngIf="!isEmptyObject(selectedCohort)">
+                  <h3 *ngIf="!isEmptyObject(cursussen)">Cursussen</h3><br />
+                  <div class="row" *ngFor="let c of cursussen | orderBy: 'periode'">
+                    <div class="col-md-5">
+                      <div class="row cursus">
+                        <div class="col-md-5">
+                          <span class="cursus-code">{{c.code}}</span>
+                          <h5 class="cursus-naam">{{c.naam}}</h5>
+                        </div>
+                        <div class="col-md-2">
+                          <span>Beroepstaken</span>
+                          <div class="hbo-i-layer" *ngFor="let bt of c.btMatrix; let i = index" [ngClass]="{'top-layer': i == 0}">
+                            <div class="hbo-i-cell">{{bt[0]}}</div>
+                            <template #tooltipTemplate1>{{bt[1]?.architectuurlaag}}<br />{{bt[1]?.activiteit}}</template>
+                            <div class="hbo-i-cell niveau-{{bt[1]?.niveau}}" [tooltip]="tooltipTemplate1"><span *ngIf="i == 0">{{bt[1]}}</span></div>
+                            <template #tooltipTemplate2>{{bt[2]?.architectuurlaag}}<br />{{bt[2]?.activiteit}}</template>
+                            <div class="hbo-i-cell niveau-{{bt[2]?.niveau}}" [tooltip]="tooltipTemplate2"><span *ngIf="i == 0">{{bt[2]}}</span></div>
+                            <template #tooltipTemplate3>{{bt[3]?.architectuurlaag}}<br />{{bt[3]?.activiteit}}</template>
+                            <div class="hbo-i-cell niveau-{{bt[3]?.niveau}}" [tooltip]="tooltipTemplate3"><span *ngIf="i == 0">{{bt[3]}}</span></div>
+                            <template #tooltipTemplate4>{{bt[4]?.architectuurlaag}}<br />{{bt[4]?.activiteit}}</template>
+                            <div class="hbo-i-cell niveau-{{bt[4]?.niveau}}" [tooltip]="tooltipTemplate4"><span *ngIf="i == 0">{{bt[4]}}</span></div>
+                            <template #tooltipTemplate5>{{bt[5]?.architectuurlaag}}<br />{{bt[5]?.activiteit}}</template>
+                            <div class="hbo-i-cell niveau-{{bt[5]?.niveau}}" [tooltip]="tooltipTemplate5"><span *ngIf="i == 0">{{bt[5]}}</span></div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="ps-layer">
+                            <span>Professional Skills</span>
+                            <div class="top-layer">
+                              <div class="ps-cell">CPO</div>
+                              <div class="ps-cell">AI</div>
+                              <div class="ps-cell">L</div>
+                              <div class="ps-cell">S</div>
+                              <div class="ps-cell">C</div>
+                              <div class="ps-cell">PO</div>
+                              <div class="ps-cell">E</div>
+                              <div class="ps-cell">LPO</div>
+                            </div>
+                            <div class="ps-layer">
+                              <div class="ps-cell ps-cpo"><span *ngFor="let ps of c.eindPS"><span *ngIf="ps?.code == 'CP'">{{ps.niveau}}</span></span></div>
+                              <div class="ps-cell ps-ai"><span *ngFor="let ps of c.eindPS"><span *ngIf="ps?.code == 'AI'">{{ps.niveau}}</span></span></div>
+                              <div class="ps-cell ps-lsc"><span *ngFor="let ps of c.eindPS"><span *ngIf="ps?.code == 'L'">{{ps.niveau}}</span></span></div>
+                              <div class="ps-cell ps-lsc"><span *ngFor="let ps of c.eindPS"><span *ngIf="ps?.code == 'S'">{{ps.niveau}}</span></span></div>
+                              <div class="ps-cell ps-lsc"><span *ngFor="let ps of c.eindPS"><span *ngIf="ps?.code == 'C'">{{ps.niveau}}</span></span></div>
+                              <div class="ps-cell ps-poe"><span *ngFor="let ps of c.eindPS"><span *ngIf="ps?.code == 'PO'">{{ps.niveau}}</span></span></div>
+                              <div class="ps-cell ps-poe"><span *ngFor="let ps of c.eindPS"><span *ngIf="ps?.code == 'E'">{{ps.niveau}}</span></span></div>
+                              <div class="ps-cell none"><span *ngFor="let ps of c.eindPS"><span *ngIf="ps?.code == 'LPO'">{{ps.niveau}}</span></span></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-1">
+                          <h6 class="cursus-ec">{{c.europeanCredits}} EC</h6>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+
+      </div>
+    </div>
+  </div>
+</div>

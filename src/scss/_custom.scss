@@ -20,3 +20,154 @@
   width: 25%;
   font-size: 13px;
 }
+
+
+/* Leerplannen */
+
+.leerplannen .cursus {
+  background: #FFFF;
+  border: 1px solid #E7E7E7;
+  border-left: 6px solid #00A1E2;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  box-shadow: 0px 1px 2px 0px rgba(46, 61, 73, 0.2);
+  transition: all 0.2s ease;
+  margin-bottom: 20px;
+}
+
+.tooltip-inner {
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid #666666;
+}
+
+.tooltip.tooltip-top .tooltip-inner::before, .tooltip.bs-tether-element-attached-bottom .tooltip-inner::before {
+  border-top-color: #666666;
+}
+
+.leerplannen .cursus:hover {
+  box-shadow: 0px 1px 3px 0px rgba(46, 61, 73, 0.2);
+}
+
+.leerplannen .cursus .cursus-code {
+  margin-top: 30px;
+  display: block;
+}
+
+.leerplannen .cursus .cursus-ec {
+  margin-top: 30px;
+  display: block;
+  color: #20A8D8;
+  font-size: 17px;
+}
+
+.leerplannen .cursus .cursus-naam {
+  color: #58646d;
+  font-weight: 300;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+
+
+.hbo-i-cell {
+  border-style: solid;
+  border-width: 1px;
+  border-color: #deebf7;
+  margin: 1px;
+  width: 15px;
+  height: 15px;
+  float: left;
+  position: relative;
+  display: inline;
+  text-align: center;
+}
+
+.ps-cell {
+  border-style: solid;
+  border-width: 1px;
+  border-color: #deebf7;
+  margin: 1px;
+  width: 25px;
+  height: 15px;
+  float: left;
+  position: relative;
+  display: inline;
+  text-align: center;
+}
+
+.hbo-i-layer {
+  display: table;
+}
+.ps-layer {
+  display: table;
+  height: 75px;
+}
+
+.hbo-i-layer > .label-top {
+  height: 14px;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.hbo-i-layer > .label-left {
+  width: 14px;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.hbo-i-layer > .niveau-1 {
+  background: #daeef3;
+}
+
+.hbo-i-layer > .niveau-2 {
+  background: #92cddc;
+}
+
+.hbo-i-layer > .niveau-3 {
+  background: #366092
+}
+
+.top-layer > .hbo-i-cell{
+  height: 12px;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.ps-layer > .top-layer > .ps-cell{
+  height: 20px;
+  font-size: 10px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.hbo-i-layer > .hbo-i-cell:first-child {
+  width: 12px;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+
+.ps-cpo {
+  background-color: #dce6f1;
+  height: 100%;
+}
+
+.ps-ai {
+  background-color: #d8e4bc;
+  height: 100%;
+}
+
+.ps-lsc {
+  background-color: #ffffcc;
+  height: 100%;
+}
+
+.ps-poe {
+  background-color: #fcd5b4;
+  height: 100%;
+}
+
+.none {
+  height: 100%;
+}
