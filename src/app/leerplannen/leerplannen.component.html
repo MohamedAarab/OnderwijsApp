@@ -27,12 +27,12 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <tr *ngFor="let o of organisaties" (click)="onSelectOrganisatie(o)" class="selectable">
+                  <tr *ngFor="let o of opleidingen" (click)="onSelectOpleiding(o)" class="selectable">
                     <td>{{ o.naam }}</td>
                   </tr>
                   </tbody>
                 </table>
-                  <span *ngIf="isEmptyObject(organisaties)">Geen organisaties beschikbaar</span>
+                  <span *ngIf="isEmptyObject(opleidingen)">Geen organisaties beschikbaar</span>
                 </div>
                 <div *ngIf="currentState == 1">
                   <table class="table table-hover">
@@ -43,7 +43,7 @@
                     </thead>
                     <tbody>
                     <tr *ngFor="let c of cohorten" (click)="onSelectCohort(c)" class="selectable">
-                      <td>{{ c.naam }}</td>
+                      <td>{{ c.jaar }}</td>
                     </tr>
                     </tbody>
                   </table>
@@ -53,7 +53,7 @@
               <div class="col-md-10 leerplannen">
                 <div class="loading" *ngIf="loading">Loading...</div>
                 <div class="choose-cohort" *ngIf="currentState == 1 && (isEmptyObject(selectedCohort) || isEmptyObject(cursussen))">
-                  <h4>{{selectedOrganisatie.naam}}</h4>
+                  <h4>{{selectedOpleiding.naam}}</h4>
                   <b>Selecteer een cohort</b>
                 </div>
                 <div class="courses" *ngIf="!isEmptyObject(selectedCohort)">
@@ -95,14 +95,14 @@
                               <div class="ps-cell">LPO</div>
                             </div>
                             <div class="ps-layer">
-                              <div class="ps-cell ps-cpo"><span *ngFor="let ps of c.eindPS"><span *ngIf="ps?.code == 'CP'">{{ps.niveau}}</span></span></div>
-                              <div class="ps-cell ps-ai"><span *ngFor="let ps of c.eindPS"><span *ngIf="ps?.code == 'AI'">{{ps.niveau}}</span></span></div>
-                              <div class="ps-cell ps-lsc"><span *ngFor="let ps of c.eindPS"><span *ngIf="ps?.code == 'L'">{{ps.niveau}}</span></span></div>
-                              <div class="ps-cell ps-lsc"><span *ngFor="let ps of c.eindPS"><span *ngIf="ps?.code == 'S'">{{ps.niveau}}</span></span></div>
-                              <div class="ps-cell ps-lsc"><span *ngFor="let ps of c.eindPS"><span *ngIf="ps?.code == 'C'">{{ps.niveau}}</span></span></div>
-                              <div class="ps-cell ps-poe"><span *ngFor="let ps of c.eindPS"><span *ngIf="ps?.code == 'PO'">{{ps.niveau}}</span></span></div>
-                              <div class="ps-cell ps-poe"><span *ngFor="let ps of c.eindPS"><span *ngIf="ps?.code == 'E'">{{ps.niveau}}</span></span></div>
-                              <div class="ps-cell none"><span *ngFor="let ps of c.eindPS"><span *ngIf="ps?.code == 'LPO'">{{ps.niveau}}</span></span></div>
+                              <div class="ps-cell ps-cpo"><span *ngFor="let ps of c.professionalskills"><span *ngIf="ps?.code == 'CP'">{{ps.niveau}}</span></span></div>
+                              <div class="ps-cell ps-ai"><span *ngFor="let ps of c.professionalskills"><span *ngIf="ps?.code == 'AI'">{{ps.niveau}}</span></span></div>
+                              <div class="ps-cell ps-lsc"><span *ngFor="let ps of c.professionalskills"><span *ngIf="ps?.code == 'L'">{{ps.niveau}}</span></span></div>
+                              <div class="ps-cell ps-lsc"><span *ngFor="let ps of c.professionalskills"><span *ngIf="ps?.code == 'S'">{{ps.niveau}}</span></span></div>
+                              <div class="ps-cell ps-lsc"><span *ngFor="let ps of c.professionalskills"><span *ngIf="ps?.code == 'C'">{{ps.niveau}}</span></span></div>
+                              <div class="ps-cell ps-poe"><span *ngFor="let ps of c.professionalskills"><span *ngIf="ps?.code == 'PO'">{{ps.niveau}}</span></span></div>
+                              <div class="ps-cell ps-poe"><span *ngFor="let ps of c.professionalskills"><span *ngIf="ps?.code == 'E'">{{ps.niveau}}</span></span></div>
+                              <div class="ps-cell none"><span *ngFor="let ps of c.professionalskills"><span *ngIf="ps?.code == 'LPO'">{{ps.niveau}}</span></span></div>
                             </div>
                           </div>
                         </div>

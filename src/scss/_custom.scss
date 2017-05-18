@@ -171,3 +171,49 @@
 .none {
   height: 100%;
 }
+
+
+/* Cursussen */
+
+.addModal .table-add{
+  margin-bottom: 0;
+}
+
+.addModal .table-add thead th {
+  border-top: none;
+}
+
+.addModal .selectItem {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.addModal .selectItem tr {
+  cursor: pointer;
+}
+
+.addModal .selectItem .checkbox{
+  border: 1px solid red;
+}
+
+
+/* Page loading */
+
+.page-loading {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  z-index: 9999;
+  background: #000000;
+  filter:alpha(opacity=20); /* IE */
+  -moz-opacity:0.2; /* Mozilla */
+  opacity: 0.2; /* CSS3 */
+  position: absolute; top: 0; left: 0; height: 100%;
+  width:100%;
+}
+
+.page-loading img {
+  margin-top: 250px;
+}

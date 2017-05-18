@@ -3,17 +3,18 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
 @Injectable()
-export class CohortenService {
+export class LeerdoelenService {
   constructor(private http: Http) {
     console.log('LeerplanService Initialized...');
   }
 
-  getCohorten() {
-    return this.http.get('http://curcon-huict.rhcloud.com/rest/cohorten/')
+  getLeerdoelen() {
+    return this.http.get('http://curcon-huict.rhcloud.com/rest/leerdoelen/')
       .map(res => res.json());
   }
 
-  getCohortenByObject(obj) {
+  getLeerdoelenByObject(obj) {
+    console.log(obj.href);
     return this.http.get(obj.href)
       .map(res => res.json());
   }

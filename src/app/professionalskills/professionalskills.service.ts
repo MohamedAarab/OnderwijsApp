@@ -13,7 +13,7 @@ export class ProfessionalskillsService {
       .map(res => res.json());
   }
 
-  getProfessionalskillByObject(obj) {
+  getProfessionalskillsByObject(obj) {
     return this.http.get(obj.href)
       .map(res => res.json());
   }

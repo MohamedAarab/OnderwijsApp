@@ -1,172 +1,262 @@
 <div class="animated fadeIn">
+  <div *ngIf="loading" align="center" class="page-loading"><img src="assets/img/ripple.svg" /></div>
   <div class="row">
-    <div class="col-md-12 col-lg-12">
-      <div class="card">
-        <div class="card-header">
-          <h4 class="card-title mb-0">Cursussen</h4>
-        </div>
-        <div class="card-block">
-          <div class="course-wrapper" style="min-height:300px;">
-            <style>
-              .selectable:hover {
-                cursor: pointer;
-              }
-              .table-label {
-                width: 10%;
+      <div class="col-md-12 col-lg-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title mb-0">Cursussen</h4>
+          </div>
+          <div class="card-block">
+            <div class="course-wrapper" style="min-height:300px;">
+              <style>
+                .selectable:hover {
+                  cursor: pointer;
+                }
+                .table-label {
+                  width: 10%;
 
-              }
-            </style>
-            <div class="row">
-              <div class="col-md-2">
-                <table class="table table-hover">
-                  <thead>
-                  <tr>
-                    <td><b>Cursussen</b></td>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr *ngFor="let c of courses" (click)="onSelect(c)" class="selectable">
-                    <td>{{ c.naam }}</td>
-                  </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div class="col-md-10 course">
-                <!--<div class="btn-group" role="group" aria-label="...">-->
-                <!--<button type="button" class="btn btn-default" (click)="changeTab(1)">Cursus beschrijving</button>-->
-                <!--<button type="button" class="btn btn-default" (click)="changeTab(2)" *ngIf="currentCourse.eindBT?.length > 0">Beroepstaken</button>-->
-                <!--<button type="button" class="btn btn-default" (click)="changeTab(3)" *ngIf="currentCourse.eindPS?.length > 0">Professional skills</button>-->
-                <!--</div>-->
-                <div class="course-header">
-                  <div class="course-title pull-left">
-                    <h3>{{currentCourse.naam}}</h3>
-                  </div>
-                  <div class="course-navigation pull-right">
-                    <button type="button" [ngClass]="{active : selectedButton == 1}" class="btn btn-primary" (click)="changeTab(1)"><i class="icon-info"></i> Detailss</button>
-                    <button type="button" [ngClass]="{active : selectedButton == 2}" class="btn btn-primary" (click)="changeTab(2)" *ngIf="currentCourse.eindBT?.length > 0"><i class="fa fa-star"></i> Beroepstaken</button>
-                    <button type="button" [ngClass]="{active : selectedButton == 3}" class="btn btn-primary" (click)="changeTab(3)" *ngIf="currentCourse.eindPS?.length > 0"><i class="icon-badge"></i> Professional Skills</button>
-                    <button type="button" [ngClass]="{active : selectedButton == 4}" class="btn btn-primary" (click)="changeTab(4)" *ngIf="currentCourse.leerdoelen?.length > 0"><i class="icon-list"></i> Leerdoelen</button>
-                  </div>
+                }
+              </style>
+              <div class="row">
+                <div class="col-md-2">
+                  <table class="table table-hover">
+                    <thead>
+                    <tr>
+                      <td><b>Cursussen</b></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let c of courses" (click)="onSelect(c)" class="selectable">
+                      <td>{{ c.naam }}</td>
+                    </tr>
+                    </tbody>
+                  </table>
                 </div>
+                <div class="col-md-10 course">
+                  <!--<div class="btn-group" role="group" aria-label="...">-->
+                  <!--<button type="button" class="btn btn-default" (click)="changeTab(1)">Cursus beschrijving</button>-->
+                  <!--<button type="button" class="btn btn-default" (click)="changeTab(2)" *ngIf="currentCourse.eindBT?.length > 0">Beroepstaken</button>-->
+                  <!--<button type="button" class="btn btn-default" (click)="changeTab(3)" *ngIf="currentCourse.eindPS?.length > 0">Professional skills</button>-->
+                  <!--</div>-->
 
-                <div class="course-info">
-                  <div class="details" *ngIf="selectedButton == 1">
-                    <table class="table table-bordered course-information table-hover">
-                      <tr>
-                        <td class="table-label"><b>Code:</b></td>
-                        <td>{{currentCourse.code}}</td>
-                      </tr>
-                      <tr>
-                        <td><b>Naam:</b></td>
-                        <td>{{currentCourse.naam}}</td>
-                      </tr>
-                      <tr>
-                        <td><b>Coordinator:</b></td>
-                        <td>{{currentCourse.coordinator?.naam}}</td>
-                      </tr>
-                      <tr>
-                        <td><b>Periode:</b></td>
-                        <td>{{currentCourse.periode}}</td>
-                      </tr>
-                      <tr>
-                        <td><b>European credits:</b></td>
-                        <td>{{currentCourse.europeanCredits}}</td>
-                      </tr>
-                    </table>
-                  </div>
-
-                  <div class="beroepstaken" *ngIf="selectedButton == 2">
-
-                    <div class="row">
-                      <div class="col-md-3 beroepstaak" *ngFor="let bt of currentCourse.eindBT">
-                        <table class="table table-bordered table-hover">
-                          <tr>
-                            <td class="table-label">Naam:</td>
-                            <td>{{bt.data?.activiteit}}</td>
-                          </tr>
-                          <tr>
-                            <td class="table-label">Architectuurlaag:</td>
-                            <td>{{bt.data?.architectuurlaag}}</td>
-                          </tr>
-                          <tr>
-                            <td class="table-label">Niveau:</td>
-                            <td>{{bt.data?.niveau}}</td>
-                          </tr>
-                        </table>
+                  <!-- Nav tabs -->
+                  <tabset>
+                    <tab>
+                      <template tabHeading><i class="icon-list"></i> Algemeen</template>
+                      <table class="table table-condensed">
+                        <tbody>
+                        <tr>
+                          <td class="table-label"><b>Code:</b></td>
+                          <td>{{currentCourse.code}}</td>
+                        </tr>
+                        <tr>
+                          <td><b>Naam:</b></td>
+                          <td>{{currentCourse.naam}}</td>
+                        </tr>
+                        <tr>
+                          <td><b>Coordinator:</b></td>
+                          <td>{{currentCourse.coordinator?.naam}}</td>
+                        </tr>
+                        <tr>
+                          <td><b>Periode:</b></td>
+                          <td>{{currentCourse.periode}}</td>
+                        </tr>
+                        <tr>
+                          <td><b>European credits:</b></td>
+                          <td>{{currentCourse.europeanCredits}}</td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </tab>
+                    <tab>
+                      <template tabHeading><i class="icon-calculator"></i> Beroepstaken</template>
+                      <table class="table table-condensed">
+                        <thead>
+                        <tr>
+                          <th></th>
+                          <th>Architectuur laag</th>
+                          <th>Activiteit</th>
+                          <th>Niveau</th>
+                          <th>Omschrijving</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let bt of currentCourse.beroepstaken">
+                          <td><a class="text-danger lead" href="javascript:void(0)" (click)="deleteBeroepstaak(bt)"><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>
+                          <td>{{bt.architectuurlaag}}</td>
+                          <td>{{bt.activiteit}}</td>
+                          <td>{{bt.niveau}}</td>
+                          <td>{{bt.omschrijving}}</td>
+                        </tr>
+                        </tbody>
+                      </table>
+                      <div class="btn-group pull-right" role="group" aria-label="...">
+                        <button type="button" class="btn btn-info" (click)="BeroepstaakModal.show(); getAllBeroepstaken();"><i class="fa fa-plus" aria-hidden="true"></i></button>
                       </div>
-                    </div>
-                  </div>
-
-                  <div class="professionalskills" *ngIf="selectedButton == 3">
-                    <div class="row">
-                      <div class="col-md-3 beroepstaak" *ngFor="let ps of currentCourse.eindPS">
-                        <table class="table table-bordered table-hover">
-                          <tr>
-                            <td class="table-label">Code:</td>
-                            <td>{{ps.data?.code}}</td>
-                          </tr>
-                          <tr>
-                            <td class="table-label">Beschrijving:</td>
-                            <td>{{ps.data?.beschrijving}}</td>
-                          </tr>
-                          <tr>
-                            <td class="table-label">Niveau:</td>
-                            <td>{{ps.data?.niveau}}</td>
-                          </tr>
-                        </table>
+                    </tab>
+                    <tab>
+                      <template tabHeading><i class="icon-pie-chart"></i> Professional skills</template>
+                      <table class="table table-condensed">
+                        <thead>
+                        <tr>
+                          <th></th>
+                          <th>Code</th>
+                          <th>Beschrijving</th>
+                          <th>Niveau</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let ps of currentCourse.professionalskills">
+                          <td><a class="text-danger lead" href="javascript:void(0)" (click)="deleteProfessionalskill(ps)"><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>
+                          <td>{{ps.code}}</td>
+                          <td>{{ps.beschrijving}}</td>
+                          <td>{{ps.niveau}}</td>
+                        </tr>
+                        </tbody>
+                      </table>
+                      <div class="btn-group pull-right" role="group" aria-label="...">
+                        <button type="button" class="btn btn-info" (click)="ProfessionalskillModal.show(); getAllProfessionalskills();"><i class="fa fa-plus" aria-hidden="true"></i></button>
                       </div>
-                    </div>
-
-                  </div>
-
-                  <div class="leerdoelen" *ngIf="selectedButton == 4">
-                    <div class="row">
-                      <div class="col-md-6 beroepstaak" *ngFor="let ld of currentCourse.leerdoelen">
-                        <table class="table table-bordered table-hover">
-                          <tr>
-                            <td class="leerdoelen-label">Naam:</td>
-                            <td>{{ld.naam}}</td>
-                          </tr>
-                          <tr>
-                            <td class="leerdoelen-label">Eind behaalde Beroepstaken:</td>
-                            <td>{{ld.data?.eindBT}}</td>
-                          </tr>
-                          <tr>
-                            <td class="leerdoelen-label">Eind behaalde Professional skills:</td>
-                            <td>{{ld.data?.eindPS}}</td>
-                          </tr>
-                          <tr>
-                            <td class="leerdoelen-label">Toetsplanning:</td>
-                            <td>{{ld.toetsplanning}}</td>
-                          </tr>
-                          <tr>
-                            <td colspan="2"><b>Bloom niveau:</b><br />
-                            <table class="table table-bordered">
-                              <tr>
-                                <td>Bloom Niveau:</td>
-                                <td>{{ld.data?.bloomniveau.data?.niveau}}</td>
-                              </tr>
-                              <tr>
-                                <td>Bloom Omschrijving:</td>
-                                <td>{{ld.data?.bloomniveau.data?.omschrijving}}</td>
-                              </tr>
-                            </table>
-                            </td>
-                          </tr>
-                        </table>
+                    </tab>
+                    <tab>
+                      <template tabHeading><i class="icon-pie-chart"></i> Leerdoelen</template>
+                      <table class="table table-condensed">
+                        <thead>
+                        <tr>
+                          <th></th>
+                          <th>Bloomniveau</th>
+                          <th>Professional Skill</th>
+                          <th>Beroepstaak</th>
+                          <th>Omschrijving</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let ld of currentCourse.leerdoelenlijst">
+                          <td><a class="text-danger lead" href="javascript:void(0)" (click)="deleteLeerdoel(ld)"><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>
+                          <td>{{ld.bloomniveau.naam}}</td>
+                          <td>{{ld.eindPS.naam}}</td>
+                          <td>{{ld.eindBT.naam}}</td>
+                          <td>{{ld.omschrijving}}</td>
+                        </tr>
+                        </tbody>
+                      </table>
+                      <div class="btn-group pull-right" role="group" aria-label="...">
+                        <button type="button" class="btn btn-info" (click)="ProfessionalskillModal.show(); getAllProfessionalskills();"><i class="fa fa-plus" aria-hidden="true"></i></button>
                       </div>
-                  </div>
-                </div>
-
+                    </tab>
+                    <tab>
+                      <template tabHeading><i class="icon-pie-chart"></i> Toetsen</template>
+                      Toetsen
+                    </tab>
+                    <tab>
+                      <template tabHeading><i class="icon-pie-chart"></i> Toetsmatrijzen</template>
+                      Toetsmatrijzen
+                    </tab>
+                  </tabset>
               </div>
-
             </div>
           </div>
         </div>
-      </div>
-      <div class="card-footer">
+        <div class="card-footer">
 
+        </div>
       </div>
     </div>
   </div>
 </div>
+
+
+<div bsModal #BeroepstaakModal="bs-modal" class="addModal modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <form name="addBeroepstaak" novalidate>
+      <div class="modal-header">
+        <h4 class="modal-title">Beroepstaken</h4>
+        <button type="button" class="close" (click)="BeroepstaakModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="loading" align="center"><br /><img src="assets/img/ripple.svg" /></div>
+        <span *ngIf="error" class="text-danger">U heeft geen beroepstaak geselecteerd</span>
+        <table *ngIf="!loading" class="table table-condensed table-hover table-add">
+          <thead>
+          <tr>
+            <th>&nbsp;</th>
+            <th>Architectuur laag</th>
+            <th>Activiteit</th>
+            <th>Niveau</th>
+          </tr>
+          </thead>
+        </table>
+
+        <div *ngIf="!loading" class="selectItem">
+            <table class="table table-condensed table-hover">
+              <tbody>
+              <tr *ngFor="let bt of allBeroepstaken" (click)="checkbox(bt)">
+                <td><input #{{bt.id}} ngModel="bt.selected" type="checkbox" class="checkbox" [checked]="bt.selected"></td>
+                <td>{{bt.architectuurlaag}}</td>
+                <td>{{bt.activiteit}}</td>
+                <td>{{bt.niveau}}</td>
+              </tr>
+              </tbody>
+            </table>
+
+        </div>
+      </div>
+      <div  *ngIf="!loading" class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="BeroepstaakModal.hide()">Sluiten</button>
+        <button type="button" class="btn btn-primary" (click)="addBeroepstaken()">Toevoegen</button>
+      </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div bsModal #ProfessionalskillModal="bs-modal" class="addModal modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <form name="addBeroepstaak" novalidate>
+      <div class="modal-header">
+        <h4 class="modal-title">Professional Skills</h4>
+        <button type="button" class="close" (click)="ProfessionalskillModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="loading" align="center"><br /><img src="assets/img/ripple.svg" /></div>
+        <span *ngIf="error" class="text-danger">U heeft geen professionalskills geselecteerd</span>
+        <table *ngIf="!loading" class="table table-condensed table-hover table-add">
+          <thead>
+          <tr>
+            <th>&nbsp;</th>
+            <th>Code</th>
+            <th>Beschrijving</th>
+            <th>Niveau</th>
+          </tr>
+          </thead>
+        </table>
+
+        <div *ngIf="!loading" class="selectItem">
+            <table class="table table-condensed table-hover">
+              <tbody>
+              <tr *ngFor="let ps of allProfessionalskills" (click)="checkbox(ps)">
+                <td><input #{{ps.id}} ngModel="ps.selected" type="checkbox" class="checkbox" [checked]="ps.selected"></td>
+                <td>{{ps.code}}</td>
+                <td>{{ps.beschrijving}}</td>
+                <td>{{ps.niveau}}</td>
+              </tr>
+              </tbody>
+            </table>
+
+        </div>
+      </div>
+      <div  *ngIf="!loading" class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="ProfessionalskillModal.hide()">Sluiten</button>
+        <button type="button" class="btn btn-primary" (click)="addProfessionalskills()">Toevoegen</button>
+      </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import {LeerplannenService} from './leerplannen.service';
 import {CohortenService} from '../cohorten/cohorten.service';
 import {OrganisatiesService} from '../organisaties/organisaties.service';
+import {OpleidingsprofielenService} from '../opleidingsprofielen/opleidingsprofielen.service';
 import {CursussenService} from '../cursussen/cursussen.service';
 import {BeroepstakenService} from '../beroepstaken/beroepstaken.service';
 import {ProfessionalskillsService} from '../professionalskills/professionalskills.service';
@@ -12,14 +13,14 @@ import {ProfessionalskillsService} from '../professionalskills/professionalskill
 })
 export class LeerplannenComponent implements OnInit {
 
-  @Input() courses: Array<any>; cohorten: Array<any>; organisaties: Array<any>; cursussen: Array<any>;
-  @Output() onSelectedOrganisatie = new EventEmitter<Object>(); onSelectedCohort = new EventEmitter<Object>();
+  @Input() courses: Array<any>; cohorten: Array<any>; opleidingen: Array<any>; cursussen: Array<any>;
+  @Output() onSelectedOpleiding = new EventEmitter<Object>(); onSelectedCohort = new EventEmitter<Object>();
   loading: boolean;
   currentState: number;
-  selectedOrganisatie = <any>{};
+  selectedOpleiding = <any>{};
   selectedCohort = <any>{};
 
-  constructor(private leerplanService: LeerplannenService, private cohortService: CohortenService, private organisatieService: OrganisatiesService, private cursusService: CursussenService, private beroepstaakService: BeroepstakenService, private professionalskillService: ProfessionalskillsService) {
+  constructor(private leerplanService: LeerplannenService, private cohortService: CohortenService, private organisatieService: OrganisatiesService, private cursusService: CursussenService, private beroepstaakService: BeroepstakenService, private professionalskillService: ProfessionalskillsService, private opleidingsproefielenService: OpleidingsprofielenService) {
     this.loading = true;
   }
 
@@ -27,9 +28,11 @@ export class LeerplannenComponent implements OnInit {
     this.currentState = 0;
     this.cursussen = [];
     this.cohorten = [];
-    this.organisaties = [];
+    this.opleidingen = [];
     this.organisatieService.getOrganisaties().subscribe(organisaties => {
-      this.organisaties = organisaties[0].opleidingsProfielen;
+      this.opleidingsproefielenService.getOpleidingsprofielByObject(organisaties[0].opleidingsProfielen).subscribe(opleidingen => {
+        this.opleidingen = opleidingen;
+      })
       this.loading = false;
     });
 
@@ -86,13 +89,12 @@ export class LeerplannenComponent implements OnInit {
     //   });
   }
 
-  onSelectOrganisatie(org: Object) {
+  onSelectOpleiding(opl: Object) {
     this.loading = true;
-    this.onSelectedOrganisatie.emit(org);
-    console.log(this.selectedOrganisatie);
-    this.organisatieService.getOrganisatieByObject(org).subscribe(organisatie => {
-      this.selectedOrganisatie = organisatie;
-      this.cohorten = this.selectedOrganisatie.cohorten;
+    this.onSelectedOpleiding.emit(opl);
+    this.selectedOpleiding = opl;
+    this.cohortService.getCohortenByObject(this.selectedOpleiding['cohorten']).subscribe(cohorten => {
+      this.cohorten = cohorten;
       this.currentState++;
       this.loading = false;
     });
@@ -100,17 +102,65 @@ export class LeerplannenComponent implements OnInit {
 
 
   onSelectCohort(coh: Object) {
-   let bar = <any>{};
-   bar = coh;
-    if (bar.naam !== this.selectedCohort.jaar) {
+    this.loading = true;
+    this.cursusService.getCursussenByObject(coh['cursussen']).subscribe(cur => {
+      this.cursussen = cur;
+      for(let i = 0; i < this.cursussen.length; i++) {
+        // let beroepstaken = [];
+        // let professionalskills = [];
+        this.beroepstaakService.getBeroepstakenByObject(this.cursussen[i].eindBT).subscribe(beroepstaken => {
+            this.cursussen[i].beroepstaken = [];
+            let btMatrix = this.generateMatrix();
+
+            //console.log(beroepstaken);
+            for(let j = 0; j < beroepstaken.length; j++) {
+              btMatrix[beroepstaken[j].architectuurlaagId][beroepstaken[j].activiteitId] = beroepstaken[j];
+              //   btMatrix[beroepstaken[j].architectuurlaagId][beroepstaken[j].activiteitId] = beroepstaken[j];
+              this.cursussen[i].beroepstaken.push(beroepstaken[j]);
+             }
+             this.cursussen[i].btMatrix = btMatrix;
+        });
+
+        // for (let j = 0; j < this.cursussen[i].eindBT.length; j++) {
+        //   this.beroepstaakService.getBeroepstaakByObject(this.cursussen[i].eindBT[j]).subscribe(beroepstaak =>{
+        //     btMatrix[beroepstaak.architectuurlaagId][beroepstaak.activiteitId] = beroepstaak;
+        //     beroepstaken.push(beroepstaak);
+        //   });
+        // }
+
+        this.professionalskillService.getProfessionalskillsByObject(this.cursussen[i].eindPS).subscribe(professionalskills => {
+          this.cursussen[i].professionalskills = [];
+          for(let j = 0; j < professionalskills.length; j++) {
+            this.cursussen[i].professionalskills.push(professionalskills[j]);
+          }
+        });
+
+        // let professionalskills = [];
+        // for (let j = 0; j < cursus.eindPS.length; j++) {
+        //   this.professionalskillService.getProfessionalskillByObject(cursus.eindPS[j]).subscribe(professionalskill => {
+        //     professionalskills.push(professionalskill);
+        //   });
+        // }
+
+
+//        this.cursussen[i].professionalskills = professionalskills;
+        // // cursus.eindPS = professionalskills;
+        // this.cursussen.push(cursus);
+      }
+      this.selectedCohort = coh;
+      this.loading = false;
+    });
+
+
+    /*if (bar.naam !== this.selectedCohort.jaar) {
       this.loading = true;
       this.onSelectedCohort.emit(coh);
-      this.cohortService.getCohortByObject(coh).subscribe(cohort => {
+      this.cohortService.getCohortenByObject(coh).subscribe(cohort => {
         this.selectedCohort = cohort;
         this.cursussen = [];
         if (this.selectedCohort.cursussen.length !== 0) {
           for (let i = 0; i < this.selectedCohort.cursussen.length; i++) {
-            this.cursusService.getCursusByObject(this.selectedCohort.cursussen[i]).subscribe(cursus => {
+            this.cursusService.getCursussenByObject(this.selectedCohort.cursussen[i]).subscribe(cursus => {
               let btMatrix = this.generateMatrix();
 
               let beroepstaken = [];
@@ -139,7 +189,7 @@ export class LeerplannenComponent implements OnInit {
         }
         this.loading = false;
       });
-    }
+    }*/
   }
 
   generateMatrix() {
@@ -169,7 +219,7 @@ export class LeerplannenComponent implements OnInit {
     console.log(currentState);
     switch (currentState) {
       case 1:
-        this.selectedOrganisatie = {};
+        this.selectedOpleiding = {};
         this.selectedCohort = {};
         this.cursussen = [];
         this.currentState--;
