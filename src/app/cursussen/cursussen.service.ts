@@ -17,7 +17,7 @@ export class CursussenService {
   }
 
   getCursussen() {
-    return this.http.get('http://curcon-huict.rhcloud.com/rest/cursussen/')
+    return this.http.get('http://curcon-huict.rhcloud.com/rest/organisaties/1/cursussen')
       .map(res => res.json());
   }
 
@@ -39,7 +39,7 @@ export class CursussenService {
 
   addProfessionalskillToCursus(cursusId, professionalskillId) {
     let newProfessionalskill = {'id': professionalskillId.id};
-    return this.http.post('http://curcon-huict.rhcloud.com/rest/cursussen/' + cursusId + '/professionalskillss', newProfessionalskill)
+    return this.http.post('http://curcon-huict.rhcloud.com/rest/cursussen/' + cursusId + '/professionalskills', newProfessionalskill)
     .catch(this.handleError);
   }
 

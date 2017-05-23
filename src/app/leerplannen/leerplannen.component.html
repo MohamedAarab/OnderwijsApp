@@ -59,11 +59,11 @@
                 <div class="courses" *ngIf="!isEmptyObject(selectedCohort)">
                   <h3 *ngIf="!isEmptyObject(cursussen)">Cursussen</h3><br />
                   <div class="row" *ngFor="let c of cursussen | orderBy: 'periode'">
-                    <div class="col-md-5">
+                    <div class="col-md-12">
                       <div class="row cursus">
                         <div class="col-md-5">
                           <span class="cursus-code">{{c.code}}</span>
-                          <h5 class="cursus-naam">{{c.naam}}</h5>
+                          <h5 class="cursus-naam"><a [routerLink]="['/cursussen', c.naam]">{{c.naam}}</a></h5>
                         </div>
                         <div class="col-md-2">
                           <span>Beroepstaken</span>

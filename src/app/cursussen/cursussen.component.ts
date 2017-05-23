@@ -29,7 +29,6 @@ export class CursussenComponent implements OnInit {
     this.selectedButton = 1;
     this.cursusService.getCursussen().subscribe(cursussen => {
         this.courses = cursussen;
-        console.log(this.courses);
         this.currentCourse = this.courses[0];
         this.currentCourse.beroepstaken = [];
         this.currentCourse.professionalskills = [];
@@ -59,6 +58,7 @@ export class CursussenComponent implements OnInit {
 
 
   deleteProfessionalskill(ps: Object) {
+    alert(this.currentCourse.id);
       this.cursusService.deleteProfessionalskill(this.currentCourse.id, ps['id']).subscribe(
         result => { this.refreshProfessionalskills();  },
         error => { this.refreshProfessionalskills();  });
