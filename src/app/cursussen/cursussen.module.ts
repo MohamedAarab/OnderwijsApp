@@ -20,6 +20,7 @@ import {HttpModule} from '@angular/http';
 import {BeroepstakenService} from '../beroepstaken/beroepstaken.service';
 import {ProfessionalskillsService} from '../professionalskills/professionalskills.service';
 import {LeerdoelenService} from '../leerdoelen/leerdoelen.service';
+import {ToetsenService} from '../toetsen/toetsen.service';
 
 @NgModule({
   imports: [
@@ -33,6 +34,6 @@ import {LeerdoelenService} from '../leerdoelen/leerdoelen.service';
   ],
   declarations: [ CursussenComponent,
     TabsComponent, TablesComponent, ModalsComponent],
-  providers: [CursussenService, BeroepstakenService, ProfessionalskillsService, LeerdoelenService]
+  providers: [CursussenService, BeroepstakenService, ProfessionalskillsService, LeerdoelenService, ToetsenService]
 })
 export class CursussenModule { }

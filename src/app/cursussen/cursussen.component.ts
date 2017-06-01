@@ -4,6 +4,7 @@ import {CursussenService} from './cursussen.service';
 import {BeroepstakenService} from '../beroepstaken/beroepstaken.service';
 import {ProfessionalskillsService} from '../professionalskills/professionalskills.service';
 import {LeerdoelenService} from "../leerdoelen/leerdoelen.service";
+import {ToetsenService} from "../toetsen/toetsen.service";
 
 @Component({
   templateUrl: 'cursussen.component.html',
@@ -21,7 +22,7 @@ export class CursussenComponent implements OnInit {
   selectedButton : number;
   currentCourse = <any>{};
 
-  constructor(private cursusService: CursussenService, private beroepstaakService: BeroepstakenService, private professionalskillService: ProfessionalskillsService, private leerdoelenService: LeerdoelenService) {
+  constructor(private cursusService: CursussenService, private beroepstaakService: BeroepstakenService, private professionalskillService: ProfessionalskillsService, private leerdoelenService: LeerdoelenService, private toetsenService: ToetsenService) {
     this.loading = true;
   }
 
@@ -32,6 +33,7 @@ export class CursussenComponent implements OnInit {
         this.currentCourse = this.courses[0];
         this.currentCourse.beroepstaken = [];
         this.currentCourse.professionalskills = [];
+        this.currentCourse.toetsenlijst = [];
 
         // Beroepstaken
         this.refreshBeroepstaken();
@@ -41,6 +43,9 @@ export class CursussenComponent implements OnInit {
 
         // Leerdoelen
         this.refreshLeerdoelen();
+
+        // Toetsen
+        this.refreshToetsen();
       },
       error => console.log('Error: ', error),
       () => {
@@ -150,6 +155,14 @@ export class CursussenComponent implements OnInit {
     });
   }
 
+  refreshToetsen() {
+    this.loading = true;
+    this.toetsenService.getToetsenByObject(this.currentCourse.toetsen).subscribe(toetsen => {
+      this.currentCourse.toetsenlijst = toetsen;
+      this.loading = false;
+    });
+  }
+
   checkbox(item) {
     item.selected = (item.selected) ? false : true;
   }
@@ -166,6 +179,9 @@ export class CursussenComponent implements OnInit {
 
     // Leerdoelen
     this.refreshLeerdoelen();
+
+    // Leerdoelen
+    this.refreshToetsen();
 
     this.selectedButton = 1;
     console.log(this.currentCourse);
