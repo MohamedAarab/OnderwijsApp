@@ -7,6 +7,7 @@ import {Observable} from "rxjs";
 export class CursussenService {
   headers: Headers;
   options: RequestOptions;
+  organisationId: any;
 
   constructor(private http: Http) {
     console.log('CourseService Initialized...');
@@ -14,10 +15,12 @@ export class CursussenService {
     });
 
     this.options = new RequestOptions({ headers: this.headers });
+
+    this.organisationId = JSON.parse(localStorage.getItem('selectedOrganisatie'));
   }
 
   getCursussen() {
-    return this.http.get('http://curcon-huict.rhcloud.com/rest/organisaties/1/cursussen')
+    return this.http.get('http://curcon-huict.rhcloud.com/rest/organisaties/' + this.organisationId.id + '/cursussen')
       .map(res => res.json());
   }
 

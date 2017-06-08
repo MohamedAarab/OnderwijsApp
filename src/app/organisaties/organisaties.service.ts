@@ -13,6 +13,11 @@ export class OrganisatiesService {
       .map(res => res.json());
   }
 
+  getOrganisatieById(id) {
+    return this.http.get('http://curcon-huict.rhcloud.com/rest/organisaties/' + id)
+      .map(res => res.json());
+  }
+
   getOrganisatieByObject(obj) {
     return this.http.get(obj.href)
       .map(res => res.json());
