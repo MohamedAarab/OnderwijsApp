@@ -1,10 +1,11 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, Directive} from '@angular/core';
 import { Router } from '@angular/router';
 import {CursussenService} from './cursussen.service';
 import {BeroepstakenService} from '../beroepstaken/beroepstaken.service';
 import {ProfessionalskillsService} from '../professionalskills/professionalskills.service';
-import {LeerdoelenService} from "../leerdoelen/leerdoelen.service";
-import {ToetsenService} from "../toetsen/toetsen.service";
+import {LeerdoelenService} from '../leerdoelen/leerdoelen.service';
+import {ToetsenService} from '../toetsen/toetsen.service';
+import {AbstractControl, NG_VALIDATORS} from '@angular/forms';
 
 @Component({
   templateUrl: 'cursussen.component.html',
@@ -19,8 +20,12 @@ export class CursussenComponent implements OnInit {
   loading: boolean;
   naam: string;
   error: boolean;
-  selectedButton : number;
+  selectedButton: number;
   currentCourse = <any>{};
+  mode: string;
+  formCourse = <any>{};
+
+
 
   constructor(private cursusService: CursussenService, private beroepstaakService: BeroepstakenService, private professionalskillService: ProfessionalskillsService, private leerdoelenService: LeerdoelenService, private toetsenService: ToetsenService) {
     this.loading = true;
@@ -28,13 +33,14 @@ export class CursussenComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectedButton = 1;
+    this.formCourse = {};
     this.cursusService.getCursussen().subscribe(cursussen => {
         this.courses = cursussen;
         this.currentCourse = this.courses[0];
+        this.formCourse = this.courses[0];
         this.currentCourse.beroepstaken = [];
         this.currentCourse.professionalskills = [];
         this.currentCourse.toetsenlijst = [];
-
         // Beroepstaken
         this.refreshBeroepstaken();
 
@@ -52,8 +58,13 @@ export class CursussenComponent implements OnInit {
         this.loading = false;
         console.log(this.currentCourse);
       });
+    this.mode = 'view';
+
   }
 
+  changeMode(mode) {
+    this.mode = mode;
+  }
 
   deleteBeroepstaak(bt: Object) {
       this.cursusService.deleteBeroepstaak(this.currentCourse.id, bt['id']).subscribe(
@@ -170,6 +181,7 @@ export class CursussenComponent implements OnInit {
   onSelect(cour: Object) {
     this.onSelectedCourse.emit(cour);
     this.currentCourse = cour;
+    this.formCourse = cour;
 
     // Beroepstaken
     this.refreshBeroepstaken();
@@ -189,5 +201,34 @@ export class CursussenComponent implements OnInit {
 
   changeTab(tabnr : number) {
     this.selectedButton = tabnr;
+  }
+
+  save(form: any) {
+    var formValues = form.value;
+    formValues.coordinator = 1;
+    console.log(formValues);
+    this.cursusService.updateCursus(this.currentCourse.id, formValues).subscribe(
+      data => {
+        this.mode = 'view';
+        this.cursusService.getCursussenByObject(this.currentCourse).subscribe(cursus => {
+          this.currentCourse = cursus;
+          this.formCourse = cursus;
+          this.currentCourse.beroepstaken = [];
+          this.currentCourse.professionalskills = [];
+          this.currentCourse.toetsenlijst = [];
+          // Beroepstaken
+          this.refreshBeroepstaken();
+
+          // Professional Skills
+          this.refreshProfessionalskills();
+
+          // Leerdoelen
+          this.refreshLeerdoelen();
+
+          // Toetsen
+          this.refreshToetsen();
+        })
+      }
+    );
   }
 }

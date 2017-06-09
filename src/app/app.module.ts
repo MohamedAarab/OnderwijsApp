@@ -20,12 +20,14 @@ import { FullLayoutComponent } from './layouts/full-layout.component';
 import { SimpleLayoutComponent } from './layouts/simple-layout.component';
 import {OrganisatiesService} from './organisaties/organisaties.service';
 import {HttpModule} from '@angular/http';
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpModule,
+    FormsModule,
     CommonModule,
     DropdownModule.forRoot(),
     TabsModule.forRoot(),

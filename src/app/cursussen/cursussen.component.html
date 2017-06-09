@@ -43,30 +43,70 @@
                   <tabset>
                     <tab>
                       <template tabHeading><i class="icon-list"></i> Algemeen</template>
-                      <table class="table table-condensed">
+                      <form #editCourse="ngForm" novalidate>
+                      <a href="javascript:void(0)" (click)="changeMode('edit')" *ngIf="mode == 'view'">Bewerken</a>
+                      <a href="javascript:void(0)" (click)="changeMode('view')" *ngIf="mode == 'edit'">Annuleren</a>
+                      <a href="javascript:void(0)" (click)="save(editCourse)" *ngIf="mode == 'edit'">Opslaan</a>
+                        <table class="table table-condensed table-nonfluid">
                         <tbody>
                         <tr>
-                          <td class="table-label"><b>Code:</b></td>
-                          <td>{{currentCourse.code}}</td>
+                          <td class="table-label"><label for="Code">Code:</label></td>
+                          <td *ngIf="mode == 'view'">{{currentCourse.code}}</td>
+                          <td *ngIf="mode == 'edit'">
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="code"
+                                     required
+                                     [ngModel]="formCourse.code" name="code">
+                            </div>
+                          </td>
                         </tr>
                         <tr>
-                          <td><b>Naam:</b></td>
-                          <td>{{currentCourse.naam}}</td>
+                          <td><label for="Naam">Naam:</label></td>
+                          <td *ngIf="mode == 'view'">{{currentCourse.naam}}</td>
+                          <td *ngIf="mode == 'edit'">
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="naam"
+                                     required
+                                     [ngModel]="formCourse.naam" name="naam">
+                            </div>
+                          </td>
                         </tr>
                         <tr>
-                          <td><b>Coordinator:</b></td>
-                          <td>{{currentCourse.coordinator?.naam}}</td>
+                          <td><label for="coordinator">Coordinator:</label> </td>
+                          <td *ngIf="mode == 'view'">{{currentCourse.coordinator?.naam}}</td>
+                          <td *ngIf="mode == 'edit'">
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="coordinator"
+                                     required
+                                     [ngModel]="formCourse.coordinator?.naam" name="coordinator">
+                            </div>
+                          </td>
                         </tr>
                         <tr>
-                          <td><b>Periode:</b></td>
-                          <td>{{currentCourse.periode}}</td>
+                          <td><label for="periode">Periode:</label></td>
+                          <td *ngIf="mode == 'view'">{{currentCourse.periode}}</td>
+                          <td *ngIf="mode == 'edit'">
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="periode"
+                                     required
+                                     [ngModel]="formCourse.periode" name="periode">
+                            </div>
+                          </td>
                         </tr>
                         <tr>
-                          <td><b>European credits:</b></td>
-                          <td>{{currentCourse.europeanCredits}}</td>
+                          <td><label for="europeanCredits">European credits:</label></td>
+                          <td *ngIf="mode == 'view'">{{currentCourse.europeanCredits}}</td>
+                          <td *ngIf="mode == 'edit'">
+                            <div class="form-group">
+                              <input type="text" class="form-control" id="europeanCredits"
+                                     required
+                                     [ngModel]="formCourse.europeanCredits" name="europeanCredits">
+                            </div>
+                          </td>
                         </tr>
                         </tbody>
                       </table>
+                      </form>
                     </tab>
                     <tab>
                       <template tabHeading><i class="icon-calculator"></i> Beroepstaken</template>

@@ -59,8 +59,16 @@ export class CursussenService {
   }
 
   deleteLeerdoel(leerdoelId) {
-    console.log('http://curcon-huict.rhcloud.com/rest/leerdoelen/' + leerdoelId);
+//    console.log('http://curcon-huict.rhcloud.com/rest/leerdoelen/' + leerdoelId);
     return this.http.delete('http://curcon-huict.rhcloud.com/rest/leerdoelen/' + leerdoelId)
+      .catch(this.handleError);
+  }
+
+  updateCursus(id, form) {
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    console.log('http://curcon-huict.rhcloud.com/rest/cursussen/' + id);
+    return this.http.put('http://curcon-huict.rhcloud.com/rest/cursussen/' + id, form)
       .catch(this.handleError);
   }
 
