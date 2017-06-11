@@ -17,6 +17,8 @@ export class CursussenService {
     this.options = new RequestOptions({ headers: this.headers });
 
     this.organisationId = JSON.parse(localStorage.getItem('selectedOrganisatie'));
+
+
   }
 
   getCursussen() {
@@ -84,4 +86,8 @@ export class CursussenService {
     console.error(errMsg);
     return Observable.throw(errMsg);
   }
+
+
+
+
 }

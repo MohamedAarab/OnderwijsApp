@@ -6,6 +6,7 @@ import {ProfessionalskillsService} from '../professionalskills/professionalskill
 import {LeerdoelenService} from '../leerdoelen/leerdoelen.service';
 import {ToetsenService} from '../toetsen/toetsen.service';
 import {AbstractControl, NG_VALIDATORS} from '@angular/forms';
+import {ToetsmatrijzenService} from "../toetsmatrijzen/toetsmatrijzen.service";
 
 @Component({
   templateUrl: 'cursussen.component.html',
@@ -24,16 +25,18 @@ export class CursussenComponent implements OnInit {
   currentCourse = <any>{};
   mode: string;
   formCourse = <any>{};
+  toetsmatrijs: any;
 
 
 
-  constructor(private cursusService: CursussenService, private beroepstaakService: BeroepstakenService, private professionalskillService: ProfessionalskillsService, private leerdoelenService: LeerdoelenService, private toetsenService: ToetsenService) {
+  constructor(private cursusService: CursussenService, private beroepstaakService: BeroepstakenService, private professionalskillService: ProfessionalskillsService, private leerdoelenService: LeerdoelenService, private toetsenService: ToetsenService, private toetsmatrijzenService: ToetsmatrijzenService) {
     this.loading = true;
   }
 
   ngOnInit(): void {
     this.selectedButton = 1;
     this.formCourse = {};
+    this.mode = 'view';
     this.cursusService.getCursussen().subscribe(cursussen => {
         this.courses = cursussen;
         this.currentCourse = this.courses[0];
@@ -41,25 +44,15 @@ export class CursussenComponent implements OnInit {
         this.currentCourse.beroepstaken = [];
         this.currentCourse.professionalskills = [];
         this.currentCourse.toetsenlijst = [];
-        // Beroepstaken
-        this.refreshBeroepstaken();
+        this.currentCourse.toetsmatrijs = [];
 
-        // Professional Skills
-        this.refreshProfessionalskills();
-
-        // Leerdoelen
-        this.refreshLeerdoelen();
-
-        // Toetsen
-        this.refreshToetsen();
+        this.refreshAll();
       },
       error => console.log('Error: ', error),
       () => {
         this.loading = false;
-        console.log(this.currentCourse);
+        //console.log(this.currentCourse);
       });
-    this.mode = 'view';
-
   }
 
   changeMode(mode) {
@@ -183,20 +176,10 @@ export class CursussenComponent implements OnInit {
     this.currentCourse = cour;
     this.formCourse = cour;
 
-    // Beroepstaken
-    this.refreshBeroepstaken();
-
-    // Professional Skills
-    this.refreshProfessionalskills();
-
-    // Leerdoelen
-    this.refreshLeerdoelen();
-
-    // Leerdoelen
-    this.refreshToetsen();
+    this.refreshAll();
 
     this.selectedButton = 1;
-    console.log(this.currentCourse);
+    //console.log(this.currentCourse);
   }
 
   changeTab(tabnr : number) {
@@ -216,19 +199,89 @@ export class CursussenComponent implements OnInit {
           this.currentCourse.beroepstaken = [];
           this.currentCourse.professionalskills = [];
           this.currentCourse.toetsenlijst = [];
-          // Beroepstaken
-          this.refreshBeroepstaken();
-
-          // Professional Skills
-          this.refreshProfessionalskills();
-
-          // Leerdoelen
-          this.refreshLeerdoelen();
-
-          // Toetsen
-          this.refreshToetsen();
-        })
+          this.currentCourse.toetsmatrijs = [];
+          this.refreshAll();
+        });
       }
     );
+  }
+
+  refreshAll() {
+    // Beroepstaken
+    this.refreshBeroepstaken();
+
+    // Professional Skills
+    this.refreshProfessionalskills();
+
+    // Leerdoelen
+    this.refreshLeerdoelen();
+
+    // Toetsen
+    this.refreshToetsen();
+
+
+    this.generateToetsMatrijs();
+
+    console.log(this.currentCourse);
+
+  }
+
+  generateToetsMatrijs() {
+
+    this.toetsmatrijzenService.getToetsmatrijzenById(this.currentCourse.id).subscribe(toetsmatrijs => {
+
+      console.log(toetsmatrijs);
+
+      var totalCells = 4; // De eerste 4 cells gereserveerd voor benaming van leerdoelen
+      var totalRows = toetsmatrijs.leerdoelen.length+2; // +2 voor de benaming van toetsen
+
+      for (let i = 0; i < toetsmatrijs.toetsen.length; i++) {
+        totalCells += toetsmatrijs.toetsen[i].beoordelingsElementen.length;
+      }
+
+
+      console.log("Total rows:" + totalRows);
+
+      console.log("Total cells:" + totalCells);
+
+      let toetsmatrijsArray = Array.apply(null, Array(totalRows)); // Rows aanmaken
+
+      for(let i = 0; i < toetsmatrijsArray.length; i++) {
+        toetsmatrijsArray[i] = Array.apply(null, Array(totalCells)); // Cellen aanmaken
+      }
+
+      var toetsPosition = 4;
+      for(let i = 0; i < toetsmatrijs.toetsen.length; i++) {
+        toetsmatrijsArray[0][toetsPosition] = toetsmatrijs.toetsen[i].naam;
+
+
+        for(let j = 0; j < toetsmatrijs.toetsen[i].beoordelingsElementen.length; j++) {
+          toetsmatrijsArray[1][toetsPosition+j] = toetsmatrijs.toetsen[i].beoordelingsElementen[j];
+        }
+
+        toetsPosition += toetsmatrijs.toetsen[i].beoordelingsElementen.length;
+      }
+
+
+      for(let i = 0; i < toetsmatrijs.leerdoelen.length; i++) {
+        toetsmatrijsArray[2 + i][0] = toetsmatrijs.leerdoelen[i].eindPS.naam;
+        toetsmatrijsArray[2 + i][1] = toetsmatrijs.leerdoelen[i].eindBT.naam;
+        toetsmatrijsArray[2 + i][2] = "LD-" + toetsmatrijs.leerdoelen[i].id;
+        toetsmatrijsArray[2 + i][3] = toetsmatrijs.leerdoelen[i].bloomniveau.naam;
+        for (let p = 0; p < toetsmatrijs.leerdoelen[i].toetsElementen.length; p++) {
+          var idToetsElement = toetsmatrijs.leerdoelen[i].toetsElementen[p].beoordelingsElement.id;
+          for (let j = 0; j < toetsmatrijsArray[1].length; j++) {
+            if (j > 3) {
+              if (idToetsElement == toetsmatrijsArray[1][j].id) {
+                 toetsmatrijsArray[2 + i][j] = toetsmatrijs.leerdoelen[i].toetsElementen[p];
+              }
+            }
+          }
+        }
+      }
+
+      this.currentCourse.toetsmatrijs = toetsmatrijsArray;
+    });
+
   }
 }

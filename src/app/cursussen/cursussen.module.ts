@@ -22,6 +22,7 @@ import {ProfessionalskillsService} from '../professionalskills/professionalskill
 import {LeerdoelenService} from '../leerdoelen/leerdoelen.service';
 import {ToetsenService} from '../toetsen/toetsen.service';
 import {FormsModule} from '@angular/forms';
+import {ToetsmatrijzenService} from "../toetsmatrijzen/toetsmatrijzen.service";
 
 @NgModule({
   imports: [
@@ -36,6 +37,6 @@ import {FormsModule} from '@angular/forms';
   ],
   declarations: [ CursussenComponent,
     TabsComponent, TablesComponent, ModalsComponent],
-  providers: [CursussenService, BeroepstakenService, ProfessionalskillsService, LeerdoelenService, ToetsenService]
+  providers: [CursussenService, BeroepstakenService, ProfessionalskillsService, LeerdoelenService, ToetsenService, ToetsmatrijzenService]
 })
 export class CursussenModule { }

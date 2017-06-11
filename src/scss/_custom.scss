@@ -224,3 +224,94 @@
 .table-nonfluid {
   width: auto !important;
 }
+
+.toetsmatrijs {
+  border: none;
+  border-collapse:collapse;
+  border-spacing:0;
+  table-layout: fixed;
+}
+
+.toetsmatrijs .toetsKopje {
+  border: none;
+  text-align: left;
+  padding: 0;
+}
+
+.toetsmatrijs .weging {
+  white-space: nowrap;
+}
+
+th.toetsKopje > div {
+
+  padding-top: 100px;
+  transform-origin:0 0;
+  transform:
+    /* Magic Numbers */
+    translate(-85px, 35px)
+      /* 45 is really 360 - 45 */
+    rotate(315deg);
+}
+th.toetsKopje > div > span {
+  border-bottom: 1px solid #ccc;
+  padding: 1px 10px;
+}
+
+
+.toetsmatrijs .toetsElementKopje {
+  border: none;
+  width: 0px !important;
+  height: 0px;
+  padding-top: 45px;
+  border-left: 1px solid #ccc;
+  overflow-wrap: break-word;
+  max-width: 100px;
+}
+
+.toetsmatrijs .toetsElementKopje:last-child {
+  border-right: 1px solid #ccc;
+}
+
+.toetsElementKopje > div {
+  transform-origin:0 0;
+  -moz-transform: rotate(270deg) translateX(-35px);
+  -webkit-transform: rotate(270deg) translateX(-35px) ;
+  -o-transform: rotate(270deg) translateX(-35px) ;
+  -ms-transform: rotate(270deg) translateX(-35px) ;
+  transform: rotate(270deg) translateX(-35px);
+  margin-left: -6px;
+  margin-bottom: 7px;
+  margin-top: 40px;
+
+}
+.toetsElementKopje > div > span {
+  display: block;
+  word-wrap: break-word;
+}
+
+
+.toetsmatrijs th, .toetsmatrijs td {
+}
+
+.toetsmatrijs .tableInvisible {
+  border: none;
+  font-weight: bold;
+  padding-top: 100px;
+}
+
+.toetsmatrijs .ps, .toetsmatrijs .bm, .toetsmatrijs .bt, .toetsmatrijs .ld {
+  width: 100px !important;
+}
+
+.toetsmatrijs .bm {
+  border-right: 2px solid #ccc;
+}
+
+.toetsmatrijs .toetsElementen {
+  border-bottom: 2px solid #ccc;
+}
+
+.toetsmatrijs td {
+  padding: 5px;
+  text-align: center;
+}
