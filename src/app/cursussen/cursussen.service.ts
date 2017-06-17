@@ -48,11 +48,19 @@ export class CursussenService {
     .catch(this.handleError);
   }
 
+  addLeerdoel(cursusId, leerdoel) {
+    return this.http.post('http://curcon-huict.rhcloud.com/rest/cursussen/' + cursusId + '/leerdoelen', leerdoel)
+    .catch(this.handleError);
+  }
+
+  addToets(cursusId, toets) {
+    return this.http.post('http://curcon-huict.rhcloud.com/rest/cursussen/' + cursusId + '/toetsen', toets)
+    .catch(this.handleError);
+  }
 
   deleteBeroepstaak(cursusId, beroepstaakId) {
     return this.http.delete('http://curcon-huict.rhcloud.com/rest/cursussen/' + cursusId + '/beroepstaken/' + beroepstaakId)
       .catch(this.handleError);
-
   }
 
   deleteProfessionalskill(cursusId, professionalskillId) {
@@ -74,6 +82,11 @@ export class CursussenService {
       .catch(this.handleError);
   }
 
+  getToetsElementen(position, url) {
+    return this.http.get(url)
+      .map(res => [position, res.json()]);
+  }
+
 
   private extractData(res: Response) {
     let body = res.json();
@@ -88,6 +101,8 @@ export class CursussenService {
   }
 
 
-
-
+  deleteToets(bt2: any) {
+    return this.http.delete('http://curcon-huict.rhcloud.com/rest/toetsen/' + bt2)
+      .catch(this.handleError);
+  }
 }

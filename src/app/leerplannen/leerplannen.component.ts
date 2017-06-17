@@ -149,6 +149,7 @@ export class LeerplannenComponent implements OnInit {
       }
       this.selectedCohort = coh;
       this.loading = false;
+      console.log(coh);
     });
 
 

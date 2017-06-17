@@ -230,20 +230,37 @@
   border-collapse:collapse;
   border-spacing:0;
   table-layout: fixed;
+  margin-top: 50px;
 }
 
 .toetsmatrijs .toetsKopje {
   border: none;
   text-align: left;
   padding: 0;
+  font-weight: bold;
 }
 
 .toetsmatrijs .weging {
   white-space: nowrap;
+  position: relative;
 }
 
-th.toetsKopje > div {
+.toetsmatrijs .weging div {
+  display: block;
+  position:absolute;
+  top:0;
+  bottom:0;
+  width:100%;
+  cursor: pointer;
+}
 
+.toetsmatrijs .weging input[type='number'] {
+  width: 70px;
+  display: inline;
+  margin-right: 5px;
+}
+
+.toetsKopje > div {
   padding-top: 100px;
   transform-origin:0 0;
   transform:
@@ -252,7 +269,7 @@ th.toetsKopje > div {
       /* 45 is really 360 - 45 */
     rotate(315deg);
 }
-th.toetsKopje > div > span {
+.toetsKopje > div > span {
   border-bottom: 1px solid #ccc;
   padding: 1px 10px;
 }
@@ -282,7 +299,7 @@ th.toetsKopje > div > span {
   margin-left: -6px;
   margin-bottom: 7px;
   margin-top: 40px;
-
+  text-align: left;
 }
 .toetsElementKopje > div > span {
   display: block;
@@ -299,12 +316,16 @@ th.toetsKopje > div > span {
   padding-top: 100px;
 }
 
-.toetsmatrijs .ps, .toetsmatrijs .bm, .toetsmatrijs .bt, .toetsmatrijs .ld {
+.toetsmatrijs .empty {
+  border: none;
+  font-weight: bold;
+}
+.toetsmatrijs .ld {
   width: 100px !important;
 }
 
-.toetsmatrijs .bm {
-  border-right: 2px solid #ccc;
+.toetsmatrijs .ld:last-child {
+  border-right: 10px solid #ccc;
 }
 
 .toetsmatrijs .toetsElementen {
@@ -314,4 +335,10 @@ th.toetsKopje > div > span {
 .toetsmatrijs td {
   padding: 5px;
   text-align: center;
+}
+
+.toetsmatrijs .total {
+  border: 2px solid #bbbbbb;
+  vertical-align: center;
+  font-weight: bold;
 }

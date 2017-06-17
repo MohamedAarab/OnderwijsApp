@@ -35,6 +35,11 @@ export class BeroepstakenService {
       .map(res => res.json());
   }
 
+  getBeroepstaakTypes() {
+    return this.http.get('http://curcon-huict.rhcloud.com/rest/beroepstaken/types')
+      .map(res => res.json());
+  }
+
   getBeroepstakenByObject(obj) {
     return this.http.get(obj.href)
       .map(res => res.json());
@@ -52,4 +57,8 @@ export class BeroepstakenService {
     return Observable.throw(errMsg);
   }
 
+  getBeroepstaakId(actid, archid, niv) {
+    return this.http.get('http://curcon-huict.rhcloud.com/rest/beroepstaken/activiteiten/' + actid + '/architectuurlagen/' + archid + '/niveaus/' + niv)
+      .map(res => res.json());
+  }
 }

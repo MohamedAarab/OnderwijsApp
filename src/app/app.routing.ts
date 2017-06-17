@@ -24,7 +24,7 @@ export const routes: Routes = [
       },
       {
         path: 'cursussen',
-        loadChildren: './cursussen/cursussen.module#CursussenModule'
+        loadChildren: './cursussen/cursussen.module#CursussenModule',
       },
       {
         path: 'leerplannen',
