@@ -105,4 +105,9 @@ export class CursussenService {
     return this.http.delete('http://curcon-huict.rhcloud.com/rest/toetsen/' + bt2)
       .catch(this.handleError);
   }
+
+  addCursus(cursus) {
+    return this.http.post('http://curcon-huict.rhcloud.com/rest/organisaties/' + this.organisationId.id + '/cursussen', cursus)
+      .catch(this.handleError);
+  }
 }

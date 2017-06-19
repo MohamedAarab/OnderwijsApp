@@ -31,6 +31,10 @@ export const routes: Routes = [
         loadChildren: './leerplannen/leerplannen.module#LeerplannenModule'
       },
       {
+        path: 'coordinatoren',
+        loadChildren: './coordinatoren/coordinatoren.module#CoordinatorenModule'
+      },
+      {
         path: 'components',
         loadChildren: './components/components.module#ComponentsModule'
       },

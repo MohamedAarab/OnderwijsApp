@@ -8,6 +8,7 @@ import {ToetsenService} from '../toetsen/toetsen.service';
 import {AbstractControl, NG_VALIDATORS} from '@angular/forms';
 import {ToetsmatrijzenService} from "../toetsmatrijzen/toetsmatrijzen.service";
 import {BloomniveausService} from "../bloomniveaus/bloomniveaus.service";
+import {CoordinatorenService} from "../coordinatoren/coordinatoren.service";
 
 @Component({
   templateUrl: 'cursussen.component.html',
@@ -17,11 +18,13 @@ export class CursussenComponent implements OnInit {
   @ViewChild('ProfessionalskillModal') professionalskillModal: any;
   @ViewChild('LeerdoelModal') leerdoelModal: any;
   @ViewChild('BeoordelingselementModal') beoordelingselementModal: any;
+  @ViewChild('CursusModal') cursusModal: any;
   @ViewChild('ToetsModal') toetsModal: any;
   @Input() courses: Array<any>;
   @Output() onSelectedCourse = new EventEmitter<Object>();
   allBeroepstaken: Array<any>;
   allProfessionalskills: Array<any>;
+  allCoordinatoren: Array<any>;
   allBloomniveaus: Array<any>;
   allOsirisResultaatTypen: Array<any>;
   loading: boolean;
@@ -37,11 +40,12 @@ export class CursussenComponent implements OnInit {
   toetsEdit = <any>{};
   toetsForm = <any>{};
   leerdoelForm = <any>{};
+  cursusForm = <any>{};
   formCourse = <any>{};
 
 
 
-  constructor(private cursusService: CursussenService, private beroepstaakService: BeroepstakenService, private professionalskillService: ProfessionalskillsService, private leerdoelenService: LeerdoelenService, private toetsenService: ToetsenService, private toetsmatrijzenService: ToetsmatrijzenService, private bloomniveauService: BloomniveausService) {
+  constructor(private cursusService: CursussenService, private coordinatorenService: CoordinatorenService, private beroepstaakService: BeroepstakenService, private professionalskillService: ProfessionalskillsService, private leerdoelenService: LeerdoelenService, private toetsenService: ToetsenService, private toetsmatrijzenService: ToetsmatrijzenService, private bloomniveauService: BloomniveausService) {
     this.loading = true;
   }
 
@@ -67,7 +71,9 @@ export class CursussenComponent implements OnInit {
       });
   }
 
+
   changeMode(mode) {
+    this.refreshCoordinatoren();
     this.mode = mode;
   }
 
@@ -131,28 +137,47 @@ export class CursussenComponent implements OnInit {
     this.bloomniveauService.getBloomniveaus().subscribe(data => {
       this.allBloomniveaus = data;
       let selectedBeroepstaak = 0;
-      if(this.currentCourse.beroepstaken.length > 0)
+      if (this.currentCourse.beroepstaken.length > 0)
         selectedBeroepstaak = this.currentCourse.beroepstaken[0].id;
 
       let selectedProfessionalSkill = 0;
-      if(this.currentCourse.professionalskills.length > 0)
+      if (this.currentCourse.professionalskills.length > 0)
         selectedProfessionalSkill = this.currentCourse.professionalskills[0].id;
 
-      this.leerdoelForm = {eindBT: selectedBeroepstaak, eindPS: selectedProfessionalSkill, bloomniveau: data[0].id, omschrijving: ""};
+      this.leerdoelForm = {
+        eindBT: selectedBeroepstaak,
+        eindPS: selectedProfessionalSkill,
+        bloomniveau: data[0].id,
+        omschrijving: ""
+      };
       this.loading = false;
     });
+  }
+
+  initializeCursusForm() {
+    this.loading = true;
+
+    this.cursusForm = {};
+    this.coordinatorenService.getCoordinatoren().subscribe(data => {
+      this.allCoordinatoren = data;
+
+      let selectedCoordinator = 0;
+      if(data.length > 0)
+        selectedCoordinator = data[0].id;
+
+      this.cursusForm = {coordinator: selectedCoordinator};
+      this.loading = false;
+    });
+  }
 
 
-
-    // this.beroepstaakService.getBeroepstakenByObject(this.currentCourse.id).subscribe(result => {
-    //   this.allBeroepstaken = result;
-    //   for(let i = 0; i < this.currentCourse.beroepstaken.length; i++) {
-    //     console.log(this.currentCourse.beroepstaken[i].id);
-    //     this.allBeroepstaken = this.allBeroepstaken.filter((x) => x.id == this.currentCourse.beroepstaken[i].id);
-    //   }
-    //   console.log(this.allBeroepstaken);
-    //   this.loading = false;
-    // });
+  addCursus() {
+    this.loading = true;
+    this.cursusService.addCursus(this.cursusForm).subscribe(x => {
+      this.cursusModal.hide();
+      this.refreshCursussen();
+      this.loading = false;
+    });
   }
 
   addToets() {
@@ -255,6 +280,14 @@ export class CursussenComponent implements OnInit {
     });
   }
 
+  refreshCoordinatoren() {
+    this.loading = true;
+    this.coordinatorenService.getCoordinatoren().subscribe(coordinatoren => {
+      this.allCoordinatoren = coordinatoren;
+      this.loading = false;
+    });
+  }
+
   refreshLeerdoelen() {
     this.loading = true;
     this.leerdoelenService.getLeerdoelenByObject(this.currentCourse.leerdoelen).subscribe(leerdoelen => {
@@ -290,8 +323,6 @@ export class CursussenComponent implements OnInit {
 
   save(form: any) {
     var formValues = form.value;
-    formValues.coordinator = 1;
-    console.log(formValues);
     this.cursusService.updateCursus(this.currentCourse.id, formValues).subscribe(
       data => {
         this.mode = 'view';
@@ -304,6 +335,7 @@ export class CursussenComponent implements OnInit {
           this.currentCourse.toetsmatrijs = [];
           this.refreshAll();
         });
+        this.refreshCursussen();
       }
     );
   }
@@ -419,5 +451,24 @@ export class CursussenComponent implements OnInit {
 
   cancelEditGewicht() {
     this.toetsMatrijsEdit = 0;
+  }
+
+  private refreshCursussen() {
+    this.loading = true;
+    this.cursusService.getCursussen().subscribe(cursussen => {
+        this.courses = cursussen;
+        this.currentCourse.beroepstaken = [];
+        this.currentCourse.professionalskills = [];
+        this.currentCourse.toetsenlijst = [];
+        this.currentCourse.toetsmatrijs = [];
+
+        this.refreshAll();
+        this.loading = false;
+      },
+      error => console.log('Error: ', error),
+      () => {
+        this.loading = false;
+        //console.log(this.currentCourse);
+      });
   }
 }

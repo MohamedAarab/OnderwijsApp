@@ -23,11 +23,12 @@
                     <thead>
                     <tr>
                       <td><b>Cursussen</b></td>
+                      <td><button type="button" class="btn btn-info btn-small pull-right" (click)="cursusModal.show(); initializeCursusForm();">Nieuwe cursus</button></td>
                     </tr>
                     </thead>
                     <tbody>
                     <tr *ngFor="let c of courses" (click)="onSelect(c)" class="selectable">
-                      <td>{{ c.naam }}</td>
+                      <td colspan="2">{{ c.naam }}</td>
                     </tr>
                     </tbody>
                   </table>
@@ -76,9 +77,9 @@
                           <td *ngIf="mode == 'view'">{{currentCourse.coordinator?.naam}}</td>
                           <td *ngIf="mode == 'edit'">
                             <div class="form-group">
-                              <input type="text" class="form-control" id="coordinator"
-                                     required
-                                     [ngModel]="formCourse.coordinator?.naam" name="coordinator">
+                              <select [ngModel]="formCourse.coordinator?.id" type="text" class="form-control" id="coordinator" name="coordinator">
+                                <option *ngFor="let a of allCoordinatoren" [ngValue]="a.id">{{a.naam}}</option>
+                              </select>
                             </div>
                           </td>
                         </tr>
@@ -521,6 +522,61 @@
         <div  *ngIf="!loading" class="modal-footer">
           <button type="button" class="btn btn-secondary" (click)="beoordelingselementModal.hide()">Sluiten</button>
           <button type="button" class="btn btn-primary" (click)="addBeoordelingselementToToets()">Toevoegen</button>
+        </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div bsModal #CursusModal="bs-modal" class="addModal modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <form #f="ngForm">
+        <div class="modal-header">
+          <h4 class="modal-title">Nieuwe cursus</h4>
+          <button type="button" class="close" (click)="cursusModal.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div *ngIf="loading" align="center"><br /><img src="assets/img/ripple.svg" /></div>
+          <div class="form">
+
+            <div class="form-group">
+              <label for="code">Code:</label>
+              <input type="text" name="code" class="form-control" [(ngModel)]="cursusForm.code" />
+            </div>
+
+            <div class="form-group">
+              <label for="naam">Naam:</label>
+              <input type="text" name="naam" class="form-control" [(ngModel)]="cursusForm.naam" />
+            </div>
+
+            <div class="form-group">
+              <label for="periode">Periode:</label>
+              <input type="text" name="periode" class="form-control" [(ngModel)]="cursusForm.periode" />
+            </div>
+
+            <div class="form-group">
+              <label for="europeanCredits">European Credits:</label>
+              <input type="text" name="europeanCredits" class="form-control" [(ngModel)]="cursusForm.europeanCredits" />
+            </div>
+
+            <div class="form-group">
+              <label for="coordinator">Coordinator:</label>
+              <select class="form-control" id="coordinator" name="coordinator" [(ngModel)]="cursusForm.coordinator">
+                <option *ngFor="let a of allCoordinatoren" [ngValue]="a.id">{{a.naam}}</option>
+              </select>
+            </div>
+
+            {{beoordelingselementForm | json}}
+
+          </div>
+        </div>
+        <div  *ngIf="!loading" class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="cursusForm.hide()">Sluiten</button>
+          <button type="button" class="btn btn-primary" (click)="addCursus()">Toevoegen</button>
         </div>
       </form>
     </div><!-- /.modal-content -->

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, Directive} from '@angular/core';
 import { Router } from '@angular/router';
 import {LeerplannenService} from './leerplannen.service';
 import {CohortenService} from '../cohorten/cohorten.service';
@@ -7,98 +7,82 @@ import {OpleidingsprofielenService} from '../opleidingsprofielen/opleidingsprofi
 import {CursussenService} from '../cursussen/cursussen.service';
 import {BeroepstakenService} from '../beroepstaken/beroepstaken.service';
 import {ProfessionalskillsService} from '../professionalskills/professionalskills.service';
+import {AbstractControl, NG_VALIDATORS} from '@angular/forms';
 
 @Component({
   templateUrl: 'leerplannen.component.html',
 })
 export class LeerplannenComponent implements OnInit {
-
-  @Input() courses: Array<any>; cohorten: Array<any>; opleidingen: Array<any>; cursussen: Array<any>;
-  @Output() onSelectedOpleiding = new EventEmitter<Object>(); onSelectedCohort = new EventEmitter<Object>();
-  loading: boolean;
-  currentState: number;
-  selectedOpleiding = <any>{};
-  selectedCohort = <any>{};
+    @ViewChild('LeerplanModal') LeerplanModal: any;
+    @Input() courses: Array<any>; cohorten: Array<any>; opleidingen: Array<any>; cursussen: Array<any>; availableCursussen: Array<any>;
+    @Output() onSelectedOpleiding = new EventEmitter<Object>(); onSelectedCohort = new EventEmitter<Object>();
+    loading: boolean;
+    currentState: number;
+    selectedOpleiding = <any>{};
+    selectedCohort = <any>{};
+    cursusForm = <any>{};
 
   constructor(private leerplanService: LeerplannenService, private cohortService: CohortenService, private organisatieService: OrganisatiesService, private cursusService: CursussenService, private beroepstaakService: BeroepstakenService, private professionalskillService: ProfessionalskillsService, private opleidingsproefielenService: OpleidingsprofielenService) {
     this.loading = true;
   }
 
-  ngOnInit(): void {
-    this.currentState = 0;
-    this.cursussen = [];
-    this.cohorten = [];
-    this.opleidingen = [];
-    this.organisatieService.getOrganisaties().subscribe(organisaties => {
-      this.opleidingsproefielenService.getOpleidingsprofielByObject(organisaties[0].opleidingsProfielen).subscribe(opleidingen => {
-        this.opleidingen = opleidingen;
-      })
-      this.loading = false;
-    });
+    ngOnInit(): void {
+        this.currentState = 0;
+        this.cursussen = [];
+        this.cohorten = [];
+        this.opleidingen = [];
+        this.organisatieService.getOrganisaties().subscribe(organisaties => {
+            this.opleidingsproefielenService.getOpleidingsprofielByObject(organisaties[0].opleidingsProfielen).subscribe(opleidingen => {
+                this.opleidingen = opleidingen;
+                this.cursusService.getCursussen().subscribe(cursussen => {
+                    this.courses = cursussen;
+                });
+            })
+            this.loading = false;
+        });
+    }
 
-    // this.selectedButton = 1;
-    // this.cursusService.getCursussen().subscribe(cursussen => {
-    //     this.courses = cursussen;
-    //     console.log(this.courses);
-    //     this.currentCourse = this.courses[0];
-    //     for(let j = 0; j < this.courses.length; j++) {
-    //       for(let i = 0; i < this.courses[j].leerdoelen.length; i++){
-    //         this.cursusService.getDataByHref(this.courses[j].leerdoelen[i].href)
-    //           .subscribe(leerdoelen => {
-    //
-    //               this.courses[j].leerdoelen[i].data = leerdoelen;
-    //               if(this.courses[j].leerdoelen[i].data.bloomniveau != null) {
-    //                 this.cursusService.getDataByHref(this.courses[j].leerdoelen[i].data.bloomniveau.href)
-    //                   .subscribe(bloomniveau => {
-    //                     this.courses[j].leerdoelen[i].data.bloomniveau.data = bloomniveau;
-    //                   });
-    //               }
-    //             },
-    //             error => console.log('Error: ', error));
-    //       }
-    //
-    //       for(let i = 0; i < this.courses[j].eindBT.length; i++){
-    //         // console.log(i);
-    //         // console.log(i);
-    //         this.cursusService.getDataByHref(this.courses[j].eindBT[i].href)
-    //           .subscribe(beroepstaken => {
-    //               //console.log(i);
-    //               this.courses[j].eindBT[i].data = beroepstaken;
-    //             },
-    //             error => console.log('Error: ', error));
-    //       }
-    //
-    //       for(let i = 0; i < this.courses[j].eindPS.length; i++){
-    //         this.cursusService.getDataByHref(this.courses[j].eindPS[i].href)
-    //           .subscribe(professionalskills => {
-    //             this.courses[j].eindPS[i].data = professionalskills;
-    //           });
-    //       }
-    //
-    //       this.cursusService.getDataByHref(this.courses[j].coordinator.href)
-    //         .subscribe(coordinator => {
-    //           this.courses[j].coordinator.data = coordinator;
-    //         });
-    //     }
-    //   },
-    //   error => console.log('Error: ', error),
-    //   () => {
-    //     this.loading = false;
-    //     console.log(this.currentCourse);
-    //     //console.log(this.currentCourse.eindBT[0].data);
-    //   });
-  }
+    addCursusToCohort(form: any) {
+        this.loading = true;
+        var formValues = form.value;
+        this.leerplanService.addCursusToCohort(this.selectedCohort.id, formValues).subscribe(data => {
+            this.LeerplanModal.hide();
+            this.cursusForm = data;
+            this.onSelectCohort(this.selectedCohort);
+        });
+        this.loading = false;
+    }
 
-  onSelectOpleiding(opl: Object) {
-    this.loading = true;
-    this.onSelectedOpleiding.emit(opl);
-    this.selectedOpleiding = opl;
-    this.cohortService.getCohortenByObject(this.selectedOpleiding['cohorten']).subscribe(cohorten => {
-      this.cohorten = cohorten;
-      this.currentState++;
-      this.loading = false;
-    });
-  }
+    deleteCursus(cu: Object) {
+        this.leerplanService.deleteCursus(this.selectedCohort.id, cu['id']).subscribe(result => {
+            this.onSelectCohort(this.selectedCohort);  },
+            error => { this.onSelectCohort(this.selectedCohort);  });
+    }
+
+    initializeLeerplanForm() {
+        this.loading = true;
+        this.availableCursussen = this.courses;
+        for (let i = 0; i < this.cursussen.length; i++) {
+            this.availableCursussen = this.availableCursussen.filter((x) => x.id !== this.cursussen[i].id);
+        }
+        var id = 0;
+        if (this.availableCursussen.length > 0){
+            id = this.availableCursussen[0].id;
+        }
+        this.cursusForm = {id: id};
+        this.loading = false;
+    }
+
+    onSelectOpleiding(opl: Object) {
+        this.loading = true;
+        this.onSelectedOpleiding.emit(opl);
+        this.selectedOpleiding = opl;
+        this.cohortService.getCohortenByObject(this.selectedOpleiding['cohorten']).subscribe(cohorten => {
+            this.cohorten = cohorten;
+            this.currentState++;
+            this.loading = false;
+        });
+    }
 
 
   onSelectCohort(coh: Object) {
@@ -149,7 +133,6 @@ export class LeerplannenComponent implements OnInit {
       }
       this.selectedCohort = coh;
       this.loading = false;
-      console.log(coh);
     });
 
 

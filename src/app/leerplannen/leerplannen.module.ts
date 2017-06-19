@@ -17,16 +17,24 @@ import {ProfessionalskillsService} from '../professionalskills/professionalskill
 import {TooltipModule} from 'ng2-bootstrap';
 import {Tooltip} from "ngx-tooltip";
 
+// Modal Component
+import { ModalModule } from 'ng2-bootstrap/modal';
+import { ModalsComponent } from '../components/modals.component';
+
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   imports: [
     LeerplannenRoutingModule,
+    FormsModule,
+    ModalModule,
     TooltipModule.forRoot(),
     ChartsModule,
     HttpModule,
     DropdownModule,
     CommonModule,
-    Ng2OrderModule
+    Ng2OrderModule,
+    ModalModule.forRoot()
   ],
   declarations: [ LeerplannenComponent],
   providers: [LeerplannenService, CohortenService, OrganisatiesService, CursussenService, OpleidingsprofielenService, BeroepstakenService, ProfessionalskillsService, Tooltip]
