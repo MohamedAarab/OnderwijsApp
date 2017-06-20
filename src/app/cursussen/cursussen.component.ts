@@ -33,13 +33,17 @@ export class CursussenComponent implements OnInit {
   currentCourse = <any>{};
   mode: string;
   toetsMatrijsEdit: number;
-  toetsMatrijsEditValue: number;
+  toetsMatrijsAdd: Array<any>;
   beroepstakenTypes = <any>{};
+  professionalskillsTypes = <any>{};
   beroepstakenForm = <any>{};
   beoordelingselementForm = <any>{};
+  toetsMatrijsEditForm = <any>{};
+  toetsMatrijsAddForm = <any>{};
   toetsEdit = <any>{};
   toetsForm = <any>{};
   leerdoelForm = <any>{};
+  professionalskillForm = <any>{};
   cursusForm = <any>{};
   formCourse = <any>{};
 
@@ -53,6 +57,7 @@ export class CursussenComponent implements OnInit {
     this.formCourse = {};
     this.mode = 'view';
     this.toetsMatrijsEdit = 0;
+    this.toetsMatrijsAdd = [];
     this.cursusService.getCursussen().subscribe(cursussen => {
         this.courses = cursussen;
         this.currentCourse = this.courses[0];
@@ -79,35 +84,34 @@ export class CursussenComponent implements OnInit {
 
   deleteBeroepstaak(bt: Object) {
       this.cursusService.deleteBeroepstaak(this.currentCourse.id, bt['id']).subscribe(
-        result => { this.refreshBeroepstaken();  },
-        error => { this.refreshBeroepstaken();  });
+        result => { this.refreshBeroepstaken(); this.generateToetsMatrijs();  },
+        error => { this.refreshBeroepstaken();  this.generateToetsMatrijs(); });
   }
 
   deleteToets(to: Object) {
       this.cursusService.deleteToets(to['id']).subscribe(
-        result => { this.refreshToetsen();  },
-        error => { this.refreshToetsen();  });
+        result => { this.refreshToetsen(); this.generateToetsMatrijs(); },
+        error => { this.refreshToetsen(); this.generateToetsMatrijs(); });
   }
 
 
   deleteProfessionalskill(ps: Object) {
-    alert(this.currentCourse.id);
       this.cursusService.deleteProfessionalskill(this.currentCourse.id, ps['id']).subscribe(
-        result => { this.refreshProfessionalskills();  },
-        error => { this.refreshProfessionalskills();  });
+        result => { this.refreshProfessionalskills(); },
+        error => { this.refreshProfessionalskills(); });
   }
 
   deleteLeerdoel(ld: Object) {
     this.cursusService.deleteLeerdoel(ld['id']).subscribe(
-      result => { this.refreshLeerdoelen();  },
-      error => { this.refreshLeerdoelen();  });
+      result => { this.refreshLeerdoelen(); this.generateToetsMatrijs(); },
+      error => { this.refreshLeerdoelen(); this.generateToetsMatrijs();   });
   }
 
 
   deleteBeoordelingsElement(el) {
     this.toetsenService.deleteBeoordelingselement(el['id']).subscribe(
-      result => { this.refreshToetsen();  },
-      error => { this.refreshToetsen();  });
+      result => { this.refreshToetsen(); this.generateToetsMatrijs() },
+      error => { this.refreshToetsen(); this.generateToetsMatrijs();});
   }
 
   getBeroepstaakTypes() {
@@ -200,6 +204,15 @@ export class CursussenComponent implements OnInit {
     });
   }
 
+  getProfessionalskillTypes() {
+    this.loading = true;
+    this.professionalskillService.getProfessionalskillsTypes().subscribe(result => {
+      this.professionalskillsTypes = result;
+      this.professionalskillForm = {activiteit: 6, niveau: 'T'};
+      this.loading = false;
+    });
+  }
+
   initializeBeoordelingsForm(toets) {
     this.loading = true;
     this.toetsEdit = toets;
@@ -224,6 +237,18 @@ export class CursussenComponent implements OnInit {
         this.cursusService.addBeroepstakenToCursus(this.currentCourse.id, data).subscribe(x => {
           this.beroepstaakModal.hide();
           this.refreshBeroepstaken();
+          this.generateToetsMatrijs();
+          this.loading = false;
+        });
+      });
+  }
+
+  addProfessionalskill() {
+      this.loading = true;
+      this.professionalskillService.getProfessionalskillId(this.professionalskillForm.activiteit, this.professionalskillForm.niveau).subscribe(data => {
+        this.cursusService.addProfessionalskillToCursus(this.currentCourse.id, data).subscribe(x => {
+          this.professionalskillModal.hide();
+          this.refreshProfessionalskills();
           this.loading = false;
         });
       });
@@ -234,6 +259,7 @@ export class CursussenComponent implements OnInit {
       this.cursusService.addLeerdoel(this.currentCourse.id, this.leerdoelForm).subscribe(x => {
         this.leerdoelModal.hide();
         this.refreshLeerdoelen();
+        this.generateToetsMatrijs();
         this.loading = false;
       });
   }
@@ -259,6 +285,7 @@ export class CursussenComponent implements OnInit {
     this.loading = true;
     this.toetsenService.addBeoordelingsElementToToets(this.toetsEdit.id, this.beoordelingselementForm).subscribe(data => {
       this.refreshToetsen();
+      this.generateToetsMatrijs();
       this.beoordelingselementModal.hide();
       this.loading = false;
     });
@@ -292,7 +319,6 @@ export class CursussenComponent implements OnInit {
     this.loading = true;
     this.leerdoelenService.getLeerdoelenByObject(this.currentCourse.leerdoelen).subscribe(leerdoelen => {
       this.currentCourse.leerdoelenlijst = leerdoelen;
-      this.generateToetsMatrijs();
       this.loading = false;
     });
   }
@@ -301,7 +327,6 @@ export class CursussenComponent implements OnInit {
     this.loading = true;
     this.toetsenService.getToetsenByObject(this.currentCourse.toetsen).subscribe(toetsen => {
       this.currentCourse.toetsenlijst = toetsen;
-      this.generateToetsMatrijs();
       this.loading = false;
     });
   }
@@ -393,12 +418,12 @@ export class CursussenComponent implements OnInit {
           toetsmatrijsArray[1][toetsPosition+j] = toetsmatrijs.toetsen[i].beoordelingsElementen[j];
           this.cursusService.getToetsElementen(toetsPosition+j,toetsmatrijs.toetsen[i].beoordelingsElementen[j].href+'/toetselementen').subscribe(data => {
             var gewicht = 0;
-            console.log(data[1]);
-            console.log(data[0]);
+            // console.log(data[1]);
+            // console.log(data[0]);
             for(let o = 0; o < data[1].length; o++) {
               gewicht += data[1][o].gewicht;
             }
-            console.log(gewicht);
+            // console.log(gewicht);
             toetsmatrijsArray[2][data[0]] = gewicht;
           });
 
@@ -429,6 +454,15 @@ export class CursussenComponent implements OnInit {
           }
           toetsmatrijsArray[3 + i][4] = totalGewicht;
         }
+
+        for (let j = 0; j < toetsmatrijsArray[1].length; j++) {
+          if(j > 4) {
+            if(!(toetsmatrijsArray[3 + i][j] instanceof Object)) {
+              toetsmatrijsArray[3 + i][j] = [toetsmatrijs.leerdoelen[i].id, toetsmatrijsArray[1][j].id];
+            }
+          }
+
+        }
       }
 
       this.currentCourse.toetsmatrijs = toetsmatrijsArray;
@@ -438,19 +472,57 @@ export class CursussenComponent implements OnInit {
 
   editCell(id, gewicht) {
     if(id != null)
+      this.toetsMatrijsAdd = [];
       this.toetsMatrijsEdit = id;
-      this.toetsMatrijsEditValue = gewicht;
-
-    console.log(this.toetsMatrijsEdit);
+      this.toetsMatrijsEditForm.gewicht = gewicht;
   }
 
-  saveGewicht(id) {
-    this.loading = true;
+  addCell(item) {
+    if(item != null)
+      this.toetsMatrijsAddForm = {};
+      this.toetsMatrijsEdit = 0;
+      this.toetsMatrijsAdd = item;
 
+  }
+
+  editToetsElement() {
+    this.loading = true;
+    console.log(this.toetsMatrijsAdd);
+    console.log(this.toetsMatrijsAddForm);
+    this.cursusService.editToetsElement(this.toetsMatrijsEdit, this.toetsMatrijsEditForm).subscribe(x => {
+      this.generateToetsMatrijs();
+      this.toetsMatrijsEdit = 0;
+      this.loading = false;
+    });
+  }
+
+  addToetsElement() {
+    this.loading = true;
+    this.toetsMatrijsAddForm.beoordelingsElement = this.toetsMatrijsAdd[1];
+    console.log(this.toetsMatrijsAdd);
+    console.log(this.toetsMatrijsAddForm);
+    this.cursusService.addToetsElement(this.toetsMatrijsAdd[0], this.toetsMatrijsAddForm).subscribe(x => {
+      this.generateToetsMatrijs();
+      this.toetsMatrijsAdd = [];
+      this.loading = false;
+    });
+  }
+
+  deleteToetsElement() {
+    this.loading = true;
+    this.cursusService.deleteToetsElement(this.toetsMatrijsEdit).subscribe(x =>{
+      this.generateToetsMatrijs();
+      this.toetsMatrijsEdit = 0;
+      this.loading = false;
+    });
   }
 
   cancelEditGewicht() {
     this.toetsMatrijsEdit = 0;
+  }
+
+  cancelSaveGewicht() {
+    this.toetsMatrijsAdd = [];
   }
 
   private refreshCursussen() {

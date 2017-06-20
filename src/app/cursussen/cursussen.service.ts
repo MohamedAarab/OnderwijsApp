@@ -77,8 +77,13 @@ export class CursussenService {
   updateCursus(id, form) {
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    console.log('http://curcon-huict.rhcloud.com/rest/cursussen/' + id);
+//    console.log('http://curcon-huict.rhcloud.com/rest/cursussen/' + id);
     return this.http.put('http://curcon-huict.rhcloud.com/rest/cursussen/' + id, form)
+      .catch(this.handleError);
+  }
+
+  addToetsElement(leerdoelid, form) {
+    return this.http.post('http://curcon-huict.rhcloud.com/rest/leerdoelen/' + leerdoelid + '/toetselementen', form)
       .catch(this.handleError);
   }
 
@@ -108,6 +113,16 @@ export class CursussenService {
 
   addCursus(cursus) {
     return this.http.post('http://curcon-huict.rhcloud.com/rest/organisaties/' + this.organisationId.id + '/cursussen', cursus)
+      .catch(this.handleError);
+  }
+
+  editToetsElement(id, element) {
+    return this.http.put('http://curcon-huict.rhcloud.com/rest/toetselementen/' + id, element)
+      .catch(this.handleError);
+  }
+
+  deleteToetsElement(id) {
+    return this.http.delete('http://curcon-huict.rhcloud.com/rest/toetselementen/' + id)
       .catch(this.handleError);
   }
 }

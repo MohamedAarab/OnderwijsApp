@@ -157,7 +157,7 @@
                         </tbody>
                       </table>
                       <div class="btn-group pull-right" role="group" aria-label="...">
-                        <button type="button" class="btn btn-info" (click)="ProfessionalskillModal.show(); getAllProfessionalskills();"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                        <button type="button" class="btn btn-info" (click)="ProfessionalskillModal.show(); getProfessionalskillTypes();"><i class="fa fa-plus" aria-hidden="true"></i></button>
                       </div>
                     </tab>
                     <tab>
@@ -284,12 +284,20 @@
                                 <td class="ld" [ngClass]="{'total': j == 4}"><div><span>{{item}} <ng-container *ngIf="j == 4">%</ng-container></span></div></td>
                               </ng-container>
                               <ng-container *ngIf="j > 4">
-                                <td class="weging" *ngIf="toetsMatrijsEdit != item?.id"><div (click)="editCell(item?.id, item?.gewicht)"><span>{{item?.gewicht}} <ng-container *ngIf="item?.gewicht != undefined">%</ng-container></span></div></td>
+                                <td class="weging" *ngIf="toetsMatrijsEdit != item?.id && toetsMatrijsAdd !== item"><div (click)="editCell(item?.id, item?.gewicht)" class="btn-editToets" *ngIf="item !== Array"><span>{{item?.gewicht}} <ng-container *ngIf="item?.gewicht != undefined">%</ng-container></span></div><div *ngIf="item?.length > 0"><button class="btn btn-small btn-info btn-addToets" (click)="addCell(item)"><i class="fa fa-plus" aria-hidden="true"></i></button></div></td>
                                 <td class="weging" *ngIf="toetsMatrijsEdit == item?.id">
-                                  <form #editGewicht="ngForm">
-                                    <input type="number" name="gewicht" class="form-control" [(ngModel)]="toetsMatrijsEditValue" max="100"/>
-                                    <button class="btn btn-success btn-sm"(click)="saveGewicht(editGewicht)"><i class="fa fa-check"></i></button>
+                                  <form #f="ngForm">
+                                    <input type="number" name="gewicht" class="form-control" [(ngModel)]="toetsMatrijsEditForm.gewicht" max="100"/>
+                                    <button class="btn btn-success btn-sm"(click)="editToetsElement()"><i class="fa fa-check"></i></button>
                                     <button class="btn btn-danger btn-sm"(click)="cancelEditGewicht()"><i class="fa fa-close"></i></button>
+                                    <button class="btn btn-danger btn-sm"(click)="deleteToetsElement()"><i class="fa fa-trash"></i></button>
+                                  </form>
+                                </td>
+                                <td class="weging" *ngIf="toetsMatrijsAdd == item">
+                                  <form #f="ngForm">
+                                    <input type="number" name="gewicht" class="form-control" [(ngModel)]="toetsMatrijsAddForm.gewicht" max="100"/>
+                                    <button class="btn btn-success btn-sm"(click)="addToetsElement()"><i class="fa fa-check"></i></button>
+                                    <button class="btn btn-danger btn-sm"(click)="cancelSaveGewicht()"><i class="fa fa-close"></i></button>
                                   </form>
                                 </td>
                               </ng-container>
@@ -363,21 +371,39 @@
 <div bsModal #ProfessionalskillModal="bs-modal" class="addModal modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-primary" role="document">
     <div class="modal-content">
-      <form name="addBeroepstaak" novalidate>
-      <div class="modal-header">
-        <h4 class="modal-title">Professional Skills</h4>
-        <button type="button" class="close" (click)="ProfessionalskillModal.hide()" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div *ngIf="loading" align="center"><br /><img src="assets/img/ripple.svg" /></div>
-        <span *ngIf="error" class="text-danger">U heeft geen professionalskills geselecteerd</span>
-      </div>
-      <div  *ngIf="!loading" class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="ProfessionalskillModal.hide()">Sluiten</button>
-        <button type="button" class="btn btn-primary" (click)="addProfessionalskills()">Toevoegen</button>
-      </div>
+      <form #f="ngForm">
+        <div class="modal-header">
+          <h4 class="modal-title">Professional skill</h4>
+          <button type="button" class="close" (click)="BeroepstaakModal.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div *ngIf="loading" align="center"><br /><img src="assets/img/ripple.svg" /></div>
+          <span *ngIf="error" class="text-danger">U heeft geen Professional skill geselecteerd</span>
+          <div class="form">
+            <div class="form-group">
+              <label for="activiteit">Activiteit:</label>
+              <select class="form-control" id="activiteit" name="activiteit" [(ngModel)]="professionalskillForm.activiteit">
+                <option *ngFor="let a of professionalskillsTypes.activiteiten" [ngValue]="a.id">{{a.naam}}</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="activiteit">Niveau:</label>
+              <select class="form-control" id="niveau" name="niveau" [(ngModel)]="professionalskillForm.niveau">
+                <option *ngFor="let a of professionalskillsTypes.niveaus" [ngValue]="a">{{a}}</option>
+              </select>
+            </div>
+
+            {{professionalskillForm | json}}
+
+          </div>
+        </div>
+        <div  *ngIf="!loading" class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="ProfessionalskillModal.hide()">Sluiten</button>
+          <button type="button" class="btn btn-primary" (click)="addProfessionalskill()">Toevoegen</button>
+        </div>
       </form>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->

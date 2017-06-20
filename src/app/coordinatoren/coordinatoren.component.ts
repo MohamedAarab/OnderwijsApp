@@ -8,11 +8,14 @@ import {AbstractControl, NG_VALIDATORS} from '@angular/forms';
 })
 export class CoordinatorenComponent implements OnInit {
     @ViewChild('CoordinatorModal') CoordinatorModal: any;
+    @ViewChild('editCoordinatorModal') editCoordinatorModal: any;
     @Input() coordinatoren: Array<any>;
     loading: boolean;
     currentState: number;
-    newCoordinator = <any>{};
+    newCoordinatorForm = <any>{};
+    editCoordinatorForm = <any>{};
     mode: string;
+    editCoordinatorId: number;
 
     constructor(private coordinatorenService: CoordinatorenService) {
         this.loading = true;
@@ -28,13 +31,17 @@ export class CoordinatorenComponent implements OnInit {
         });
     }
 
-    addCoordinator(form: any) {
-      var formValues = form.value;
-      this.coordinatorenService.addCoordinator(1, formValues).subscribe(coordinator => {
-          this.CoordinatorModal.hide();
-          this.newCoordinator = coordinator;
+    addCoordinator() {
+      this.loading = true;
+      this.coordinatorenService.addCoordinator(this.newCoordinatorForm).subscribe(coordinator => {
           this.refreshCoordinatoren();
+          this.CoordinatorModal.hide();
+          this.loading = false;
       });
+    }
+
+    initializeCoordinatorForm() {
+        this.newCoordinatorForm = {};
     }
     // save(form: any) {
     //     var formValues = form.value;
@@ -51,6 +58,20 @@ export class CoordinatorenComponent implements OnInit {
     //         });
     //     });
     // }
+
+    editCoordinator() {
+      this.loading = false;
+      this.coordinatorenService.editCoordinator(this.editCoordinatorId, this.editCoordinatorForm).subscribe(coordinator => {
+        this.refreshCoordinatoren();
+        this.editCoordinatorModal.hide();
+        this.loading = false;
+      });
+    }
+
+    getCoordinator(coor) {
+      this.editCoordinatorId = coor.id;
+      this.editCoordinatorForm.naam = coor.naam;
+    }
 
     refreshCoordinatoren() {
       this.loading = true;

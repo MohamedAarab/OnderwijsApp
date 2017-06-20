@@ -11,6 +11,7 @@ export class CoordinatorenService {
 
     constructor(private http: Http) {
         console.log('CoordinatorService Initialized...');
+      this.organisationId = JSON.parse(localStorage.getItem('selectedOrganisatie'));
     }
 
     getCoordinatoren() {
@@ -28,8 +29,8 @@ export class CoordinatorenService {
           .map(res => res.json());
     }
 
-    addCoordinator(organisatieId, coordinator) {
-        return this.http.post('http://curcon-huict.rhcloud.com/rest/organisaties/' + organisatieId + '/docenten', coordinator)
+    addCoordinator(coordinator) {
+        return this.http.post('http://curcon-huict.rhcloud.com/rest/organisaties/' + this.organisationId.id + '/docenten', coordinator)
             .catch(this.handleError);
     }
 
@@ -46,4 +47,9 @@ export class CoordinatorenService {
             console.error(errMsg);
         return Observable.throw(errMsg);
     }
+
+  editCoordinator(editCoordinatorId, editCoordinatorForm) {
+    return this.http.put('http://curcon-huict.rhcloud.com/rest/docenten/' + editCoordinatorId, editCoordinatorForm)
+      .catch(this.handleError);
+  }
 }

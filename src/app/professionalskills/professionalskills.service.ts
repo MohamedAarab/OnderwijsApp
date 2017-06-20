@@ -18,4 +18,14 @@ export class ProfessionalskillsService {
       .map(res => res.json());
   }
 
+  getProfessionalskillsTypes() {
+    return this.http.get('http://curcon-huict.rhcloud.com/rest/professionalskills/types')
+      .map(res => res.json());
+  }
+
+
+  getProfessionalskillId(skillid, niv) {
+    return this.http.get('http://curcon-huict.rhcloud.com/rest/professionalskills/skill/' + skillid + '/niveaus/' + niv)
+      .map(res => res.json());
+  }
 }

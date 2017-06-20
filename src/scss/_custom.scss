@@ -342,3 +342,27 @@
   vertical-align: center;
   font-weight: bold;
 }
+
+.btn-addToets {
+  width: 100%;
+  height: 100%;
+  margin-left: -10px;
+  background: #ffffff;
+  border: 1px solid #ffffff;
+}
+
+.btn-addToets:hover {
+  cursor: pointer;
+}
+
+.btn-editToets {
+  margin-left: -5px;
+}
+
+.btn-editToets:hover {
+  background-color: #39b2d5;
+  border: 1px solid #39b2d5;
+  color: #ffffff;
+  font-weight: bold;
+
+}
