@@ -8,6 +8,7 @@
   "license": "MIT",
   "angular-cli": {},
   "scripts": {
+    "start": "node server.js",
     "ng": "ng",
     "start": "ng serve",
     "test": "ng test",
@@ -54,5 +55,6 @@
     "ts-node": "2.1.0",
     "tslint": "4.5.1",
     "typescript": "2.2.1"
-  }
+  },
+  "main": "server.js"
 }
