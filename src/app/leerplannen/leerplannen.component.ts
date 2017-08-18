@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import {LeerplannenService} from './leerplannen.service';
 import {CohortenService} from '../cohorten/cohorten.service';
 import {OrganisatiesService} from '../organisaties/organisaties.service';
-import {OpleidingsprofielenService} from '../opleidingsprofielen/opleidingsprofielen.service';
+import {OpleidingenService} from '../opleidingen/opleidingen.service';
 import {CursussenService} from '../cursussen/cursussen.service';
 import {BeroepstakenService} from '../beroepstaken/beroepstaken.service';
 import {ProfessionalskillsService} from '../professionalskills/professionalskills.service';
@@ -22,7 +22,7 @@ export class LeerplannenComponent implements OnInit {
     selectedCohort = <any>{};
     cursusForm = <any>{};
 
-  constructor(private leerplanService: LeerplannenService, private cohortService: CohortenService, private organisatieService: OrganisatiesService, private cursusService: CursussenService, private beroepstaakService: BeroepstakenService, private professionalskillService: ProfessionalskillsService, private opleidingsproefielenService: OpleidingsprofielenService) {
+  constructor(private leerplanService: LeerplannenService, private cohortService: CohortenService, private organisatieService: OrganisatiesService, private cursusService: CursussenService, private beroepstaakService: BeroepstakenService, private professionalskillService: ProfessionalskillsService, private opleidingenService: OpleidingenService) {
     this.loading = true;
   }
 
@@ -32,7 +32,7 @@ export class LeerplannenComponent implements OnInit {
         this.cohorten = [];
         this.opleidingen = [];
         this.organisatieService.getOrganisaties().subscribe(organisaties => {
-            this.opleidingsproefielenService.getOpleidingsprofielByObject(organisaties[0].opleidingsProfielen).subscribe(opleidingen => {
+            this.opleidingenService.getOpleidingByObject(organisaties[0].opleidingen).subscribe(opleidingen => {
                 this.opleidingen = opleidingen;
                 this.cursusService.getCursussen().subscribe(cursussen => {
                     this.courses = cursussen;

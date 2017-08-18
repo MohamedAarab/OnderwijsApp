@@ -59,11 +59,6 @@ export class CursussenComponent implements OnInit {
 			this.courses = cursussen;
 			this.currentCourse = this.courses[0];
 			this.cursusForm = this.courses[0];
-// this.currentCourse.beroepstaken = [];
-// this.currentCourse.professionalskills = [];
-// this.currentCourse.toetsenlijst = [];
-// this.currentCourse.toetsmatrijs = [];
-
 			this.refreshAll();
 		},
 		error => console.log('Error: ', error),

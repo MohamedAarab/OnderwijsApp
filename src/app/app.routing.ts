@@ -23,8 +23,8 @@ export const routes: Routes = [
         loadChildren: './dashboard/dashboard.module#DashboardModule'
       },
       {
-        path: 'opleidingsprofielen',
-        loadChildren: './opleidingsprofielen/opleidingsprofielen.module#OpleidingsprofielenModule',
+        path: 'opleidingen',
+        loadChildren: './opleidingen/opleidingen.module#OpleidingenModule',
       },
       {
         path: 'cursussen',

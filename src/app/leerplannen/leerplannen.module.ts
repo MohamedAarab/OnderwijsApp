@@ -7,7 +7,7 @@ import { LeerplannenService } from './leerplannen.service';
 import { CohortenService } from '../cohorten/cohorten.service';
 import { OrganisatiesService } from '../organisaties/organisaties.service';
 import { CursussenService } from '../cursussen/cursussen.service';
-import { OpleidingsprofielenService } from '../opleidingsprofielen/opleidingsprofielen.service';
+import { OpleidingenService } from '../opleidingen/opleidingen.service';
 import { Ng2OrderModule } from 'ng2-order-pipe';
 import { BeroepstakenService } from '../beroepstaken/beroepstaken.service';
 import { LeerplannenRoutingModule } from './leerplannen-routing.module';
@@ -37,6 +37,6 @@ import {FormsModule} from '@angular/forms';
     ModalModule.forRoot()
   ],
   declarations: [ LeerplannenComponent],
-  providers: [LeerplannenService, CohortenService, OrganisatiesService, CursussenService, OpleidingsprofielenService, BeroepstakenService, ProfessionalskillsService, Tooltip]
+  providers: [LeerplannenService, CohortenService, OrganisatiesService, CursussenService, OpleidingenService, BeroepstakenService, ProfessionalskillsService, Tooltip]
 })
 export class LeerplannenModule { }
