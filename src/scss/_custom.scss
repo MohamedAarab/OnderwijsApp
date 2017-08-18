@@ -28,11 +28,12 @@
   background: #FFFF;
   border: 1px solid #E7E7E7;
   border-left: 6px solid #00A1E2;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 3px;
+  padding-bottom: 3px;
   box-shadow: 0px 1px 2px 0px rgba(46, 61, 73, 0.2);
   transition: all 0.2s ease;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  color: #58646d;
 }
 
 .tooltip-inner {
@@ -47,28 +48,27 @@
 
 .leerplannen .cursus:hover {
   box-shadow: 0px 1px 3px 0px rgba(46, 61, 73, 0.2);
+  background: #FaFaFa;
 }
 
 .leerplannen .cursus .cursus-code {
-  margin-top: 30px;
+  margin-top: 10px;
   display: block;
-}
-
-.leerplannen .cursus .cursus-ec {
-  margin-top: 30px;
-  display: block;
-  color: #20A8D8;
-  font-size: 17px;
 }
 
 .leerplannen .cursus .cursus-naam {
-  color: #58646d;
   font-weight: 300;
   text-transform: uppercase;
   font-size: 14px;
   letter-spacing: 2px;
 }
 
+.leerplannen .cursus .cursus-ec {
+  margin-top: 20px;
+  display: block;
+  color: #20A8D8;
+  font-size: 17px;
+}
 
 .hbo-i-cell {
   border-style: solid;
@@ -101,19 +101,21 @@
 }
 .ps-layer {
   display: table;
-  height: 75px;
+  height: 80px;
 }
 
 .hbo-i-layer > .label-top {
-  height: 14px;
+  height: 15px;
+  width: 15px;
   font-size: 10px;
-  font-weight: bold;
+  font-weight: normal;
 }
 
 .hbo-i-layer > .label-left {
-  width: 14px;
+  height: 15px;
+  width: 15px;
   font-size: 10px;
-  font-weight: bold;
+  font-weight: normal;
 }
 
 .hbo-i-layer > .niveau-1 {
@@ -129,22 +131,22 @@
 }
 
 .top-layer > .hbo-i-cell{
-  height: 12px;
+  height: 15px;
   font-size: 10px;
-  font-weight: bold;
+  font-weight: normal;
 }
 
 .ps-layer > .top-layer > .ps-cell{
-  height: 20px;
+  height: 15px;
   font-size: 10px;
   text-align: center;
-  font-weight: bold;
+  font-weight: normal;
 }
 
 .hbo-i-layer > .hbo-i-cell:first-child {
-  width: 12px;
+  width: 15px;
   font-size: 10px;
-  font-weight: bold;
+  font-weight: normal;
 }
 
 

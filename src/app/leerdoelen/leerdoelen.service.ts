@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class LeerdoelenService {
   constructor(private http: Http) {
-    console.log('LeerplanService Initialized...');
+    console.log('LeerdoelenService Initialized...');
   }
 
   getLeerdoelen() {

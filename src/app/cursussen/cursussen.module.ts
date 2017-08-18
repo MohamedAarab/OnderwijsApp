@@ -24,7 +24,7 @@ import {ToetsenService} from '../toetsen/toetsen.service';
 import {FormsModule} from '@angular/forms';
 import {ToetsmatrijzenService} from '../toetsmatrijzen/toetsmatrijzen.service';
 import {BloomniveausService} from '../bloomniveaus/bloomniveaus.service';
-import {CoordinatorenService} from "../coordinatoren/coordinatoren.service";
+import {DocentenService} from "../docenten/docenten.service";
 
 @NgModule({
   imports: [
@@ -39,6 +39,6 @@ import {CoordinatorenService} from "../coordinatoren/coordinatoren.service";
   ],
   declarations: [ CursussenComponent,
     TabsComponent, TablesComponent, ModalsComponent],
-  providers: [CursussenService, CoordinatorenService, BeroepstakenService, ProfessionalskillsService, LeerdoelenService, ToetsenService, ToetsmatrijzenService, BloomniveausService]
+  providers: [CursussenService, DocentenService, BeroepstakenService, ProfessionalskillsService, LeerdoelenService, ToetsenService, ToetsmatrijzenService, BloomniveausService]
 })
 export class CursussenModule { }

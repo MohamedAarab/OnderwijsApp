@@ -89,91 +89,31 @@ export class LeerplannenComponent implements OnInit {
     this.loading = true;
     this.cursusService.getCursussenByObject(coh['cursussen']).subscribe(cur => {
       this.cursussen = cur;
-      for(let i = 0; i < this.cursussen.length; i++) {
-        // let beroepstaken = [];
-        // let professionalskills = [];
-        this.beroepstaakService.getBeroepstakenByObject(this.cursussen[i].eindBT).subscribe(beroepstaken => {
-            this.cursussen[i].beroepstaken = [];
+      for(let index = 0; index < this.cursussen.length; index++) {
+         this.beroepstaakService.getBeroepstakenByObject(this.cursussen[index].eindBT).subscribe(beroepstaken => {
+            this.cursussen[index].beroepstaken = [];
             let btMatrix = this.generateMatrix();
 
             //console.log(beroepstaken);
-            for(let j = 0; j < beroepstaken.length; j++) {
-              btMatrix[beroepstaken[j].architectuurlaagId][beroepstaken[j].activiteitId] = beroepstaken[j];
-              //   btMatrix[beroepstaken[j].architectuurlaagId][beroepstaken[j].activiteitId] = beroepstaken[j];
-              this.cursussen[i].beroepstaken.push(beroepstaken[j]);
+            for(let btIndex = 0; btIndex < beroepstaken.length; btIndex++) {
+              btMatrix[beroepstaken[btIndex].architectuurlaagId][beroepstaken[btIndex].activiteitId] = beroepstaken[btIndex];
+              //   btMatrix[beroepstaken[btIndex].architectuurlaagId][beroepstaken[btIndex].activiteitId] = beroepstaken[btIndex];
+              this.cursussen[index].beroepstaken.push(beroepstaken[btIndex]);
              }
-             this.cursussen[i].btMatrix = btMatrix;
+             this.cursussen[index].btMatrix = btMatrix;
         });
 
-        // for (let j = 0; j < this.cursussen[i].eindBT.length; j++) {
-        //   this.beroepstaakService.getBeroepstaakByObject(this.cursussen[i].eindBT[j]).subscribe(beroepstaak =>{
-        //     btMatrix[beroepstaak.architectuurlaagId][beroepstaak.activiteitId] = beroepstaak;
-        //     beroepstaken.push(beroepstaak);
-        //   });
-        // }
-
-        this.professionalskillService.getProfessionalskillsByObject(this.cursussen[i].eindPS).subscribe(professionalskills => {
-          this.cursussen[i].professionalskills = [];
+        this.professionalskillService.getProfessionalskillsByObject(this.cursussen[index].eindPS).subscribe(professionalskills => {
+          this.cursussen[index].professionalskills = [];
           for(let j = 0; j < professionalskills.length; j++) {
-            this.cursussen[i].professionalskills.push(professionalskills[j]);
+            this.cursussen[index].professionalskills.push(professionalskills[j]);
           }
         });
 
-        // let professionalskills = [];
-        // for (let j = 0; j < cursus.eindPS.length; j++) {
-        //   this.professionalskillService.getProfessionalskillByObject(cursus.eindPS[j]).subscribe(professionalskill => {
-        //     professionalskills.push(professionalskill);
-        //   });
-        // }
-
-
-//        this.cursussen[i].professionalskills = professionalskills;
-        // // cursus.eindPS = professionalskills;
-        // this.cursussen.push(cursus);
-      }
+       }
       this.selectedCohort = coh;
       this.loading = false;
     });
-
-
-    /*if (bar.naam !== this.selectedCohort.jaar) {
-      this.loading = true;
-      this.onSelectedCohort.emit(coh);
-      this.cohortService.getCohortenByObject(coh).subscribe(cohort => {
-        this.selectedCohort = cohort;
-        this.cursussen = [];
-        if (this.selectedCohort.cursussen.length !== 0) {
-          for (let i = 0; i < this.selectedCohort.cursussen.length; i++) {
-            this.cursusService.getCursussenByObject(this.selectedCohort.cursussen[i]).subscribe(cursus => {
-              let btMatrix = this.generateMatrix();
-
-              let beroepstaken = [];
-              for (let j = 0; j < cursus.eindBT.length; j++) {
-                this.beroepstaakService.getBeroepstaakByObject(cursus.eindBT[j]).subscribe(beroepstaak =>{
-                  btMatrix[beroepstaak.architectuurlaagId][beroepstaak.activiteitId] = beroepstaak;
-                  beroepstaken.push(beroepstaak);
-                });
-              }
-
-              let professionalskills = [];
-              for (let j = 0; j < cursus.eindPS.length; j++) {
-                this.professionalskillService.getProfessionalskillByObject(cursus.eindPS[j]).subscribe(professionalskill => {
-                  professionalskills.push(professionalskill);
-                });
-              }
-
-              cursus.btMatrix = btMatrix;
-              cursus.eindBT = beroepstaken;
-              cursus.eindPS = professionalskills;
-              // cursus.eindPS = professionalskills;
-              this.cursussen.push(cursus);
-            });
-          }
-          console.log(this.cursussen);
-        }
-        this.loading = false;
-      });
-    }*/
   }
 
   generateMatrix() {

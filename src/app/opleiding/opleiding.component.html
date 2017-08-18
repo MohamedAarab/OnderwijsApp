@@ -1,0 +1,58 @@
+
+<style>
+.selectable:hover {
+	cursor: pointer;
+}
+
+.table-label {
+	width: 10%;
+}
+</style>
+
+<div class="animated fadeIn">
+	<div *ngIf="loading" align="center" class="page-loading">
+		<img src="assets/img/ripple.svg" />
+	</div>
+	<div class="row">
+		<div class="col-2">
+			<div class="card">
+				<div class="card-header">
+					<h4 class="card-title mb-0">Opleidingsprofielen</h4>
+				</div>
+				<button type="button" class="btn btn-info"
+					(click)="opleidingModal.show(); initializeOpleidingForm();">
+					<i class="fa fa-plus" aria-hidden="true"></i>
+				</button>
+				<div class="card-block">
+					<div class="course-wrapper">
+						<div class="row">
+							<div class="col-md-12">
+								<table class="table table-hover">
+									<tbody>
+										<tr *ngFor="let opleiding of opleidingen" (click)="onSelect(opleiding)"
+											class="selectable">
+											<td colspan="1">{{ opleiding.naam }}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-10 course">
+			<div *ngIf="currentOpleiding">
+				<div class="card">
+					<div class="card-header">
+						<h4 class="card-title mb-0">{{currentOpleiding.naam |
+							uppercase}}</h4>
+					</div>
+					<div class="card-block"></div>
+
+				</div>
+			</div>
+			<div class="card-footer"></div>
+		</div>
+	</div>
+</div>

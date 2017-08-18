@@ -23,6 +23,10 @@ export const routes: Routes = [
         loadChildren: './dashboard/dashboard.module#DashboardModule'
       },
       {
+        path: 'opleidingsprofielen',
+        loadChildren: './opleidingsprofielen/opleidingsprofielen.module#OpleidingsprofielenModule',
+      },
+      {
         path: 'cursussen',
         loadChildren: './cursussen/cursussen.module#CursussenModule',
       },
@@ -31,8 +35,8 @@ export const routes: Routes = [
         loadChildren: './leerplannen/leerplannen.module#LeerplannenModule'
       },
       {
-        path: 'coordinatoren',
-        loadChildren: './coordinatoren/coordinatoren.module#CoordinatorenModule'
+        path: 'docenten',
+        loadChildren: './docenten/docenten.module#DocentenModule'
       },
       {
         path: 'components',
