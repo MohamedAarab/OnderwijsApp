@@ -10,8 +10,6 @@ import {OrderByPipe} from './orderby.pipe';
 })
 
 export class DocentenComponent implements OnInit {
-    @ViewChild('newDocentModal') newDocentModal: any;
-    @ViewChild('editDocentModal') editDocentModal: any;
     @ViewChild('docentModal') docentModal: any;
     @Input() docenten: Array<any>;
     loading: boolean;

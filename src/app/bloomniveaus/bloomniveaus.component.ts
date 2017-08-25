@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { Router } from '@angular/router';
-import {BloomniveausService} from './bloomniveaus.service';
+import {BloomniveausService} from '../services/bloomniveaus.service';
 
 @Component({
   templateUrl: 'bloomniveaus.component.html',

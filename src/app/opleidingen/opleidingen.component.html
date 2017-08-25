@@ -14,23 +14,24 @@
 		<img src="assets/img/ripple.svg" />
 	</div>
 	<div class="row">
-		<div class="col-2">
+		<div class="col-3">
 			<div class="card">
 				<div class="card-header">
 					<h4 class="card-title mb-0">Opleidingsprofielen</h4>
+					<br />
+					<button type="button" class="btn btn-info"
+						(click)="opleidingModal.show(); initializeOpleidingForm();">
+						<i class="fa fa-plus" aria-hidden="true"></i>
+					</button>
 				</div>
-				<button type="button" class="btn btn-info"
-					(click)="opleidingModal.show(); initializeOpleidingForm();">
-					<i class="fa fa-plus" aria-hidden="true"></i>
-				</button>
 				<div class="card-block">
 					<div class="course-wrapper">
 						<div class="row">
 							<div class="col-md-12">
 								<table class="table table-hover">
 									<tbody>
-										<tr *ngFor="let opleiding of opleidingen" (click)="onSelect(opleiding)"
-											class="selectable">
+										<tr *ngFor="let opleiding of opleidingen"
+											(click)="onSelectOpleiding(opleiding)" class="selectable">
 											<td colspan="1">{{ opleiding.naam }}</td>
 										</tr>
 									</tbody>
@@ -41,18 +42,530 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-10 course">
-			<div *ngIf="currentOpleiding">
-				<div class="card">
-					<div class="card-header">
-						<h4 class="card-title mb-0">{{selectedOpleiding.naam |
-							uppercase}}</h4>
-					</div>
-					<div class="card-block"></div>
-
+		<div class="col-9 opleiding">
+			<div *ngIf="selectedOpleiding" class="card">
+				<div class="card-header">
+					<h4 class="card-title mb-0">{{selectedOpleiding.naam}}</h4>
 				</div>
+				<div class="card-block"></div>
+				<tabset> <tab> <template tabHeading> <i
+					class="icon-list"></i> Overzicht</template>
+				<div class="col-12 leerplannen">
+					<div class="row cursus">
+						<div class="col-4">
+							<span class="cursus-code">TDC-ERTRB</span>
+							<h5 class="cursus-naam">{{selectedOpleiding.naam}}</h5>
+							<h6 class="cursus-ec">240 EC</h6>
+						</div>
+						<div class="col-4">
+							<div class="overzicht">
+								<span>Beroepstaken</span>
+								<div class="hbo-i-layer"
+									*ngFor="let bt of selectedOpleiding.btMatrix; let i = index"
+									[ngClass]="{'top-layer': i == 0}">
+									<div class="hbo-i-cell">{{bt[0]}}</div>
+
+									<template #tooltipTemplate1>{{bt[1]?.architectuurlaag}}<br />
+									{{bt[1]?.activiteit}}</template>
+									<div class="hbo-i-cell niveau-{{bt[1]?.niveau}}"
+										[tooltip]="tooltipTemplate1">
+										<span *ngIf="i == 0">{{bt[1]}}</span>
+									</div>
+									<template #tooltipTemplate2>{{bt[2]?.architectuurlaag}}<br />
+									{{bt[2]?.activiteit}}</template>
+									<div class="hbo-i-cell niveau-{{bt[2]?.niveau}}"
+										[tooltip]="tooltipTemplate2">
+										<span *ngIf="i == 0">{{bt[2]}}</span>
+									</div>
+									<template #tooltipTemplate3>{{bt[3]?.architectuurlaag}}<br />
+									{{bt[3]?.activiteit}}</template>
+									<div class="hbo-i-cell niveau-{{bt[3]?.niveau}}"
+										[tooltip]="tooltipTemplate3">
+										<span *ngIf="i == 0">{{bt[3]}}</span>
+									</div>
+									<template #tooltipTemplate4>{{bt[4]?.architectuurlaag}}<br />
+									{{bt[4]?.activiteit}}</template>
+									<div class="hbo-i-cell niveau-{{bt[4]?.niveau}}"
+										[tooltip]="tooltipTemplate4">
+										<span *ngIf="i == 0">{{bt[4]}}</span>
+									</div>
+									<template #tooltipTemplate5>{{bt[5]?.architectuurlaag}}<br />
+									{{bt[5]?.activiteit}}</template>
+									<div class="hbo-i-cell niveau-{{bt[5]?.niveau}}"
+										[tooltip]="tooltipTemplate5">
+										<span *ngIf="i == 0">{{bt[5]}}</span>
+									</div>
+								</div>
+							</div>
+							
+							<div class="overzicht">
+								<div class="ps-layer">
+									<span>Professional Skills</span>
+									<div class="top-layer">
+										<div class="ps-cell">CPO</div>
+										<div class="ps-cell">OD</div>
+										<div class="ps-cell">LSC</div>
+										<div class="ps-cell">POKe</div>
+										<div class="ps-cell">LPO</div>
+									</div>
+									<div class="ps-layer">
+										<div class="ps-cell ps-cpo">
+											<span *ngFor="let ps of selectedOpleiding.professionalskills"><span
+												*ngIf="ps?.code == 'CP'">{{ps.niveau}}</span></span>
+										</div>
+										<div class="ps-cell ps-ai">
+											<span *ngFor="let ps of selectedOpleiding.professionalskills"><span
+												*ngIf="ps?.code == 'OD'">{{ps.niveau}}</span></span>
+										</div>
+										<div class="ps-cell ps-lsc">
+											<span *ngFor="let ps of selectedOpleiding.professionalskills"><span
+												*ngIf="ps?.code == 'LSC'">{{ps.niveau}}</span></span>
+										</div>
+										<div class="ps-cell ps-poe">
+											<span *ngFor="let ps of selectedOpleiding.professionalskills"><span
+												*ngIf="ps?.code == 'POKe'">{{ps.niveau}}</span></span>
+										</div>
+										<div class="ps-cell none">
+											<span *ngFor="let ps of selectedOpleiding.professionalskills"><span
+												*ngIf="ps?.code == 'LPO'">{{ps.niveau}}</span></span>
+										</div>
+									</div>
+								</div>
+							</div>
+														
+						</div>
+					</div>
+				</div>
+
+				</tab> <tab> <template tabHeading> <i class="icon-list"></i>
+				Algemeen</template>
+				<form #opleidingForm="ngForm" novalidate>
+					<a href="javascript:void(0)" (click)="setMode('edit')"
+						*ngIf="mode == 'view'">Bewerken</a> <a href="javascript:void(0)"
+						(click)="setMode('view')" *ngIf="mode == 'edit'">Annuleren</a> <a
+						href="javascript:void(0)" (click)="saveOpleiding(opleidingForm)"
+						*ngIf="mode == 'edit'">Opslaan</a>
+					<div class="form-group row">
+						<label for="naam" class="col-2 col-form-label">Naam</label>
+						<div class="col-10">
+							<div class="col-form-label" *ngIf="mode == 'view'">{{selectedOpleiding.naam}}</div>
+							<input *ngIf="mode == 'edit'" class="form-control" type="text"
+								id="naam" name="naam" required
+								[(ngModel)]="selectedOpleiding.naam">
+						</div>
+					</div>
+					{{opleidingForm.value | json}}
+				</form>
+				</tab> <tab> <template tabHeading> <i
+					class="icon-calculator"></i> Beroepstaken</template>
+				<div class="col-12">
+					<div class="row">
+						<div class="table-responsive">
+							<table class="table preview-table">
+								<thead>
+									<tr>
+										<th></th>
+										<th>Architectuur laag</th>
+										<th>Activiteit</th>
+										<th>Niveau</th>
+										<th>Omschrijving</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr *ngFor="let bt of selectedOpleiding.beroepstaken">
+										<td><a class="text-danger lead" href="javascript:void(0)"
+											(click)="deleteBeroepstaak(bt)"><i
+												class="fa fa-minus-circle" aria-hidden="true"></i></a></td>
+										<td>{{bt.architectuurlaag}}</td>
+										<td>{{bt.activiteit}}</td>
+										<td>{{bt.niveau}}</td>
+										<td>{{bt.omschrijving}}</td>
+									</tr>
+								</tbody>
+								<!-- preview content goes here-->
+							</table>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="btn-group pull-right" role="group" aria-label="...">
+								<button type="button" class="btn btn-info"
+									(click)="beroepstaakModal.show(); getBeroepstaakTypes();">
+									<i class="fa fa-plus" aria-hidden="true"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				</tab> <tab> <template tabHeading> <i
+					class="icon-pie-chart"></i> Professional skills</template>
+				<div class="col-12">
+					<div class="row">
+						<div class="table-responsive">
+							<table class="table preview-table">
+								<thead>
+									<tr>
+										<th></th>
+										<th>Code</th>
+										<th>Beschrijving</th>
+										<th>Niveau</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr *ngFor="let ps of selectedOpleiding.professionalskills">
+										<td><a class="text-danger lead" href="javascript:void(0)"
+											(click)="deleteProfessionalskill(ps)"><i
+												class="fa fa-minus-circle" aria-hidden="true"></i></a></td>
+										<td>{{ps.code}}</td>
+										<td>{{ps.beschrijving}}</td>
+										<td>{{ps.niveau}}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="btn-group pull-right" role="group" aria-label="...">
+								<button type="button" class="btn btn-info"
+									(click)="ProfessionalskillModal.show(); getProfessionalskillTypes();">
+									<i class="fa fa-plus" aria-hidden="true"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				</tab> <tab> <template tabHeading> <i
+					class="icon-pie-chart"></i> Leerplanschema</template>
+				<div class="col-12 leerplannen">
+					<div *ngIf="!isEmptyObject(selectedCohort)">
+						<div class="row">
+							<div class="col-12">
+								<div class="btn-group pull-right" role="group" aria-label="...">
+									<button type="button" class="btn btn-info"
+										(click)="cursusModal.show(); initializeCursusForm();">
+										<i class="fa fa-plus" aria-hidden="true"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+						<div class="col-12">
+							<h3>Cursussen</h3>
+							<br />
+							<div *ngFor="let c of cursussen | orderBy: 'periode' ">
+
+								<div class="row cursus">
+									<div class="col-4">
+										<span class="cursus-code"><a
+											[routerLink]="['/cursussen', c.code]">{{c.code}}</a></span>
+										<h5 class="cursus-naam">{{c.naam}}</h5>
+										<h6 class="cursus-ec">{{c.europeanCredits}} EC</h6>
+										<a class="text-danger lead" href="javascript:void(0)"
+											(click)="deleteCursusFromCohort(c)"><i class="fa fa-minus-circle"
+											aria-hidden="true"></i></a>
+									</div>
+
+									<div class="col-2">
+										<span>Beroepstaken</span>
+										<div class="hbo-i-layer"
+											*ngFor="let bt of c.btMatrix; let i = index"
+											[ngClass]="{'top-layer': i == 0}">
+											<div class="hbo-i-cell">{{bt[0]}}</div>
+
+											<template #tooltipTemplate1>{{bt[1]?.architectuurlaag}}<br />
+											{{bt[1]?.activiteit}}</template>
+											<div class="hbo-i-cell niveau-{{bt[1]?.niveau}}"
+												[tooltip]="tooltipTemplate1">
+												<span *ngIf="i == 0">{{bt[1]}}</span>
+											</div>
+											<template #tooltipTemplate2>{{bt[2]?.architectuurlaag}}<br />
+											{{bt[2]?.activiteit}}</template>
+											<div class="hbo-i-cell niveau-{{bt[2]?.niveau}}"
+												[tooltip]="tooltipTemplate2">
+												<span *ngIf="i == 0">{{bt[2]}}</span>
+											</div>
+											<template #tooltipTemplate3>{{bt[3]?.architectuurlaag}}<br />
+											{{bt[3]?.activiteit}}</template>
+											<div class="hbo-i-cell niveau-{{bt[3]?.niveau}}"
+												[tooltip]="tooltipTemplate3">
+												<span *ngIf="i == 0">{{bt[3]}}</span>
+											</div>
+											<template #tooltipTemplate4>{{bt[4]?.architectuurlaag}}<br />
+											{{bt[4]?.activiteit}}</template>
+											<div class="hbo-i-cell niveau-{{bt[4]?.niveau}}"
+												[tooltip]="tooltipTemplate4">
+												<span *ngIf="i == 0">{{bt[4]}}</span>
+											</div>
+											<template #tooltipTemplate5>{{bt[5]?.architectuurlaag}}<br />
+											{{bt[5]?.activiteit}}</template>
+											<div class="hbo-i-cell niveau-{{bt[5]?.niveau}}"
+												[tooltip]="tooltipTemplate5">
+												<span *ngIf="i == 0">{{bt[5]}}</span>
+											</div>
+										</div>
+									</div>
+
+
+									<div class="col-3">
+										<div class="ps-layer">
+											<span>Professional Skills</span>
+											<div class="top-layer">
+												<div class="ps-cell">CPO</div>
+												<div class="ps-cell">OD</div>
+												<div class="ps-cell">LSC</div>
+												<div class="ps-cell">POKe</div>
+												<div class="ps-cell">LPO</div>
+											</div>
+											<div class="ps-layer">
+												<div class="ps-cell ps-cpo">
+													<span *ngFor="let ps of c.professionalskills"><span
+														*ngIf="ps?.code == 'CP'">{{ps.niveau}}</span></span>
+												</div>
+												<div class="ps-cell ps-ai">
+													<span *ngFor="let ps of c.professionalskills"><span
+														*ngIf="ps?.code == 'OD'">{{ps.niveau}}</span></span>
+												</div>
+												<div class="ps-cell ps-lsc">
+													<span *ngFor="let ps of c.professionalskills"><span
+														*ngIf="ps?.code == 'LSC'">{{ps.niveau}}</span></span>
+												</div>
+												<div class="ps-cell ps-poe">
+													<span *ngFor="let ps of c.professionalskills"><span
+														*ngIf="ps?.code == 'POKe'">{{ps.niveau}}</span></span>
+												</div>
+												<div class="ps-cell none">
+													<span *ngFor="let ps of c.professionalskills"><span
+														*ngIf="ps?.code == 'LPO'">{{ps.niveau}}</span></span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-3">
+										<span>Trefwoorden</span>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+				</tab></tabset>
 			</div>
-			<div class="card-footer"></div>
 		</div>
 	</div>
 </div>
+
+<div bsModal #OpleidingModal="bs-modal" class="addModal modal fade"
+	tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog modal-primary" role="document">
+		<div class="modal-content">
+			<form #f="ngForm">
+				<div class="modal-header">
+					<h4 class="modal-title">Nieuwe opleiding</h4>
+					<button type="button" class="close"
+						(click)="closeModal(opleidingModal)" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div *ngIf="loading" align="center">
+						<br /> <img src="assets/img/ripple.svg" />
+					</div>
+					<div class="form">
+
+						<div class="form-group row">
+							<label for="naam" class="col-2 col-form-label">Code</label>
+							<div class="col-10">
+								<input class="form-control" type="text" id="code" name="code"
+									required [(ngModel)]="opleidingForm.code">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="naam" class="col-2 col-form-label">Naam</label>
+							<div class="col-10">
+								<input class="form-control" type="text" id="naam" name="naam"
+									required [(ngModel)]="opleidingForm.naam">
+							</div>
+						</div>
+						{{opleidingForm | json}}
+
+					</div>
+				</div>
+				<div *ngIf="!loading" class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						(click)="opleidngModal.hide()">Sluiten</button>
+					<button type="button" class="btn btn-primary"
+						(click)="addOpleiding()">Toevoegen</button>
+				</div>
+			</form>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<div bsModal #beroepstaakModal="bs-modal" class="addModal modal fade"
+	tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog modal-primary" role="document">
+		<div class="modal-content">
+			<form #f="ngForm">
+				<div class="modal-header">
+					<h4 class="modal-title">Beroepstaken</h4>
+					<button type="button" class="close"
+						(click)="closeModal(beroepstaakModal)" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div *ngIf="loading" align="center">
+						<br /> <img src="assets/img/ripple.svg" />
+					</div>
+					<span *ngIf="error" class="text-danger">U heeft geen
+						beroepstaak geselecteerd</span>
+					<div class="form">
+						<div class="form-group">
+							<label for="architectuurlaag">Architectuur laag:</label> <select
+								class="form-control" id="architectuurlaag"
+								name="architectuurlaag"
+								[(ngModel)]="beroepstakenForm.architectuurlaag">
+								<option *ngFor="let a of beroepstakenTypes.architectuurLagen"
+									[ngValue]="a.id">{{a.naam}}</option>
+							</select>
+						</div>
+
+						<div class="form-group">
+							<label for="activiteit">Activiteit:</label> <select
+								class="form-control" id="activiteit" name="activiteit"
+								[(ngModel)]="beroepstakenForm.activiteit">
+								<option *ngFor="let a of beroepstakenTypes.activiteiten"
+									[ngValue]="a.id">{{a.naam}}</option>
+							</select>
+						</div>
+
+						<div class="form-group">
+							<label for="niveau">Niveau:</label> <select class="form-control"
+								id="niveau" name="niveau" [(ngModel)]="beroepstakenForm.niveau">
+								<option *ngFor="let a of beroepstakenTypes.niveaus"
+									[ngValue]="a">{{a}}</option>
+							</select>
+						</div>
+						{{beroepstakenForm | json}}
+
+					</div>
+				</div>
+				<div *ngIf="!loading" class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						(click)="beroepstaakModal.hide()">Sluiten</button>
+					<button type="button" class="btn btn-primary"
+						(click)="addBeroepstaak();beroepstaakModal.hide();">Toevoegen</button>
+				</div>
+			</form>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<div bsModal #ProfessionalskillModal="bs-modal"
+	class="addModal modal fade" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-primary" role="document">
+		<div class="modal-content">
+			<form #f="ngForm">
+				<div class="modal-header">
+					<h4 class="modal-title">Professional skill</h4>
+					<button type="button" class="close"
+						(click)="closeModal(professionalskillModal)" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div *ngIf="loading" align="center">
+						<br /> <img src="assets/img/ripple.svg" />
+					</div>
+					<span *ngIf="error" class="text-danger">U heeft geen
+						Professional skill geselecteerd</span>
+					<div class="form">
+						<div class="form-group">
+							<label for="activiteit">Activiteit:</label> <select
+								class="form-control" id="activiteit" name="activiteit"
+								[(ngModel)]="professionalskillForm.activiteit">
+								<option *ngFor="let a of professionalskillsTypes.activiteiten"
+									[ngValue]="a.id">{{a.naam}}</option>
+							</select>
+						</div>
+
+						<div class="form-group">
+							<label for="activiteit">Niveau:</label> <select
+								class="form-control" id="niveau" name="niveau"
+								[(ngModel)]="professionalskillForm.niveau">
+								<option *ngFor="let a of professionalskillsTypes.niveaus"
+									[ngValue]="a">{{a}}</option>
+							</select>
+						</div>
+
+						{{professionalskillForm | json}}
+
+					</div>
+				</div>
+				<div *ngIf="!loading" class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						(click)="closeModal(professionalskillModal)">Sluiten</button>
+					<button type="button" class="btn btn-primary"
+						(click)="addProfessionalskill()">Toevoegen</button>
+				</div>
+			</form>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<div bsModal #CursusModal="bs-modal" class="modal fade" tabindex="-1"
+	role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-primary" role="document">
+		<div class="modal-content">
+			<form name="cursusForm" novalidate>
+				<div class="modal-header">
+					<h4 class="modal-title">Cursussen</h4>
+					<button type="button" class="close" (click)="CursusModal.hide()"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div *ngIf="loading" align="center">
+						<br /> <img src="assets/img/ripple.svg" />
+					</div>
+					<span *ngIf="error" class="text-danger">Selecteer een
+						cursus!</span>
+						<div class="form-group">
+							<label for="cursussen">Cursussen</label> <select class="form-control"
+								id="cursussen" name="id" [(ngModel)]="cursusForm.id">
+								<option *ngFor="let a of availableCursussen" [ngValue]="a.id">{{a.naam}}</option>
+							</select>
+						</div>
+					<!-- <p>Form: {{ selectedCursus.value | json }}</p> -->
+				</div>
+				<div *ngIf="!loading" class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						(click)="CursusModal.hide()">Sluiten</button>
+					<button type="button" class="btn btn-primary"
+						(click)="addCursusToCohort(cursusForm)">Toevoegen</button>
+				</div>
+			</form>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+

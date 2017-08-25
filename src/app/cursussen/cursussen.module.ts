@@ -5,7 +5,7 @@ import { DropdownModule } from 'ng2-bootstrap/dropdown';
 import { CursussenComponent } from './cursussen.component';
 import { CursussenService } from './cursussen.service';
 import { CursussenRoutingModule } from './cursussen-routing.module';
-import {CommonModule} from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { TablesComponent } from '../components/tables.component';
 
 // Modal Component
@@ -16,14 +16,17 @@ import { ModalsComponent } from '../components/modals.component';
 import { TabsModule } from 'ng2-bootstrap/tabs';
 import { TabsComponent } from '../components/tabs.component';
 
+import {TooltipModule} from 'ng2-bootstrap';
+import {Tooltip} from "ngx-tooltip";
+
 import {HttpModule} from '@angular/http';
 import {BeroepstakenService} from '../beroepstaken/beroepstaken.service';
 import {ProfessionalskillsService} from '../professionalskills/professionalskills.service';
 import {LeerdoelenService} from '../leerdoelen/leerdoelen.service';
-import {ToetsenService} from '../toetsen/toetsen.service';
+import {ToetsenService} from '../services/toetsen.service';
 import {FormsModule} from '@angular/forms';
 import {ToetsmatrijzenService} from '../toetsmatrijzen/toetsmatrijzen.service';
-import {BloomniveausService} from '../bloomniveaus/bloomniveaus.service';
+import {BloomniveausService} from '../services/bloomniveaus.service';
 import {DocentenService} from "../docenten/docenten.service";
 
 @NgModule({
@@ -35,6 +38,7 @@ import {DocentenService} from "../docenten/docenten.service";
     FormsModule,
     CommonModule,
     TabsModule,
+    TooltipModule.forRoot(),
     ModalModule.forRoot()
   ],
   declarations: [ CursussenComponent,

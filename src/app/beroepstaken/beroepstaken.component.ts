@@ -1,34 +1,41 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, Injectable, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, Directive} from '@angular/core';
 import { Router } from '@angular/router';
-import {BeroepstakenService} from './beroepstaken.service';
+import { BeroepstakenService } from './beroepstaken.service';
+import { AbstractControl, NG_VALIDATORS } from '@angular/forms';
 
 @Component({
-  templateUrl: 'beroepstaken.component.html',
+	templateUrl: 'beroepstaken.component.html',
 })
+@Injectable()
 export class BeroepstakenComponent implements OnInit {
+    @ViewChild('beroepstaakModal') beroepstaakModal: any;
+    @Input() selectedBeroepstaak: any;
+    loading: boolean;
+	allBeroepstaken: Array<any>;
+	beroepstakenForm = <any>{};
+	beroepstakenTypes = <any>{};
 
-  @Input() courses: Array<any>;
-  @Output() onSelectedCourse = new EventEmitter<Object>();
-  loading: boolean;
-  naam: string;
-  selectedButton : number;
-  currentCourse = <any>{};
+    constructor(private beroepstakenService: BeroepstakenService) {
+        this.loading = true;
+    }
 
-  constructor(private beroepstaakService: BeroepstakenService) {
-    this.loading = true;
-  }
+	ngOnInit(): void {	
+	}
+	
+	getBeroepstaakTypes() {
+		this.loading = true;
+		this.beroepstakenService.getBeroepstaakTypes().subscribe(result => {
+			this.beroepstakenTypes = result;
+			this.beroepstakenForm = {architectuurlaag: 1, activiteit: 1, niveau: 1};
+			this.loading = false;
+		});
+	}
+	
+	showModal() {
+		this.getBeroepstaakTypes();
+		console.log(this.beroepstakenTypes);
+		this.beroepstaakModal.show();
+	}
 
-  ngOnInit(): void {
-  }
-
-  onSelect(cour:Object) {
-    this.onSelectedCourse.emit(cour);
-    this.currentCourse = cour;
-    this.selectedButton = 1;
-    console.log(this.currentCourse);
-  }
-
-  changeTab(tabnr : number) {
-    this.selectedButton = tabnr;
-  }
+	
 }

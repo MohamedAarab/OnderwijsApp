@@ -1,0 +1,42 @@
+div bsModal #OpleidingModal="bs-modal" class="addModal modal fade"
+	tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+	aria-hidden="true">
+<div class="overzicht">
+	<span>Beroepstaken</span>
+	<div class="hbo-i-layer"
+		*ngFor="let bt of selected.btMatrix; let i = index"
+		[ngClass]="{'top-layer': i == 0}">
+		<div class="hbo-i-cell">{{bt[0]}}</div>
+
+		<template #tooltipTemplate1>{{bt[1]?.architectuurlaag}}<br />
+		{{bt[1]?.activiteit}}</template>
+		<div class="hbo-i-cell niveau-{{bt[1]?.niveau}}"
+			[tooltip]="tooltipTemplate1">
+			<span *ngIf="i == 0">{{bt[1]}}</span>
+		</div>
+		<template #tooltipTemplate2>{{bt[2]?.architectuurlaag}}<br />
+		{{bt[2]?.activiteit}}</template>
+		<div class="hbo-i-cell niveau-{{bt[2]?.niveau}}"
+			[tooltip]="tooltipTemplate2">
+			<span *ngIf="i == 0">{{bt[2]}}</span>
+		</div>
+		<template #tooltipTemplate3>{{bt[3]?.architectuurlaag}}<br />
+		{{bt[3]?.activiteit}}</template>
+		<div class="hbo-i-cell niveau-{{bt[3]?.niveau}}"
+			[tooltip]="tooltipTemplate3">
+			<span *ngIf="i == 0">{{bt[3]}}</span>
+		</div>
+		<template #tooltipTemplate4>{{bt[4]?.architectuurlaag}}<br />
+		{{bt[4]?.activiteit}}</template>
+		<div class="hbo-i-cell niveau-{{bt[4]?.niveau}}"
+			[tooltip]="tooltipTemplate4">
+			<span *ngIf="i == 0">{{bt[4]}}</span>
+		</div>
+		<template #tooltipTemplate5>{{bt[5]?.architectuurlaag}}<br />
+		{{bt[5]?.activiteit}}</template>
+		<div class="hbo-i-cell niveau-{{bt[5]?.niveau}}"
+			[tooltip]="tooltipTemplate5">
+			<span *ngIf="i == 0">{{bt[5]}}</span>
+		</div>
+	</div>
+</div>

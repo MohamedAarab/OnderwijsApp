@@ -20,8 +20,7 @@ constructor(private http: Http) {
 getCursussen() {
 	var url = myGlobals.baseUrl+'organisaties/' + this.organisationId.id + '/cursussen';
 	console.log("url "+url)
-	return this.http.get(url)
-	.map(res => res.json());
+	return this.http.get(url).map(res => res.json());
 }
 
 getDataByHref(href) {
@@ -30,6 +29,7 @@ getDataByHref(href) {
 }
 
 getCursussenByObject(obj) {
+	console.log(obj.href);
 	return this.http.get(obj.href)
 	.map(res => res.json());
 }
@@ -49,26 +49,26 @@ addProfessionalskillToCursus(cursusId, professionalskillId) {
 saveLeerdoel(cursusId, leerdoel) {
 	if (leerdoel.id == null) {
 		return this.http.post(myGlobals.baseUrl+'cursussen/' + cursusId + '/leerdoelen', leerdoel)
-			.catch(this.handleError);	
+		.catch(this.handleError);	
 	} else {
 		var leerdoelId = leerdoel.id;
 		delete leerdoel.id;
 		console.log("leerdoelId "+leerdoelId);
 		console.log("leerdoel "+leerdoel);
 		return this.http.put(myGlobals.baseUrl+'leerdoelen/' + leerdoelId, leerdoel)
-			.catch(this.handleError);
+		.catch(this.handleError);
 	}
 }
 
 saveToets(cursusId, toets) {
 	if (toets.id == null) {
 		return this.http.post(myGlobals.baseUrl+'cursussen/' + cursusId + '/toetsen', toets)
-			.catch(this.handleError);	
+		.catch(this.handleError);	
 	} else {
 		var toetsId = toets.id;
 		delete toets.id;
 		return this.http.put(myGlobals.baseUrl+'toetsen/' + toetsId, toets)
-			.catch(this.handleError);
+		.catch(this.handleError);
 	}
 }
 

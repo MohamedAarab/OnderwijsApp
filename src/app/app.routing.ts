@@ -31,10 +31,6 @@ export const routes: Routes = [
         loadChildren: './cursussen/cursussen.module#CursussenModule',
       },
       {
-        path: 'leerplannen',
-        loadChildren: './leerplannen/leerplannen.module#LeerplannenModule'
-      },
-      {
         path: 'docenten',
         loadChildren: './docenten/docenten.module#DocentenModule'
       },

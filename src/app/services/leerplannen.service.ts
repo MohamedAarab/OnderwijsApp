@@ -22,17 +22,6 @@ export class LeerplannenService {
             .map(res => res.json());
     }
 
-    addCursusToCohort(cohortId, cursus){
-        return this.http.post('http://curcon-huict.rhcloud.com/rest/cohorten/' + cohortId + '/cursussen', cursus)
-            .catch(this.handleError);
-    }
-
-    deleteCursus(cohortId, cursusId) {
-        // Verwijdert een cursus uit een cohort (examenprogramma), cursus zelf wordt niet verwijderd.
-        return this.http.delete('http://curcon-huict.rhcloud.com/rest/cohorten/' + cohortId + '/cursussen/' + cursusId)
-            .catch(this.handleError);
-    }
-
     private handleError(error: any) {
         let errMsg = (error.message) ? error.message :
             error.status ? `${error.status} - ${error.statusText}` : 'Server error';

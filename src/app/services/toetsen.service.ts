@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import {Observable} from "rxjs";
+import * as myGlobals from '../globals';
 
 @Injectable()
 export class ToetsenService {
@@ -10,7 +11,7 @@ export class ToetsenService {
   }
 
   getToetsen() {
-    return this.http.get('http://curcon-huict.rhcloud.com/rest/toetsen/')
+    return this.http.get('myGlobals.baseUrl'+'toetsen/')
       .map(res => res.json());
   }
 
@@ -20,7 +21,7 @@ export class ToetsenService {
   }
 
   getOsisrisResultaatTypes() {
-    return this.http.get('http://curcon-huict.rhcloud.com/rest/osirisresultaattypen/')
+    return this.http.get('myGlobals.baseUrl'+'osirisresultaattypen/')
       .map(res => res.json());
   }
 
@@ -29,16 +30,22 @@ export class ToetsenService {
       .map(res => res.json());
   }
 
-  addBeoordelingsElementToToets(toetsid, element) {
-    console.log(element);
-    return this.http.post('http://curcon-huict.rhcloud.com/rest/toetsen/' + toetsid + '/beoordelingselementen', element)
-      .catch(this.handleError);
-  }
+	saveBeoordelingsElement(toetsId, element) {
+		if (element.id == null) {
+			return this.http.post(myGlobals.baseUrl+'toetsen/' + toetsId + '/beoordelingselementen', element)
+			.catch(this.handleError);	
+		} else {
+			var elementId = element.id;
+			delete element.id;
+			return this.http.put(myGlobals.baseUrl+'beoordelingselementen/' + elementId, element)
+			.catch(this.handleError);
+		}
+	}
 
-  deleteBeoordelingselement(elementid) {
-    return this.http.delete('http://curcon-huict.rhcloud.com/rest/beoordelingselementen/' + elementid)
-      .catch(this.handleError);
-  }
+	deleteBeoordelingselement(elementid) {
+		return this.http.delete(myGlobals.baseUrl+'beoordelingselementen/' + elementid)
+			.catch(this.handleError);
+	}
 
   private extractData(res: Response) {
     let body = res.json();

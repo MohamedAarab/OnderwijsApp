@@ -14,15 +14,16 @@
 		<img src="assets/img/ripple.svg" />
 	</div>
 	<div class="row">
-		<div class="col-2">
+		<div class="col-3">
 			<div class="card">
 				<div class="card-header">
 					<h4 class="card-title mb-0">Cursussen</h4>
+					<br />
+					<button type="button" class="btn btn-info"
+						(click)="cursusModal.show(); initializeCursusForm();">
+						<i class="fa fa-plus" aria-hidden="true"></i>
+					</button>
 				</div>
-				<button type="button" class="btn btn-info"
-					(click)="cursusModal.show(); initializeCursusForm();">
-					<i class="fa fa-plus" aria-hidden="true"></i>
-				</button>
 				<div class="card-block">
 					<div class="course-wrapper">
 						<div class="row">
@@ -43,387 +44,529 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-10 course">
-			<div *ngIf="currentCourse">
-				<div class="card">
-					<div class="card-header">
-						<h4 class="card-title mb-0">{{currentCourse.code |
-							uppercase}}</h4>
-					</div>
-					<div class="card-block">
-						<!-- Nav tabs -->
-						<tabset> <tab> <template tabHeading> <i
-							class="icon-list"></i> Algemeen</template>
-						<form #editCourse="ngForm" novalidate>
-							<a href="javascript:void(0)" (click)="changeMode('edit')"
-								*ngIf="mode == 'view'">Bewerken</a> <a href="javascript:void(0)"
-								(click)="changeMode('view')" *ngIf="mode == 'edit'">Annuleren</a>
-							<a href="javascript:void(0)" (click)="save(editCourse)"
-								*ngIf="mode == 'edit'">Opslaan</a>
-							<div class="form-group row">
-								<label for="code" class="col-2 col-form-label">Code</label>
-								<div class="col-10">
-									<div class="col-form-label" *ngIf="mode == 'view'">{{currentCourse.code}}</div>
-									<input *ngIf="mode == 'edit'" class="form-control" type="text"
-										id="code" name="code" required
-										[(ngModel)]="currentCourse.code">
-								</div>
-							</div>
-							<div class="form-group row">
-								<label for="naam" class="col-2 col-form-label">Naam</label>
-								<div class="col-10">
-									<div class="col-form-label" *ngIf="mode == 'view'">{{currentCourse.naam}}</div>
-									<input *ngIf="mode == 'edit'" class="form-control" type="text"
-										id="naam" name="naam" required
-										[(ngModel)]="currentCourse.naam">
-								</div>
-							</div>
-							<div class="form-group row">
-								<label for="periode" class="col-2 col-form-label">Periode</label>
-								<div class="col-10">
-									<div class="col-form-label" *ngIf="mode == 'view'">{{currentCourse.periode}}</div>
-									<input *ngIf="mode == 'edit'" class="form-control" type="text"
-										id="periode" name="periode" required
-										[(ngModel)]="currentCourse.periode">
-								</div>
-							</div>
-							<div class="form-group row">
-								<label for="europeanCredits" class="col-2 col-form-label">Ects</label>
-								<div class="col-10">
-									<div class="col-form-label" *ngIf="mode == 'view'">{{currentCourse.europeanCredits}}</div>
-									<input *ngIf="mode == 'edit'" class="form-control" type="text"
-										id="europeanCredits" name="europeanCredits" required
-										[(ngModel)]="currentCourse.europeanCredits">
-								</div>
-							</div>
-							<div class="form-group row">
-								<label for="coordinator" class="col-2 col-form-label">Coördinator</label>
-								<div class="col-10">
-									<div class="col-form-label" *ngIf="mode == 'view'">{{currentCourse.coordinator?.naam}}</div>
-									<select *ngIf="mode == 'edit'"
-										[ngModel]="cursusForm.coordinator?.id" type="text"
-										class="form-control" id="coordinator" name="coordinator">
-										<option *ngFor="let a of allDocenten" [ngValue]="a.id">{{a.naam}}</option>
-									</select>
-								</div>
-							</div>
-							{{editCourse.value | json}}
-						</form>
-						</tab> <tab> <template tabHeading> <i
-							class="icon-calculator"></i> Beroepstaken</template>
-						<div class="col-12">
-							<div class="row">
-								<div class="table-responsive">
-									<table class="table preview-table">
-										<thead>
-											<tr>
-												<th></th>
-												<th>Architectuur laag</th>
-												<th>Activiteit</th>
-												<th>Niveau</th>
-												<th>Omschrijving</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr *ngFor="let bt of currentCourse.beroepstaken">
-												<td><a class="text-danger lead"
-													href="javascript:void(0)" (click)="deleteBeroepstaak(bt)"><i
-														class="fa fa-minus-circle" aria-hidden="true"></i></a></td>
-												<td>{{bt.architectuurlaag}}</td>
-												<td>{{bt.activiteit}}</td>
-												<td>{{bt.niveau}}</td>
-												<td>{{bt.omschrijving}}</td>
-											</tr>
-										</tbody>
-										<!-- preview content goes here-->
-									</table>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-12">
-									<div class="btn-group pull-right" role="group" aria-label="...">
-										<button type="button" class="btn btn-info"
-											(click)="BeroepstaakModal.show(); getBeroepstaakTypes();">
-											<i class="fa fa-plus" aria-hidden="true"></i>
-										</button>
-									</div>
-								</div>
-							</div>
-						</div>
+		<div class="col-9 course">
+			<div *ngIf="selectedCursus" class="card">
+				<div class="card-header">
+					<h4 class="card-title mb-0">{{selectedCursus.code |
+						uppercase}}</h4>
+				</div>
+				<div class="card-block">
+					<!-- Nav tabs -->
+					<tabset> <tab> <template tabHeading> <i
+						class="icon-list"></i> Overzicht</template>
 
-						</tab> <tab> <template tabHeading> <i
-							class="icon-pie-chart"></i> Professional skills</template>
-						<div class="col-12">
-							<div class="row">
-								<div class="table-responsive">
-									<table class="table preview-table">
-										<thead>
-											<tr>
-												<th></th>
-												<th>Code</th>
-												<th>Beschrijving</th>
-												<th>Niveau</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr *ngFor="let ps of currentCourse.professionalskills">
-												<td><a class="text-danger lead"
-													href="javascript:void(0)"
-													(click)="deleteProfessionalskill(ps)"><i
-														class="fa fa-minus-circle" aria-hidden="true"></i></a></td>
-												<td>{{ps.code}}</td>
-												<td>{{ps.beschrijving}}</td>
-												<td>{{ps.niveau}}</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
+					<div class="col-12 leerplannen">
+						<div class="row cursus">
+							<div class="col-4">
+								<span class="cursus-code">{{selectedCursus.code}}</span>
+								<h5 class="cursus-naam">{{selectedCursus.naam}}</h5>
+								<h6 class="cursus-ec">{{selectedCursus.europeanCredits}} EC</h6>
 							</div>
-							<div class="row">
-								<div class="col-12">
-									<div class="btn-group pull-right" role="group" aria-label="...">
-										<button type="button" class="btn btn-info"
-											(click)="ProfessionalskillModal.show(); getProfessionalskillTypes();">
-											<i class="fa fa-plus" aria-hidden="true"></i>
-										</button>
-									</div>
-								</div>
-							</div>
-						</div>
-						</tab> <tab> <template tabHeading> <i
-							class="icon-pie-chart"></i> Leerdoelen</template>
-						<div class="col-12">
-							<div class="row">
-								<div class="table-responsive">
-									<table class="table preview-table">
-										<thead>
-											<tr>
-												<th></th>
-												<th></th>
-												<th>Bloomniveau</th>
-												<th>Beroepstaak</th>
-												<th>Professional Skill</th>
-												<th>Gewicht</th>
-												<th>Omschrijving</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr *ngFor="let ld of currentCourse.leerdoelenlijst">
-												<td><a class="text-danger" href="javascript:void(0)"
-													(click)="deleteLeerdoel(ld)"><i
-														class="fa fa-minus-circle" aria-hidden="true"
-														style="font-size: 20px;"></i></a></td>
-												<td><a href="javascript:void(0)"
-													(click)="initializeLeerdoelModal(ld);"><i
-														class="fa fa-pencil-square" aria-hidden="true"
-														style="font-size: 20px;"></i></a></td>
-												<td>{{ld.bloomniveau.naam}}</td>
-												<td>{{ld.eindBT.naam}}</td>
-												<td>{{ld.eindPS.naam}}</td>
-												<td>{{ld.gewicht}}</td>
-												<td>{{ld.omschrijving}}</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-12">
-									<div class="btn-group pull-right" role="group" aria-label="...">
-										<button type="button" class="btn btn-info"
-											(click)="LeerdoelModal.show(); initializeLeerdoelForm();">
-											<i class="fa fa-plus" aria-hidden="true"></i>
-										</button>
-									</div>
-								</div>
-							</div>
-						</div>
+							<div class="col-2">
+								<span>Beroepstaken</span>
+								<div class="hbo-i-layer"
+									*ngFor="let bt of selectedCursus.btMatrix; let i = index"
+									[ngClass]="{'top-layer': i == 0}">
+									<div class="hbo-i-cell">{{bt[0]}}</div>
 
-						</tab> <tab> <template tabHeading> <i
-							class="icon-pie-chart"></i> Toetsen</template>
-						<div class="col-12">
-							<div class="row">
-								<div class="table-responsive">
-									<table class="table preview-table">
-										<thead>
-											<tr>
-												<th></th>
-												<th></th>
-												<th>Naam</th>
-												<th>Gewicht</th>
-												<th>Osiris Resultaat type</th>
-												<th>beoordelingsElementen</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr *ngFor="let toets of currentCourse.toetsenlijst">
-												<td><a class="text-danger" href="javascript:void(0)"
-													(click)="deleteToets(ld)"><i class="fa fa-minus-circle"
-														aria-hidden="true" style="font-size: 20px;"></i></a></td>
-												<td><a href="javascript:void(0)"
-													(click)="initializeToetsModal(toets);"><i
-														class="fa fa-pencil-square" aria-hidden="true"
-														style="font-size: 20px;"></i></a></td>
-												<td>{{toets.naam}}</td>
-												<td>{{toets.gewicht}}%</td>
-												<td>{{toets.osirisResultaatType.naam}}</td>
-												<td>
-													<table class="table table-sm">
-														<tr>
-															<th colspan="4"><div style="overflow: auto;"
-																	role="group" aria-label="...">
-																	<button class="btn btn-info btn-sm pull-right"
-																		(click)="beoordelingselementModal.show(); initializeBeoordelingsForm(toets);">
-																		<i class="fa fa-plus" aria-hidden="true"></i>
-																	</button>
-																</div></th>
-														</tr>
-														<tr *ngFor="let be of toets.beoordelingsElementen">
-															<td><a class="text-danger lead text-sm"
-																href="javascript:void(0)"
-																(click)="deleteBeoordelingsElement(be)"><i
-																	class="fa fa-minus-circle" aria-hidden="true"></i></a></td>
-															<td><b>Naam:</b> {{be.naam}}</td>
-															<td><b>Omschrijving:</b> {{be.omschrijving}}</td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-										</tbody>
-									</table>
+									<template #tooltipTemplate1>{{bt[1]?.architectuurlaag}}<br />
+									{{bt[1]?.activiteit}}</template>
+									<div class="hbo-i-cell niveau-{{bt[1]?.niveau}}"
+										[tooltip]="tooltipTemplate1">
+										<span *ngIf="i == 0">{{bt[1]}}</span>
+									</div>
+									<template #tooltipTemplate2>{{bt[2]?.architectuurlaag}}<br />
+									{{bt[2]?.activiteit}}</template>
+									<div class="hbo-i-cell niveau-{{bt[2]?.niveau}}"
+										[tooltip]="tooltipTemplate2">
+										<span *ngIf="i == 0">{{bt[2]}}</span>
+									</div>
+									<template #tooltipTemplate3>{{bt[3]?.architectuurlaag}}<br />
+									{{bt[3]?.activiteit}}</template>
+									<div class="hbo-i-cell niveau-{{bt[3]?.niveau}}"
+										[tooltip]="tooltipTemplate3">
+										<span *ngIf="i == 0">{{bt[3]}}</span>
+									</div>
+									<template #tooltipTemplate4>{{bt[4]?.architectuurlaag}}<br />
+									{{bt[4]?.activiteit}}</template>
+									<div class="hbo-i-cell niveau-{{bt[4]?.niveau}}"
+										[tooltip]="tooltipTemplate4">
+										<span *ngIf="i == 0">{{bt[4]}}</span>
+									</div>
+									<template #tooltipTemplate5>{{bt[5]?.architectuurlaag}}<br />
+									{{bt[5]?.activiteit}}</template>
+									<div class="hbo-i-cell niveau-{{bt[5]?.niveau}}"
+										[tooltip]="tooltipTemplate5">
+										<span *ngIf="i == 0">{{bt[5]}}</span>
+									</div>
 								</div>
 							</div>
-							<div class="row">
-								<div class="col-12">
-									<div class="btn-group pull-right" role="group" aria-label="...">
-										<button type="button" class="btn btn-info"
-											(click)="ToetsModal.show(); initializeToetsForm();">
-											<i class="fa fa-plus" aria-hidden="true"></i>
-										</button>
+							<div class="col-3">
+								<div class="ps-layer">
+									<span>Professional Skills</span>
+									<div class="top-layer">
+										<div class="ps-cell">CPO</div>
+										<div class="ps-cell">OD</div>
+										<div class="ps-cell">LSC</div>
+										<div class="ps-cell">POKe</div>
+										<div class="ps-cell">LPO</div>
 									</div>
+									<div class="ps-layer">
+										<div class="ps-cell ps-cpo">
+											<span *ngFor="let ps of selectedCursus.professionalskills"><span
+												*ngIf="ps?.code == 'CP'">{{ps.niveau}}</span></span>
+										</div>
+										<div class="ps-cell ps-ai">
+											<span *ngFor="let ps of selectedCursus.professionalskills"><span
+												*ngIf="ps?.code == 'OD'">{{ps.niveau}}</span></span>
+										</div>
+										<div class="ps-cell ps-lsc">
+											<span *ngFor="let ps of selectedCursus.professionalskills"><span
+												*ngIf="ps?.code == 'LSC'">{{ps.niveau}}</span></span>
+										</div>
+										<div class="ps-cell ps-poe">
+											<span *ngFor="let ps of selectedCursus.professionalskills"><span
+												*ngIf="ps?.code == 'POKe'">{{ps.niveau}}</span></span>
+										</div>
+										<div class="ps-cell none">
+											<span *ngFor="let ps of selectedCursus.professionalskills"><span
+												*ngIf="ps?.code == 'LPO'">{{ps.niveau}}</span></span>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+
+					</tab> <tab> <template tabHeading> <i class="icon-list"></i>
+					Algemeen</template>
+					<form #editCourse="ngForm" novalidate>
+						<a href="javascript:void(0)" (click)="changeMode('edit')"
+							*ngIf="mode == 'view'">Bewerken</a> <a href="javascript:void(0)"
+							(click)="changeMode('view')" *ngIf="mode == 'edit'">Annuleren</a>
+						<a href="javascript:void(0)" (click)="saveCursus(editCourse)"
+							*ngIf="mode == 'edit'">Opslaan</a>
+						<div class="form-group row">
+							<label for="code" class="col-2 col-form-label">Code</label>
+							<div class="col-10">
+								<div class="col-form-label" *ngIf="mode == 'view'">{{selectedCursus.code}}</div>
+								<input *ngIf="mode == 'edit'" class="form-control" type="text"
+									id="code" name="code" required [(ngModel)]="cursusForm.code">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="naam" class="col-2 col-form-label">Naam</label>
+							<div class="col-10">
+								<div class="col-form-label" *ngIf="mode == 'view'">{{selectedCursus.naam}}</div>
+								<input *ngIf="mode == 'edit'" class="form-control" type="text"
+									id="naam" name="naam" required [(ngModel)]="cursusForm.naam">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="periode" class="col-2 col-form-label">Periode</label>
+							<div class="col-10">
+								<div class="col-form-label" *ngIf="mode == 'view'">{{selectedCursus.periode}}</div>
+								<input *ngIf="mode == 'edit'" class="form-control" type="text"
+									id="periode" name="periode" required
+									[(ngModel)]="cursusForm.periode">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="europeanCredits" class="col-2 col-form-label">Ects</label>
+							<div class="col-10">
+								<div class="col-form-label" *ngIf="mode == 'view'">{{selectedCursus.europeanCredits}}</div>
+								<input *ngIf="mode == 'edit'" class="form-control" type="text"
+									id="europeanCredits" name="europeanCredits" required
+									[(ngModel)]="cursusForm.europeanCredits">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="coordinator" class="col-2 col-form-label">Coördinator</label>
+							<div class="col-10">
+								<div class="col-form-label" *ngIf="mode == 'view'">{{selectedCursus.coordinator?.naam}}</div>
+								<select *ngIf="mode == 'edit'"
+									[ngModel]="cursusForm.coordinator?.id" type="text"
+									class="form-control" id="coordinator" name="coordinator">
+									<option *ngFor="let a of allDocenten" [ngValue]="a.id">{{a.naam}}</option>
+								</select>
+							</div>
+						</div>
+						{{editCourse.value | json}}
+					</form>
+					</tab> <tab> <template tabHeading> <i
+						class="icon-calculator"></i> Beroepstaken</template>
+					<div class="col-12">
+						<div class="row">
+							<div class="table-responsive">
+								<table class="table preview-table">
+									<thead>
+										<tr>
+											<th></th>
+											<th>Architectuur laag</th>
+											<th>Activiteit</th>
+											<th>Niveau</th>
+											<th>Omschrijving</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr *ngFor="let bt of selectedCursus.beroepstaken">
+											<td><a class="text-danger lead"
+												href="javascript:void(0)" (click)="deleteBeroepstaak(bt)"><i
+													class="fa fa-minus-circle" aria-hidden="true"></i></a></td>
+											<td>{{bt.architectuurlaag}}</td>
+											<td>{{bt.activiteit}}</td>
+											<td>{{bt.niveau}}</td>
+											<td>{{bt.omschrijving}}</td>
+										</tr>
+									</tbody>
+									<!-- preview content goes here-->
+								</table>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<div class="btn-group pull-right" role="group" aria-label="...">
+									<button type="button" class="btn btn-info"
+										(click)="BeroepstaakModal.show(); getBeroepstaakTypes();">
+										<i class="fa fa-plus" aria-hidden="true"></i>
+									</button>
 								</div>
 							</div>
 						</div>
-						</tab> <tab> <template tabHeading> <i
-							class="icon-pie-chart"></i> Toetsmatrijs</template>
-						<table class="toetsmatrijs table table-bordered table-nonfluid">
-							<tr>
-								<td class="tableInvisible"></td>
-								<td class="tableInvisible"></td>
-								<td class="tableInvisible"></td>
-								<td class="tableInvisible"></td>
-								<td class="tableInvisible"></td>
-								<ng-container
-									*ngFor="let row of currentCourse.toetsmatrijs; let i = index">
-								<ng-container *ngIf="i == 0"> <ng-container
-									*ngFor="let item of row; let j = index"> <ng-container
-									*ngIf="j > 4">
-								<td class="toetsKopje"><div>
-										<span>{{item}}</span>
-									</div></td>
-								</ng-container> </ng-container> </ng-container> </ng-container>
-							</tr>
-							<tr class="toetsElementen">
-								<td class="tableInvisible"><div>
-										<span>Prof. Skill</span>
-									</div></td>
-								<td class="tableInvisible"><div>
-										<span>Beroepstaak</span>
-									</div></td>
-								<td class="tableInvisible"><div>
-										<span>Leerdoel</span>
-									</div></td>
-								<td class="tableInvisible"><div>
-										<span>Bloom</span>
-									</div></td>
-								<td class="tableInvisible"></td>
-								<ng-container
-									*ngFor="let row of currentCourse.toetsmatrijs; let i = index">
-								<ng-container *ngIf="i == 1"> <ng-container
-									*ngFor="let item of row; let j = index"> <ng-container
-									*ngIf="j > 4">
-								<td class="toetsElementKopje"><div>
-										<span>{{item.naam}}</span>
-									</div></td>
-								</ng-container> </ng-container> </ng-container> </ng-container>
-							</tr>
-							<tr>
-								<td class="empty"></td>
-								<td class="empty"></td>
-								<td class="empty"></td>
-								<td class="empty"></td>
-								<td class="empty total">Totaal</td>
-								<ng-container
-									*ngFor="let row of currentCourse.toetsmatrijs; let i = index">
-								<ng-container *ngIf="i == 2"> <ng-container
-									*ngFor="let item of row; let j = index"> <ng-container
-									*ngIf="j > 4">
-								<td class="total"><div>
-										<span>{{item}} %</span>
-									</div></td>
-								</ng-container> </ng-container> </ng-container> </ng-container>
-							</tr>
-							<ng-container
-								*ngFor="let row of currentCourse.toetsmatrijs; let i = index">
-							<ng-container *ngIf="i > 2">
-							<tr>
-								<ng-container *ngFor="let item of row; let j = index">
-								<ng-container *ngIf="j < 5">
-								<td class="ld" [ngClass]="{'total': j == 4}"><div>
-										<span>{{item}} <ng-container *ngIf="j == 4">%</ng-container></span>
-									</div></td>
-								</ng-container> <ng-container *ngIf="j > 4">
-								<td class="weging"
-									*ngIf="toetsMatrijsEdit != item?.id && toetsMatrijsAdd !== item"><div
-										(click)="editCell(item?.id, item?.gewicht)"
-										class="btn-editToets" *ngIf="item !== Array">
-										<span>{{item?.gewicht}} <ng-container
-												*ngIf="item?.gewicht != undefined">%</ng-container></span>
-									</div>
-									<div *ngIf="item?.length > 0">
-										<button class="btn btn-small btn-info btn-addToets"
-											(click)="addCell(item)">
-											<i class="fa fa-plus" aria-hidden="true"></i>
-										</button>
-									</div></td>
-								<td class="weging" *ngIf="toetsMatrijsEdit == item?.id">
-									<form #f="ngForm">
-										<input type="number" name="gewicht" class="form-control"
-											[(ngModel)]="toetsMatrijsEditForm.gewicht" max="100" />
-										<button class="btn btn-success btn-sm"
-											(click)="editToetsElement()">
-											<i class="fa fa-check"></i>
-										</button>
-										<button class="btn btn-danger btn-sm"
-											(click)="cancelEditGewicht()">
-											<i class="fa fa-close"></i>
-										</button>
-										<button class="btn btn-danger btn-sm"
-											(click)="deleteToetsElement()">
-											<i class="fa fa-trash"></i>
-										</button>
-									</form>
-								</td>
-								<td class="weging" *ngIf="toetsMatrijsAdd == item">
-									<form #f="ngForm">
-										<input type="number" name="gewicht" class="form-control"
-											[(ngModel)]="toetsMatrijsAddForm.gewicht" max="100" />
-										<button class="btn btn-success btn-sm"
-											(click)="addToetsElement()">
-											<i class="fa fa-check"></i>
-										</button>
-										<button class="btn btn-danger btn-sm"
-											(click)="cancelSaveGewicht()">
-											<i class="fa fa-close"></i>
-										</button>
-									</form>
-								</td>
-								</ng-container> </ng-container>
-							</tr>
-							</ng-container> </ng-container>
-						</table>
-						</tab> </tabset>
 					</div>
+
+					</tab> <tab> <template tabHeading> <i
+						class="icon-pie-chart"></i> Professional skills</template>
+					<div class="col-12">
+						<div class="row">
+							<div class="table-responsive">
+								<table class="table preview-table">
+									<thead>
+										<tr>
+											<th></th>
+											<th>Code</th>
+											<th>Beschrijving</th>
+											<th>Niveau</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr *ngFor="let ps of selectedCursus.professionalskills">
+											<td><a class="text-danger lead"
+												href="javascript:void(0)"
+												(click)="deleteProfessionalskill(ps)"><i
+													class="fa fa-minus-circle" aria-hidden="true"></i></a></td>
+											<td>{{ps.code}}</td>
+											<td>{{ps.beschrijving}}</td>
+											<td>{{ps.niveau}}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<div class="btn-group pull-right" role="group" aria-label="...">
+									<button type="button" class="btn btn-info"
+										(click)="ProfessionalskillModal.show(); getProfessionalskillTypes();">
+										<i class="fa fa-plus" aria-hidden="true"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					</tab> <tab> <template tabHeading> <i
+						class="icon-pie-chart"></i> Leerdoelen</template>
+					<div class="col-12">
+						<div class="row">
+							<div class="table-responsive">
+								<table class="table preview-table">
+									<thead>
+										<tr>
+											<th></th>
+											<th>Bloomniveau</th>
+											<th>Beroepstaak</th>
+											<th>Professional Skill</th>
+											<th>Gewicht</th>
+											<th>Omschrijving</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr *ngFor="let ld of selectedCursus.leerdoelenlijst">
+											<td><a class="text-danger" href="javascript:void(0)"
+												(click)="deleteLeerdoel(ld)"><i
+													class="fa fa-minus-circle" aria-hidden="true"
+													style="font-size: 20px;"></i></a> <a href="javascript:void(0)"
+												(click)="initializeLeerdoelModal(ld);"><i
+													class="fa fa-pencil-square" aria-hidden="true"
+													style="font-size: 20px;"></i></a></td>
+											<td>{{ld.bloomniveau.naam}}</td>
+											<td>{{ld.eindBT.naam}}</td>
+											<td>{{ld.eindPS.naam}}</td>
+											<td>{{ld.gewicht}}</td>
+											<td>{{ld.omschrijving}}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<div class="btn-group pull-right" role="group" aria-label="...">
+									<button type="button" class="btn btn-info"
+										(click)="LeerdoelModal.show(); initializeLeerdoelForm();">
+										<i class="fa fa-plus" aria-hidden="true"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					</tab> <tab> <template tabHeading> <i
+						class="icon-pie-chart"></i> Toetsen</template>
+					<div class="col-12">
+						<div class="row">
+							<table class="table preview-table">
+								<thead>
+									<tr>
+										<th></th>
+										<th>Naam</th>
+										<th>Gewicht</th>
+										<th>Beoordelingselementen</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr *ngFor="let toets of selectedCursus.toetsenlijst">
+										<td><a class="text-danger" href="javascript:void(0)"
+											(click)="deleteToets(toets)"><i
+												class="fa fa-minus-circle" aria-hidden="true"
+												style="font-size: 20px;"></i></a> <a href="javascript:void(0)"
+											(click)="initializeToetsModal(toets);"><i
+												class="fa fa-pencil-square" aria-hidden="true"
+												style="font-size: 20px;"></i></a></td>
+										<td>{{toets.naam}}</td>
+										<td>{{toets.gewicht}}%</td>
+										<td>
+
+											<table class="table table-condensed table-sm">
+												<tr *ngFor="let be of toets.beoordelingsElementen">
+													<td><a class="text-danger" href="javascript:void(0)"
+														(click)="deleteBeoordelingsElement(be)"><i
+															class="fa fa-minus-circle" aria-hidden="true"
+															style="font-size: 20px;"></i></a> <a
+														href="javascript:void(0)"
+														(click)="initializeBeoordelngelementModal(be);"><i
+															class="fa fa-pencil-square" aria-hidden="true"
+															style="font-size: 20px;"></i></a></td>
+													<td>{{be.naam}}</td>
+													<td>{{be.gewicht}}%</td>
+													<td>{{be.omschrijving}}</td>
+												</tr>
+												<tr>
+													<td colspan="4"><div style="overflow: auto;"
+															role="group" aria-label="...">
+															<button class="btn btn-info btn-sm pull-right"
+																(click)="beoordelingselementModal.show(); initializeBeoordelingsForm(toets);">
+																<i class="fa fa-plus" aria-hidden="true"></i>
+															</button>
+														</div></td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<div class="btn-group pull-right" role="group" aria-label="...">
+									<button type="button" class="btn btn-info"
+										(click)="ToetsModal.show(); initializeToetsForm();">
+										<i class="fa fa-plus" aria-hidden="true"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					</tab> <tab> <template tabHeading> <i
+						class="icon-pie-chart"></i> Toetsmatrijs</template>
+					<table class="toetsmatrijs table table-bordered table-nonfluid">
+						<tr>
+							<td class="tableInvisible"></td>
+							<td class="tableInvisible"></td>
+							<td class="tableInvisible"></td>
+							<ng-container *ngFor="let toets of toetsenArray; let i = index">
+								<td class="toetsKopje">
+									<div>
+										<span>{{toets}}</span>
+									</div>
+								</td>
+							</ng-container>
+							
+<!-- 							<ng-container -->
+<!-- 								*ngFor="let row of selectedCursus.toetsmatrijs; let i = index"> -->
+<!-- 							<ng-container *ngIf="i == 0"> <ng-container -->
+<!-- 								*ngFor="let item of row; let j = index"> <ng-container -->
+<!-- 								*ngIf="j > 4"> -->
+<!-- 							<td class="toetsKopje"><div> -->
+<!-- 									<span>{{item}}</span> -->
+<!-- 								</div></td> -->
+<!-- 							</ng-container> </ng-container> </ng-container> </ng-container> -->
+						</tr>
+						<tr class="toetsElementen">
+							<td class="tableInvisible"></td>
+							<td class="tableInvisible"></td>
+							<td class="tableInvisible"></td>
+							<ng-container *ngFor="let element of beoordelingselementArray; let i = index">
+								<td class="toetsElementKopje">
+									<div>
+										<span>{{element.naam}}</span>
+									</div>
+								</td>
+							</ng-container>
+						</tr>
+						<tr>
+							<td class=""><div>
+									<span>Leerdoel</span>
+								</div>
+							</td>
+							<td class=""><div>
+									<span>Bloom</span>
+								</div>
+							</td>
+							<td class="empty total">Totaal</td>
+							<ng-container *ngFor="let element of beoordelingselementArray; let i = index">
+								<td class="total">
+									<div>
+										<span>{{element.gewicht}}</span>
+									</div>
+								</td>
+							</ng-container>
+						</tr>
+<!-- 						<ng-container *ngFor="let leerdoel of selectedCursus.leerdoelenlijst; let leerdoelIndex = index"> -->
+<!-- 							<tr> -->
+<!-- 								<td> -->
+<!-- 									{{leerdoel.omschrijving}} -->
+<!-- 								</td> -->
+<!-- 								<td> -->
+<!-- 									{{leerdoel.bloomniveau.naam}} -->
+<!-- 								</td> -->
+
+<!-- 								<ng-container *ngFor="let item of selectedCursus.toetsmatrijs[leerdoelIndex]; let itemIndex = index"> -->
+<!-- 									<td> -->
+<!-- 									<td class="weging" *ngIf="toetsMatrijsEdit != item?.id && toetsMatrijsAdd !== item"> -->
+<!-- 										<div (click)="editCell(item?.id, item?.gewicht)" -->
+<!-- 											class="btn-editToets" *ngIf="item !== Array"> -->
+<!-- 											<span>{{item?.gewicht}} <ng-container -->
+<!-- 												*ngIf="item?.gewicht != undefined">%</ng-container></span> -->
+<!-- 										</div> -->
+<!-- 										<div *ngIf="item?.length > 0"> -->
+<!-- 											<button class="btn btn-small btn-info btn-addToets" -->
+<!-- 												(click)="addCell(item)"> -->
+<!-- 												<i class="fa fa-plus" aria-hidden="true"></i> -->
+<!-- 											</button> -->
+<!-- 										</div> -->
+<!-- 									</td> -->
+<!-- 									<td class="weging" *ngIf="toetsMatrijsEdit == item?.id"> -->
+<!-- 										<form #f="ngForm"> -->
+<!-- 											<input type="number" name="gewicht" class="form-control" -->
+<!-- 												[(ngModel)]="toetsMatrijsEditForm.gewicht" max="100" /> -->
+<!-- 											<button class="btn btn-success btn-sm" -->
+<!-- 												(click)="editToetsElement()"> -->
+<!-- 												<i class="fa fa-check"></i> -->
+<!-- 											</button> -->
+<!-- 											<button class="btn btn-danger btn-sm" -->
+<!-- 												(click)="cancelEditGewicht()"> -->
+<!-- 												<i class="fa fa-close"></i> -->
+<!-- 											</button> -->
+<!-- 											<button class="btn btn-danger btn-sm" -->
+<!-- 												(click)="deleteToetsElement()"> -->
+<!-- 												<i class="fa fa-trash"></i> -->
+<!-- 											</button> -->
+<!-- 										</form> -->
+<!-- 									</td> -->
+<!--  									<td class="weging" *ngIf="toetsMatrijsAdd == item"> -->
+<!-- 								<form #f="ngForm"> -->
+<!-- 									<input type="number" name="gewicht" class="form-control" -->
+<!-- 										[(ngModel)]="toetsMatrijsAddForm.gewicht" max="100" /> -->
+<!-- 									<button class="btn btn-success btn-sm" -->
+<!-- 										(click)="addToetsElement()"> -->
+<!-- 										<i class="fa fa-check"></i> -->
+<!-- 									</button> -->
+<!-- 									<button class="btn btn-danger btn-sm" -->
+<!-- 										(click)="cancelSaveGewicht()"> -->
+<!-- 										<i class="fa fa-close"></i> -->
+<!-- 									</button> -->
+<!-- 								</form> -->
+<!-- 									</td> -->
+<!-- 								</ng-container> -->
+
+<!-- 							</tr> -->
+<!-- 						</ng-container> -->
+						
+<!-- 						<ng-container -->
+<!-- 							*ngFor="let row of selectedCursus.toetsmatrijs; let i = index"> -->
+<!-- 						<ng-container *ngIf="i > 2"> -->
+<!-- 						<tr> -->
+<!-- 							<ng-container *ngFor="let item of row; let j = index"> -->
+<!-- 								<ng-container *ngIf="j < 3"> -->
+<!-- 									<td class="ld" [ngClass]="{'total': j == 2}"><div> -->
+<!-- 										<span>{{item}} <ng-container *ngIf="j == 2">%</ng-container></span> -->
+<!-- 										</div> -->
+<!-- 									</td> -->
+<!-- 								</ng-container>  -->
+<!-- 								<ng-container *ngIf="j > 2"> -->
+<!-- 									<td class="weging" *ngIf="toetsMatrijsEdit != item?.id && toetsMatrijsAdd !== item"> -->
+<!-- 										<div (click)="editCell(item?.id, item?.gewicht)" -->
+<!-- 											class="btn-editToets" *ngIf="item !== Array"> -->
+<!-- 											<span>{{item?.gewicht}} <ng-container -->
+<!-- 												*ngIf="item?.gewicht != undefined">%</ng-container></span> -->
+<!-- 										</div> -->
+<!-- 										<div *ngIf="item?.length > 0"> -->
+<!-- 											<button class="btn btn-small btn-info btn-addToets" -->
+<!-- 												(click)="addCell(item)"> -->
+<!-- 												<i class="fa fa-plus" aria-hidden="true"></i> -->
+<!-- 											</button> -->
+<!-- 										</div> -->
+<!-- 									</td> -->
+<!-- 									<td class="weging" *ngIf="toetsMatrijsEdit == item?.id"> -->
+<!-- 										<form #f="ngForm"> -->
+<!-- 											<input type="number" name="gewicht" class="form-control" -->
+<!-- 												[(ngModel)]="toetsMatrijsEditForm.gewicht" max="100" /> -->
+<!-- 											<button class="btn btn-success btn-sm" -->
+<!-- 												(click)="editToetsElement()"> -->
+<!-- 												<i class="fa fa-check"></i> -->
+<!-- 											</button> -->
+<!-- 											<button class="btn btn-danger btn-sm" -->
+<!-- 												(click)="cancelEditGewicht()"> -->
+<!-- 												<i class="fa fa-close"></i> -->
+<!-- 											</button> -->
+<!-- 											<button class="btn btn-danger btn-sm" -->
+<!-- 												(click)="deleteToetsElement()"> -->
+<!-- 												<i class="fa fa-trash"></i> -->
+<!-- 											</button> -->
+<!-- 										</form> -->
+<!-- 									</td> -->
+<!--  									<td class="weging" *ngIf="toetsMatrijsAdd == item"> -->
+<!-- 								<form #f="ngForm"> -->
+<!-- 									<input type="number" name="gewicht" class="form-control" -->
+<!-- 										[(ngModel)]="toetsMatrijsAddForm.gewicht" max="100" /> -->
+<!-- 									<button class="btn btn-success btn-sm" -->
+<!-- 										(click)="addToetsElement()"> -->
+<!-- 										<i class="fa fa-check"></i> -->
+<!-- 									</button> -->
+<!-- 									<button class="btn btn-danger btn-sm" -->
+<!-- 										(click)="cancelSaveGewicht()"> -->
+<!-- 										<i class="fa fa-close"></i> -->
+<!-- 									</button> -->
+<!-- 								</form> -->
+<!-- 									</td> -->
+<!-- 							</ng-container> </ng-container> -->
+<!-- 						</tr> -->
+<!-- 						</ng-container> </ng-container> -->
+					</table>
+					</tab> </tabset>
 				</div>
 			</div>
 		</div>
@@ -645,10 +788,10 @@
 					</div>
 					<div class="form">
 						<div class="form-group">
-							<label for="eindBT">Beroepstaak:
-								{{leerdoelForm.eindBT?.id}}</label> <select class="form-control"
-								id="eindBT" name="eindBT" [(ngModel)]="leerdoelForm.eindBT">
-								<option *ngFor="let bt of currentCourse.beroepstaken"
+							<label for="eindBT">Beroepstaak:</label> <select
+								class="form-control" id="eindBT" name="eindBT"
+								[(ngModel)]="leerdoelForm.eindBT">
+								<option *ngFor="let bt of selectedCursus.beroepstaken"
 									[ngValue]="bt.id">{{bt.activiteit}} -
 									{{bt.architectuurlaag}} - {{bt.niveau}}</option>
 							</select>
@@ -658,8 +801,8 @@
 							<label for="eindPS">Professionalskill:</label> <select
 								class="form-control" id="eindPS" name="eindPS"
 								[(ngModel)]="leerdoelForm.eindPS">
-								<option *ngFor="let a of currentCourse.professionalskills"
-									[ngValue]="a.id">{{a.code}} - {{a.niveau}}</option>
+								<option *ngFor="let ps of selectedCursus.professionalskills"
+									[ngValue]="ps.id">{{ps.code}} - {{ps.niveau}}</option>
 							</select>
 						</div>
 
@@ -667,7 +810,7 @@
 							<label for="bloomniveau">Bloomniveau:</label> <select
 								class="form-control" id="bloomniveau" name="bloomniveau"
 								[(ngModel)]="leerdoelForm.bloomniveau">
-								<option *ngFor="let a of allBloomniveaus" [ngValue]="a.id">{{a.niveau}}</option>
+								<option *ngFor="let bn of allBloomniveaus" [ngValue]="bn.id">{{bn.niveau}}</option>
 							</select>
 						</div>
 
@@ -723,15 +866,15 @@
 								class="form-control" [(ngModel)]="toetsForm.naam" />
 						</div>
 
-						<div class="form-group">
-							<label for="osirisResultaatType">Osiris Resultaat Type:</label> <select
-								class="form-control" id="osirisResultaatType"
-								name="osirisResultaatType"
-								[(ngModel)]="toetsForm.osirisResultaatType">
-								<option *ngFor="let a of allOsirisResultaatTypen"
-									[ngValue]="a.id">{{a.naam}}</option>
-							</select>
-						</div>
+						<!-- 						<div class="form-group"> -->
+						<!-- 							<label for="osirisResultaatType">Osiris Resultaat Type:</label> <select -->
+						<!-- 								class="form-control" id="osirisResultaatType" -->
+						<!-- 								name="osirisResultaatType" -->
+						<!-- 								[(ngModel)]="toetsForm.osirisResultaatType"> -->
+						<!-- 								<option *ngFor="let a of allOsirisResultaatTypen" -->
+						<!-- 									[ngValue]="a.id">{{a.naam}}</option> -->
+						<!-- 							</select> -->
+						<!-- 						</div> -->
 
 						<div class="form-group">
 							<label for="gewicht">Gewicht:</label> <input type="number"
@@ -808,7 +951,7 @@
 					<button type="button" class="btn btn-secondary"
 						(click)="beoordelingselementModal.hide()">Sluiten</button>
 					<button type="button" class="btn btn-primary"
-						(click)="addBeoordelingselementToToets()">Toevoegen</button>
+						(click)="saveBeoordelingselement(beoordelingselementForm)">Toevoegen</button>
 				</div>
 			</form>
 		</div>
