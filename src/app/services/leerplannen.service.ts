@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {Http, Response, Headers, RequestOptions, URLSearchParams } from '@angular/http';
 import 'rxjs/add/operator/map';
 import {Observable} from "rxjs";
+import * as myGlobals from '../globals';
 
 @Injectable()
 export class LeerplannenService {
@@ -13,7 +14,12 @@ export class LeerplannenService {
     }
 
     getLeerplannen() {
-        return this.http.get('http://curcon-huict.rhcloud.com/rest/leerplannen/')
+        return this.http.get(myGlobals.baseUrl+'leerplannen/')
+            .map(res => res.json());
+    }
+
+    getLeerplannenProfiel(cohortId) {
+        return this.http.get(myGlobals.baseUrl+'leerplanschemas/' + cohortId + '/profiel')
             .map(res => res.json());
     }
 

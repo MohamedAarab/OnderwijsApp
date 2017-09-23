@@ -34,6 +34,30 @@
   color: #58646d;
 }
 
+.overzicht {
+	display: inline-block;
+	float: left;
+}
+
+.overzicht .samenvatting {
+	width: 300px;
+}
+
+.overzicht .naam {
+  font-weight: 300;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 2px;
+  height: 35px;
+}
+
+.overzicht .ects {
+  margin-top: 20px;
+  display: block;
+  color: #20A8D8;
+  font-size: 17px;
+}
+
 .tooltip-inner {
   background: #ffffff;
   color: #000000;
@@ -94,11 +118,6 @@
   position: relative;
   display: inline;
   text-align: center;
-}
-
-.overzicht {
-	display: inline-block;
-	float: left;
 }
 
 .hbo-i-layer {
@@ -233,12 +252,31 @@
   width: auto !important;
 }
 
+.vertical-text {
+	display: inline-block;
+	width: 1.5em;
+}
+.vertical-text__inner {
+	display: inline-block;
+	white-space: nowrap;
+	line-height: 1.5;
+	transform: translate(0, 100%) rotate(-90deg);
+	transform-origin: 0 0;
+}
+/* This element stretches the parent to be square
+   by using the mechanics of vertical margins  */
+.vertical-text__inner:after {
+	content: "";
+	display: block;
+	margin: -1.5em 0 100%;
+}
+
+
 .toetsmatrijs {
   border: none;
   border-collapse:collapse;
   border-spacing:0;
   table-layout: fixed;
-  margin-top: 50px;
 }
 
 .toetsmatrijs .toetsKopje {
@@ -246,26 +284,7 @@
   text-align: left;
   padding: 0;
   font-weight: bold;
-}
-
-.toetsmatrijs .weging {
-  white-space: nowrap;
-  position: relative;
-}
-
-.toetsmatrijs .weging div {
-  display: block;
-  position:absolute;
-  top:0;
-  bottom:0;
-  width:100%;
-  cursor: pointer;
-}
-
-.toetsmatrijs .weging input[type='number'] {
-  width: 70px;
-  display: inline;
-  margin-right: 5px;
+  width: auto;
 }
 
 .toetsKopje > div {
@@ -277,6 +296,7 @@
       /* 45 is really 360 - 45 */
     rotate(315deg);
 }
+
 .toetsKopje > div > span {
   border-bottom: 1px solid #ccc;
   padding: 1px 10px;
@@ -287,10 +307,14 @@
   border: none;
   width: 0px !important;
   height: 0px;
-  padding-top: 45px;
+  padding-top: 30px;
   border-left: 1px solid #ccc;
-  overflow-wrap: break-word;
-  max-width: 100px;
+/*  max-width: 100px; */
+  margin-left: -5px;
+  margin-bottom: 7px;
+  margin-top: 30px;
+  text-align: left;
+
 }
 
 .toetsmatrijs .toetsElementKopje:last-child {
@@ -299,34 +323,20 @@
 
 .toetsElementKopje > div {
   transform-origin:0 0;
-  -moz-transform: rotate(270deg) translateX(-35px);
-  -webkit-transform: rotate(270deg) translateX(-35px) ;
-  -o-transform: rotate(270deg) translateX(-35px) ;
-  -ms-transform: rotate(270deg) translateX(-35px) ;
-  transform: rotate(270deg) translateX(-35px);
-  margin-left: -6px;
-  margin-bottom: 7px;
-  margin-top: 40px;
-  text-align: left;
-}
-.toetsElementKopje > div > span {
-  display: block;
-  word-wrap: break-word;
-}
-
-
-.toetsmatrijs th, .toetsmatrijs td {
+  -moz-transform: rotate(270deg) translateX(-45px);
+  -webkit-transform: rotate(270deg) translateX(-45px) ;
+  -o-transform: rotate(270deg) translateX(-45px) ;
+  -ms-transform: rotate(270deg) translateX(-45px) ;
+  transform: rotate(270deg) translateX(-45px);
 }
 
 .toetsmatrijs .tableInvisible {
   border: none;
-  font-weight: bold;
   padding-top: 100px;
 }
 
 .toetsmatrijs .empty {
   border: none;
-  font-weight: bold;
 }
 .toetsmatrijs .ld {
   width: 100px !important;
@@ -336,14 +346,31 @@
   border-right: 10px solid #ccc;
 }
 
-.toetsmatrijs .toetsElementen {
-  border-bottom: 2px solid #ccc;
-}
-
 .toetsmatrijs td {
   padding: 5px;
-  text-align: center;
+  text-align: left;
 }
+
+.toetsmatrijs .weging {
+//  white-space: nowrap;
+//  position: relative;
+}
+
+.toetsmatrijs .weging div {
+//  display: block;
+//  position:absolute;
+//  top:0;
+//  bottom:0;
+  width:100%;
+  cursor: pointer;
+}
+
+.toetsmatrijs .weging input[type='number'] {
+  width: 70px;
+  display: inline;
+  margin-right: 5px;
+}
+
 
 .toetsmatrijs .total {
   border: 2px solid #bbbbbb;
@@ -352,9 +379,6 @@
 }
 
 .btn-addToets {
-  width: 100%;
-  height: 100%;
-  margin-left: -10px;
   background: #ffffff;
   border: 1px solid #ffffff;
 }
@@ -364,7 +388,7 @@
 }
 
 .btn-editToets {
-  margin-left: -5px;
+//  margin-left: -5px;
 }
 
 .btn-editToets:hover {

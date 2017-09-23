@@ -11,7 +11,7 @@ export class CohortenService {
   }
 
   getCohorten() {
-    return this.http.get('myGlobals.baseUrl'+'cohorten/')
+    return this.http.get(myGlobals.baseUrl+'cohorten/')
       .map(res => res.json());
   }
 

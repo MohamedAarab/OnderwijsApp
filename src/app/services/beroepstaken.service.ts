@@ -16,6 +16,7 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
 
+import * as myGlobals from '../globals';
 
 
 @Injectable()
@@ -31,12 +32,12 @@ export class BeroepstakenService {
   }
 
   getBeroepstaken() {
-    return this.http.get('http://curcon-huict.rhcloud.com/rest/beroepstaken/')
+    return this.http.get(myGlobals.baseUrl+'beroepstaken/')
       .map(res => res.json());
   }
 
   getBeroepstaakTypes() {
-    return this.http.get('http://curcon-huict.rhcloud.com/rest/beroepstaken/types')
+    return this.http.get(myGlobals.baseUrl+'beroepstaken/types')
       .map(res => res.json());
   }
 
@@ -58,7 +59,7 @@ export class BeroepstakenService {
   }
 
   getBeroepstaakId(actid, archid, niv) {
-    return this.http.get('http://curcon-huict.rhcloud.com/rest/beroepstaken/activiteiten/' + actid + '/architectuurlagen/' + archid + '/niveaus/' + niv)
+    return this.http.get(myGlobals.baseUrl+'beroepstaken/activiteiten/' + actid + '/architectuurlagen/' + archid + '/niveaus/' + niv)
       .map(res => res.json());
   }
 }

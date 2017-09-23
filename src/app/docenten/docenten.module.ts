@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { DropdownModule } from 'ng2-bootstrap/dropdown';
 
-import { DocentenService } from './docenten.service';
+import { DocentenService } from '../services/docenten.service';
 import { DocentenRoutingModule } from './docenten-routing.module';
 import { DocentenComponent } from './docenten.component';
 import { OrganisatiesService } from '../organisaties/organisaties.service';
@@ -16,6 +16,7 @@ import { ModalModule } from 'ng2-bootstrap/modal';
 import { ModalsComponent } from '../components/modals.component';
 
 import {FormsModule} from '@angular/forms';
+import { DocentComponent } from '../test/docent.component';
 
 @NgModule({
   imports: [
@@ -28,7 +29,8 @@ import {FormsModule} from '@angular/forms';
     Ng2OrderModule,
     ModalModule.forRoot()
   ],
-  declarations: [ DocentenComponent ],
+  declarations: [ DocentenComponent,
+    DocentComponent ],
   providers: [ DocentenService, OrganisatiesService, CursussenService ]
 })
 export class DocentenModule { }

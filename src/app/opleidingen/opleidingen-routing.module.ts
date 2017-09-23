@@ -5,17 +5,17 @@ import { Routes,
 import { OpleidingenComponent } from './opleidingen.component';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: OpleidingenComponent,
-    data: {
-      title: 'Opleidingsprofielen'
-    }
-  }
+	{
+		path: '',
+		component: OpleidingenComponent,
+		data: {
+			title: 'Opleidingsprofielen'
+		}
+	}
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+	imports: [RouterModule.forChild(routes)],
+	exports: [RouterModule]
 })
 export class OpleidingenRoutingModule {}

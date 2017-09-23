@@ -2,18 +2,20 @@ import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, D
 import {Router} from '@angular/router';
 import {OrderByPipe} from './orderby.pipe';
 import {CursussenService} from '../cursussen/cursussen.service';
-import {BeroepstakenService} from '../beroepstaken/beroepstaken.service';
-import {ProfessionalskillsService} from '../professionalskills/professionalskills.service';
+import {BeroepstakenService} from '../services/beroepstaken.service';
+import {ProfessionalskillsService} from '../services/professionalskills.service';
 import {AbstractControl, NG_VALIDATORS} from '@angular/forms';
 import {OpleidingenService} from './opleidingen.service';
 
 import {CohortenService} from '../services/cohorten.service';
 import {LeerplannenService} from '../services/leerplannen.service';
-import {BtOverzichtComponent} from '../bt-overzicht/bt-overzicht.component';
+import {BtMatrixComponent} from '../bt-overzicht/bt-matrix.component';
+import {PsOverzichtComponent} from '../ps-overzicht/ps/overzicht.component';
 
 @Component({
 	templateUrl: 'opleidingen.component.html',
 })
+
 export class OpleidingenComponent implements OnInit {
 	opleidingen: Array<any>;
 	@Input() cursussen: Array<any>;
@@ -51,8 +53,7 @@ export class OpleidingenComponent implements OnInit {
 			private cursussenService: CursussenService,
 			private leerplannenService: LeerplannenService,
 			private professionalskillService: ProfessionalskillsService, 
-			private beroepstakenService: BeroepstakenService,
-			private btOverzichtComponent: BtOverzichtComponent) {
+			private beroepstakenService: BeroepstakenService) {
 		this.loading = true;
 	}
 
@@ -75,21 +76,34 @@ export class OpleidingenComponent implements OnInit {
 		this.mode = mode;
 	}
 
-	onSelectOpleiding(opleiding:Object) {
+	onSelectOpleiding(opleiding : Object) {
+		console.log("onSelectOpleiding(opleiding:Object)");
 		this.onSelectedOpleiding.emit(opleiding);
 		this.selectedOpleiding = opleiding;
-		let btMatrix = this.generateMatrix();
-		this.selectedOpleiding.btMatrix = btMatrix;
-		this.loadBeroepstaken();
-		this.btOverzichtComponent.show(this.selectedOpleiding);
-		this.refreshProfessionalskills();
+		
+		this.beroepstakenService.getBeroepstakenByObject(this.selectedOpleiding.eindBT).subscribe(beroepstaken => {
+			this.selectedOpleiding.beroepstaken = [];
+			this.selectedOpleiding.beroepstaken = beroepstaken;
+			this.selectedOpleiding.btMatrix = this.generateMatrix();;
+			for (let bt of this.selectedOpleiding.beroepstaken) {
+				this.selectedOpleiding.btMatrix[bt.architectuurlaagId][bt.activiteitId] = bt;
+			}
+			console.log(this.selectedOpleiding.beroepstaken);
+		});
 
+		console.log('this.selectedOpleiding.btProfiel');
+		console.log(this.selectedOpleiding.btProfiel);
         this.cohortenService.getCohortenByObject(this.selectedOpleiding['cohorten']).subscribe(cohorten => {
             this.cohorten = cohorten;
             this.selectedCohort = cohorten[0];
-    		console.log(this.selectedOpleiding);
-    		console.log(this.selectedCohort);
+    		this.loadBTPSProfiel();
+    		this.selectedOpleiding.btProfiel = this.generateMatrix();;
+    		this.refreshProfessionalskills();
     		this.refreshCursussen();
+    		console.log("---- this.selectedOpleiding ----");
+    		console.log(this.selectedOpleiding);
+    		console.log("---- this.selectedCohort ----");
+    		console.log(this.selectedCohort);
             this.loading = false;
         });
 	}
@@ -101,7 +115,7 @@ export class OpleidingenComponent implements OnInit {
 	saveOpleiding(form: any) {
 		this.loading = true;
 		this.selectedOpleiding.naam = form.naam;
-		console.log(this.selectedOpleiding);
+// console.log(this.selectedOpleiding);
 		this.opleidingenService.saveOpleiding(this.selectedOpleiding).subscribe(x => {
 			this.mode = 'view';
 			this.loading = false;
@@ -136,10 +150,19 @@ export class OpleidingenComponent implements OnInit {
 		this.beroepstakenService.getBeroepstakenByObject(this.selectedOpleiding.eindBT).subscribe(beroepstaken => {
 			this.selectedOpleiding.beroepstaken = [];
 			this.selectedOpleiding.beroepstaken = beroepstaken;
-			for (let bt of this.selectedOpleiding.beroepstaken) {
-				this.selectedOpleiding.btMatrix[bt.architectuurlaagId][bt.activiteitId] = bt;
-			}
+		});
+	}
 
+	loadBTPSProfiel() {
+		this.leerplannenService.getLeerplannenProfiel(this.selectedCohort.id).subscribe(data => {
+			console.log("loadBeroepstakenProfiel data");
+			console.log(data);
+			this.selectedOpleiding.profiel = data;
+			console.log("this.selectedOpleiding");
+			console.log(this.selectedOpleiding);
+			for (let bt of data.eindBT) {
+				this.selectedOpleiding.btProfiel[bt.architectuurlaagId][bt.activiteitId] = bt;
+			}
 		});
 	}
 
@@ -149,7 +172,7 @@ export class OpleidingenComponent implements OnInit {
 			this.beroepstakenForm.architectuurlaag,
 			this.beroepstakenForm.niveau).subscribe(data => {
 				this.opleidingenService.addBeroepstakenToOpleiding(this.selectedOpleiding.id, data).subscribe(x => {
-					this.selectedOpleiding.beroepstaken = this.loadBeroepstaken();
+					this.loadBeroepstaken();
 					this.loading = false;
 				});
 			});
@@ -207,8 +230,6 @@ export class OpleidingenComponent implements OnInit {
 				this.beroepstakenService.getBeroepstakenByObject(c.eindBT).subscribe(beroepstaken => {
 					c.beroepstaken = [];
 					c.beroepstaken = beroepstaken;
-					console.log("c.beroepstaken");
-					console.log(c.beroepstaken);
 					let btMatrix = this.generateMatrix();
 					for (let bt of c.beroepstaken) {
 						btMatrix[bt.architectuurlaagId][bt.activiteitId] = bt;
@@ -258,7 +279,7 @@ export class OpleidingenComponent implements OnInit {
 	addOpleiding() {
 		this.loading = true;
 		delete this.opleidingForm.code;
-		console.log(this.opleidingForm);
+// console.log(this.opleidingForm);
 		this.opleidingenService.saveOpleiding(this.opleidingForm).subscribe(x => {
 			this.opleidingen.push(this.opleidingForm);
 			this.onSelectOpleiding(this.opleidingForm);
@@ -268,8 +289,8 @@ export class OpleidingenComponent implements OnInit {
 	
     addCursusToCohort(form: any) {
         this.loading = true;
-        console.log(form)
-        console.log("addCursusToCohort "+this.selectedCohort.id+" "+form)
+// console.log(form)
+// console.log("addCursusToCohort "+this.selectedCohort.id+" "+form)
         this.cohortenService.addCursusToCohort(this.selectedCohort.id, form).subscribe(data => {
             this.cursusModal.hide();
 // this.cursusForm = data;

@@ -1,0 +1,34 @@
+<div class="overzicht">
+	<div class="ps-layer">
+		<span>Professional Skills</span>
+		<div class="top-layer">
+			<div class="ps-cell">CPO</div>
+			<div class="ps-cell">OD</div>
+			<div class="ps-cell">LSC</div>
+			<div class="ps-cell">POKe</div>
+			<div class="ps-cell">LPO</div>
+		</div>
+		<div class="ps-layer">
+			<div class="ps-cell ps-cpo">
+				<span *ngFor="let ps of professionalskills"><span
+					*ngIf="ps?.code == 'CP'">{{ps.niveau}}</span></span>
+			</div>
+			<div class="ps-cell ps-ai">
+				<span *ngFor="let ps of professionalskills"><span
+					*ngIf="ps?.code == 'OD'">{{ps.niveau}}</span></span>
+			</div>
+			<div class="ps-cell ps-lsc">
+				<span *ngFor="let ps of professionalskills"><span
+					*ngIf="ps?.code == 'LSC'">{{ps.niveau}}</span></span>
+			</div>
+			<div class="ps-cell ps-poe">
+				<span *ngFor="let ps of professionalskills"><span
+					*ngIf="ps?.code == 'POKe'">{{ps.niveau}}</span></span>
+			</div>
+			<div class="ps-cell none">
+				<span *ngFor="let ps of professionalskills"><span
+					*ngIf="ps?.code == 'LPO'">{{ps.niveau}}</span></span>
+			</div>
+		</div>
+	</div>
+</div>

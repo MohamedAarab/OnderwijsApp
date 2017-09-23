@@ -13,6 +13,7 @@ export class OpleidingenService {
 	constructor(private http: Http) {
 		console.log('OpleidingenService Initialized...');
 		this.headers = new Headers({ 'Content-Type': 'application/json' });
+		this.headers.append('Access-Control-Allow-Origin', '*');
 		this.options = new RequestOptions({ headers: this.headers });
 		this.organisation = JSON.parse(localStorage.getItem('selectedOrganisatie'));
 	}
@@ -20,17 +21,16 @@ export class OpleidingenService {
 	getOpleidingen() {
 		var url = myGlobals.baseUrl+'organisaties/' + this.organisation.id + '/opleidingsprofielen';
 		console.log(url);
-		return this.http.get(url)
-			.map(res => res.json());
+		return this.http.get(url, this.options).map(res => res.json());
 	}
 
 	getDataByHref(href) {
-		return this.http.get(href)
+		return this.http.get(href, this.options)
 			.map(res => res.json());
 	}
 
 	getOpleidingByObject(obj) {
-		return this.http.get(obj.href)
+		return this.http.get(obj.href, this.options)
 			.map(res => res.json());
 	}
   

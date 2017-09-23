@@ -19,30 +19,47 @@ import { TabsComponent } from '../components/tabs.component';
 import {TooltipModule} from 'ng2-bootstrap';
 import {Tooltip} from "ngx-tooltip";
 
-import {HttpModule} from '@angular/http';
-import {BeroepstakenService} from '../beroepstaken/beroepstaken.service';
-import {ProfessionalskillsService} from '../professionalskills/professionalskills.service';
-import {LeerdoelenService} from '../leerdoelen/leerdoelen.service';
-import {ToetsenService} from '../services/toetsen.service';
 import {FormsModule} from '@angular/forms';
-import {ToetsmatrijzenService} from '../toetsmatrijzen/toetsmatrijzen.service';
+import {HttpModule} from '@angular/http';
+
+import {BeroepstakenService} from '../services/beroepstaken.service';
+import {ProfessionalskillsService} from '../services/professionalskills.service';
+import {LeerdoelenService} from '../services/leerdoelen.service';
+import {ToetsenService} from '../services/toetsen.service';
+import {ToetsmatrijzenService} from '../services/toetsmatrijzen.service';
 import {BloomniveausService} from '../services/bloomniveaus.service';
-import {DocentenService} from "../docenten/docenten.service";
+import {DocentenService} from "../services/docenten.service";
+import {BtMatrixModule} from '../bt-overzicht/bt-matrix.module';
+import {PsOverzichtModule} from '../ps-overzicht/ps-overzicht.module';
 
 @NgModule({
-  imports: [
-    CursussenRoutingModule,
-    ChartsModule,
-    HttpModule,
-    DropdownModule,
-    FormsModule,
-    CommonModule,
-    TabsModule,
-    TooltipModule.forRoot(),
-    ModalModule.forRoot()
-  ],
-  declarations: [ CursussenComponent,
-    TabsComponent, TablesComponent, ModalsComponent],
-  providers: [CursussenService, DocentenService, BeroepstakenService, ProfessionalskillsService, LeerdoelenService, ToetsenService, ToetsmatrijzenService, BloomniveausService]
+	imports: [
+		BtMatrixModule,
+		PsOverzichtModule,
+		CursussenRoutingModule,
+		ChartsModule,
+		HttpModule,
+		DropdownModule,
+		FormsModule,
+		CommonModule,
+		TabsModule,
+		ModalModule.forRoot()
+		],
+	declarations: [ 
+		CursussenComponent,
+//		TabsComponent, 
+//		TablesComponent, 
+//		ModalsComponent
+	],
+	providers: [
+		CursussenService, 
+		DocentenService, 
+		BeroepstakenService, 
+		ProfessionalskillsService, 
+		LeerdoelenService, 
+		ToetsenService, 
+		ToetsmatrijzenService, 
+		BloomniveausService
+	]
 })
 export class CursussenModule { }

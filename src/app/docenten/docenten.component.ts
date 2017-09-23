@@ -1,8 +1,9 @@
 import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, Directive} from '@angular/core';
 import { Router } from '@angular/router';
-import { DocentenService } from './docenten.service';
+import { DocentenService } from '../services/docenten.service';
 import {AbstractControl, NG_VALIDATORS} from '@angular/forms';
 import {OrderByPipe} from './orderby.pipe';
+import {DocentComponent} from "../test/docent.component"
 
 @Component({
 	templateUrl: 'docenten.component.html',

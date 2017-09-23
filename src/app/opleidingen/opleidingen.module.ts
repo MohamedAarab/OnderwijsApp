@@ -20,19 +20,22 @@ import { TabsComponent } from '../components/tabs.component';
 
 import { HttpModule } from '@angular/http';
 
-import { BeroepstakenService } from '../beroepstaken/beroepstaken.service';
-import { BeroepstakenComponent } from '../beroepstaken/beroepstaken.component';
-import { ProfessionalskillsService } from '../professionalskills/professionalskills.service';
+import { BeroepstakenService } from '../services/beroepstaken.service';
+//import { BeroepstakenComponent } from '../beroepstaken/beroepstaken.component';
+import { ProfessionalskillsService } from '../services/professionalskills.service';
 import { CursussenService } from '../cursussen/cursussen.service';
 import { OpleidingenComponent } from './opleidingen.component';
 import { OpleidingenService } from './opleidingen.service';
 import { CohortenService } from '../services/cohorten.service';
 import { OpleidingenRoutingModule } from './opleidingen-routing.module';
 import { LeerplannenService } from '../services/leerplannen.service';
-import { BtOverzichtComponent } from '../bt-overzicht/bt-overzicht.component';
+import { BtMatrixModule } from '../bt-overzicht/bt-matrix.module';
+import { PsOverzichtModule } from '../ps-overzicht/ps-overzicht.module';
 
 @NgModule({
 	imports: [
+		PsOverzichtModule,
+		BtMatrixModule,
 		OpleidingenRoutingModule,
 	    ChartsModule,
 	    HttpModule,
@@ -44,8 +47,17 @@ import { BtOverzichtComponent } from '../bt-overzicht/bt-overzicht.component';
 	    TooltipModule.forRoot(),
 	    ModalModule.forRoot()
 	],
-	declarations: [ BtOverzichtComponent, OpleidingenComponent ],
-	providers: [ LeerplannenService, BtOverzichtComponent, OpleidingenService, CohortenService, CursussenService, BeroepstakenComponent, BeroepstakenService, ProfessionalskillsService ]
+	declarations: [
+		OpleidingenComponent
+	],
+	providers: [ 
+		LeerplannenService, 
+		OpleidingenService, 
+		CohortenService, 
+		CursussenService, 
+		BeroepstakenService, 
+		ProfessionalskillsService 
+	]
 })
 
 export class OpleidingenModule { }

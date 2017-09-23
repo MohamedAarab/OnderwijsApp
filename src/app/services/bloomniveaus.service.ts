@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
+import * as myGlobals from '../globals';
 
 @Injectable()
 export class BloomniveausService {
@@ -9,7 +10,7 @@ export class BloomniveausService {
   }
 
   getBloomniveaus() {
-    return this.http.get('http://curcon-huict.rhcloud.com/rest/bloomniveaus/')
+    return this.http.get(myGlobals.baseUrl+'bloomniveaus/')
       .map(res => res.json());
   }
 

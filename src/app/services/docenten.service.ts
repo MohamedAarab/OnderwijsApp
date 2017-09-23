@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {Http, Response, Headers, RequestOptions, URLSearchParams } from '@angular/http';
 import 'rxjs/add/operator/map';
 import {Observable} from "rxjs";
+import * as myGlobals from '../globals';
 
 @Injectable()
 export class DocentenService {
@@ -15,7 +16,7 @@ export class DocentenService {
     }
 
     getDocenten() {
-        return this.http.get('http://curcon-huict.rhcloud.com/rest/organisaties/1/docenten')
+        return this.http.get(myGlobals.baseUrl+'organisaties/1/docenten')
           .map(res => res.json());
     }
 
@@ -39,11 +40,11 @@ export class DocentenService {
 	saveDocent(docentId, docentForm) {
 		var headers = new Headers();
 		headers.append('Content-Type', 'application/json');
-		if (docentId == 0) {
-			return this.http.post('http://curcon-huict.rhcloud.com/rest/docenten/', docentForm)
+		if (docentId == null) {
+			return this.http.post(myGlobals.baseUrl+'organisaties/1/docenten/', docentForm)
 				.catch(this.handleError);
 		} else {
-			return this.http.put('http://curcon-huict.rhcloud.com/rest/docenten/' + docentId, docentForm)
+			return this.http.put(myGlobals.baseUrl+'docenten/' + docentId, docentForm)
 				.catch(this.handleError);
 		}
 	}

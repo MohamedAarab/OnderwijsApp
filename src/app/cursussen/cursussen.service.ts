@@ -13,6 +13,8 @@ export class CursussenService {
 constructor(private http: Http) {
 	console.log('Cursussen Service Initialized...');
 	this.headers = new Headers({ 'Content-Type': 'application/json' });
+	this.headers.append('Access-Control-Allow-Origin', '*');
+//	this.headers.append('Access-Control-Expose-Headers', 'content-disposition');
 	this.options = new RequestOptions({ headers: this.headers });
 	this.organisationId = JSON.parse(localStorage.getItem('selectedOrganisatie'));
 }
@@ -20,23 +22,23 @@ constructor(private http: Http) {
 getCursussen() {
 	var url = myGlobals.baseUrl+'organisaties/' + this.organisationId.id + '/cursussen';
 	console.log("url "+url)
-	return this.http.get(url).map(res => res.json());
+	return this.http.get(url, this.options).map(res => res.json());
 }
 
 getDataByHref(href) {
-	return this.http.get(href)
+	return this.http.get(href, this.options)
 	.map(res => res.json());
 }
 
 getCursussenByObject(obj) {
 	console.log(obj.href);
-	return this.http.get(obj.href)
+	return this.http.get(obj.href, this.options)
 	.map(res => res.json());
 }
 
 addBeroepstakenToCursus(cursusId, beroepstaak) {
 	let newBeroepstaak = {'id': beroepstaak.id};
-	return this.http.post(myGlobals.baseUrl+'cursussen/' + cursusId + '/beroepstaken', newBeroepstaak)
+	return this.http.post(myGlobals.baseUrl+'cursussen/' + cursusId + '/beroepstaken', newBeroepstaak, this.options)
 	.catch(this.handleError);
 }
 
@@ -106,16 +108,27 @@ getToetsElementen(position, url) {
 	.map(res => [position, res.json()]);
 }
 
-
-
 deleteToets(bt2: any) {
 	return this.http.delete(myGlobals.baseUrl+'toetsen/' + bt2)
 	.catch(this.handleError);
 }
 
 addCursus(cursus) {
-	return this.http.post(myGlobals.baseUrl+'organisaties/' + this.organisationId.id + '/cursussen', cursus)
-	.catch(this.handleError);
+	let url = myGlobals.baseUrl+'organisaties/' + this.organisationId.id + '/cursussen';
+//	return this.http.post(url, cursus, this.options).flatMap(
+//		(res:Response) => {
+//			console.log("headers");
+//			console.log(res.headers);
+//			return res;
+//		}
+//	).map(
+//		(res:Response) => {
+//			res.json();
+//		}
+//	).catch(this.handleError);
+	
+	return this.http.post(url, cursus, this.options).catch(this.handleError)
+
 }
 
 editToetsElement(id, element) {
